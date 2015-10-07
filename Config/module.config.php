@@ -1,0 +1,31 @@
+<?php
+ return array (
+  'module' => 
+  array (
+    'name' => 'News',
+    'url' => '/admin/module/news',
+    'icon' => '/module/News/Assets/news.png',
+    'order' => 1,
+    'description' => 'News module allows you to manage news on your site',
+  ),
+  'coverHeight' => '300',
+  'coverWidth' => '300',
+  'thumbHeight' => '100',
+  'thumbWidth' => '100',
+  'blockPerPageCount' => '5',
+  'perPageCount' => '2',
+  'timeFormatInList' => 'm/d/Y h',
+  'postTemplate' => 'news-post',
+  'categoryTemplate' => 'news-list',
+  'time_format_in_list' => 'm/d/Y',
+  'time_format_in_post' => 'm/d/Y',
+  'per_page_count' => '5',
+  'block_per_page_count' => '4',
+  'cover_height' => '300',
+  'cover_width' => '300',
+  'thumb_height' => '180',
+  'thumb_width' => '180',
+  'category_template' => 'news-category',
+  'post_template' => 'news-post',
+  'cover_quality' => '75',
+);
