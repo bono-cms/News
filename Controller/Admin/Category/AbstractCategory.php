@@ -19,7 +19,7 @@ abstract class AbstractCategory extends AbstractAdminController
 	/**
 	 * Returns prepared validator instance
 	 * 
-	 * @param array $input Raw form data
+	 * @param array $input Raw input data
 	 * @return \Krystal\Validate\ValidatorChain
 	 */
 	final protected function getValidator(array $input)
