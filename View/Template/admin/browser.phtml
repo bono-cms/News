@@ -1,6 +1,6 @@
 <?php
 
-use Krystal\Form\Widget\CheckBoxWidget;
+use Krystal\Form\Element;
 
 ?>
 
@@ -53,7 +53,6 @@ use Krystal\Form\Widget\CheckBoxWidget;
 			
 			<?php if (!empty($posts)): ?>
 			<tbody>
-				
 				<?php foreach ($posts as $post): ?>
 				<tr>
 					<td class="text-center">
@@ -64,10 +63,10 @@ use Krystal\Form\Widget\CheckBoxWidget;
 					<td class="text-center"><?php echo $post->getTimeBag()->getPanelFormat(); ?></td>
 					<td class="text-center"><?php echo $post->getCategoryName(); ?></td>
 					<td class="text-center">
-						<?php echo CheckBoxWidget::render(array('name' => sprintf('published[%s]', $post->getId())), $post->getPublished()); ?>
+                        <?php echo Element::checkbox(sprintf('published[%s]', $post->getId()), $post->getPublished()); ?>
 					</td>
 					<td class="text-center">
-						<?php echo CheckBoxWidget::render(array('name' => sprintf('seo[%s]', $post->getId())), $post->getSeo()); ?>
+                        <?php echo Element::checkbox(sprintf('seo[%s]', $post->getId()), $post->getSeo()); ?>
 					</td>
 					<td class="text-center">
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this post'); ?>" data-button="view" target="_blank" href="<?php echo $post->getUrl(); ?>"><i class="glyphicon glyphicon-search"></i></a>
@@ -77,7 +76,6 @@ use Krystal\Form\Widget\CheckBoxWidget;
 				</tr>
 				
 				<?php endforeach; ?>
-				
 			</tbody>
 			<?php endif; ?>
 		</table>
@@ -139,6 +137,6 @@ use Krystal\Form\Widget\CheckBoxWidget;
 			<h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
 		</div>
 		<?php endif; ?>
-		
+        
 	</div>
 </div>

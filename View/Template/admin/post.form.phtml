@@ -1,7 +1,6 @@
 <?php
 
-use Krystal\Form\Widget\CheckBoxWidget;
-use Krystal\Form\Widget\DropdownWidget;
+use Krystal\Form\Element;
 
 ?>
 
@@ -10,45 +9,41 @@ use Krystal\Form\Widget\DropdownWidget;
 <form>
 	<div class="well clearfix">
 		
-		<input type="hidden" name="post[id]" value="<?php echo $post->getId(); ?>" />
-		<input type="hidden" name="post[web_page_id]" value="<?php echo $post->getWebPageId(); ?>" />
-		<input type="hidden" name="post[cover]" value="<?php echo $post->getCover(); ?>" />
-		
-		
+        <?php echo Element::hidden('post[id]', $post->getId()); ?>
+        <?php echo Element::hidden('post[web_page_id]', $post->getWebPageId()); ?>
+        <?php echo Element::hidden('post[cover]', $post->getCover()); ?>
+        
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
 			<div class="col-lg-10">
 				<div class="input-group">
-					<input type="text" name="post[title]" class="form-control" data-input="title" placeholder="<?php $this->show("Post's title"); ?>" value="<?php echo $post->getTitle(); ?>" />
+                    
+                    <?php echo Element::text('post[title]', $post->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's title"))); ?>
 					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
 				</div>
 			</div>
 		</div>
 		
-		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Category'); ?></label>
 			<div class="col-lg-10">
-				<?php echo DropdownWidget::render(array('name' => 'post[category_id]', 'class' => 'form-control'), $categories, $post->getCategoryId(), false); ?>
+                <?php echo Element::select('post[category_id]', $categories, $post->getCategoryId(), array('class' => 'form-control')); ?>
 			</div>
 		</div>
-		
 		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Introduction'); ?></label>
 			<div class="col-lg-10">
-				<textarea name="post[intro]"><?php echo $post->getIntro(); ?></textarea>
+                <?php echo Element::textarea('post[intro]', $post->getIntro()); ?>
 			</div>
 		</div>
-		
 		
 		<div class="form-group clearfix">
 			<label class="col-lg-2 control-label"><?php $this->show('Full text'); ?></label>
 			<div class="col-lg-10">
-				<textarea name="post[full]"><?php echo $post->getFull(); ?></textarea>
+                <?php echo Element::textarea('post[full]', $post->getFull()); ?>
 			</div>
 		</div>
-		
 		
 		<div class="options">
 			
@@ -56,34 +51,32 @@ use Krystal\Form\Widget\DropdownWidget;
 				<label class="col-lg-2 control-label"><?php $this->show('Date'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group date">
-						<input type="text" name="post[date]" class="form-control" placeholder="<?php $this->show('Date of the post'); ?>" value="<?php echo $post->getTimeBag()->getPanelFormat(); ?>" />
+
+                        <?php echo Element::text('post[date]', $post->getTimeBag()->getPanelFormat(), array('class' => 'form-control', 'placeholder' => $this->translate('Date of the post'))); ?>
 						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="<?php $this->show('Change the date'); ?>"></i></span>
 					</div>
 				</div>
 			</div>
 			
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
 				<div class="col-lg-10">
-					<?php echo CheckBoxWidget::render(array('name' => 'post[published]', 'class' => 'form-control'), $post->getPublished()); ?>
+                    <?php echo Element::checkbox('post[published]', $post->getPublished(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
-			
 			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Enable SEO'); ?></label>
 				<div class="col-lg-10">
-					<?php echo CheckBoxWidget::render(array('name' => 'post[seo]', 'class' => 'form-control'), $post->getSeo()); ?>
+                    <?php echo Element::checkbox('post[seo]', $post->getSeo(), array('class' => 'form-control')); ?>
 				</div>
 			</div>
-			
 			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-						<input type="text" name="post[slug]" class="form-control" data-input="slug" placeholder="<?php $this->show('URL slug for this post. By default is taken from a title'); ?>" value="<?php echo $post->getSlug(); ?>" />
+                        <?php echo Element::text('post[slug]', $post->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => 'URL slug for this post. By default is taken from a title')); ?>
 						<span class="input-group-addon">
 							<a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh the slug'); ?>"></i></a>
 						</span>
@@ -91,25 +84,22 @@ use Krystal\Form\Widget\DropdownWidget;
 				</div>
 			</div>
 			
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-						<input type="text" name="post[keywords]" class="form-control" placeholder="<?php $this->show('Keywords used for search engines'); ?>" value="<?php echo $post->getKeywords(); ?>" />
+                        <?php echo Element::text('post[keywords]', $post->getKeywords(), array('class' => 'form-control', 'placeholder' => 'Keywords used for search engines')); ?>
 						<span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
 					</div>
 				</div>
 			</div>
 			
-			
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
 				<div class="col-lg-10">
-					<textarea name="post[meta_description]" class="form-control" placeholder="<?php $this->show('Meta description for search engines'); ?>"><?php echo $post->getMetaDescription(); ?></textarea>
+                    <?php echo Element::textarea('post[meta_description]', $post->getMetaDescription(), array('class' => 'form-control', 'placeholder' => 'Meta description for search engines')); ?>
 				</div>
 			</div>
-			
 			
 			<!--Cover-->
 			<div class="form-group clearfix">
@@ -118,7 +108,6 @@ use Krystal\Form\Widget\DropdownWidget;
 					<br />
 					
 					<?php if ($post->hasCover()): ?>
-					
 					<img data-image="preview" src="<?php echo $post->getImageBag()->getUrl('200x200'); ?>" data-zoom-image="<?php echo $post->getImageBag()->getUrl('original'); ?>" />
 					
 					<br />
@@ -132,15 +121,13 @@ use Krystal\Form\Widget\DropdownWidget;
 					<br />
 					
 					<?php else: ?>
-					
 					<img data-image="preview" />
-					
 					<?php endif; ?>
 					
 					<br />
 					<br />
 					
-					<input type="file" name="file" accept="image/x-png, image/gif, image/jpeg" />
+                    <?php echo Element::file('file', 'image/x-png, image/gif, image/jpeg'); ?>
 				</div>
 			</div>
 			<!--/Cover-->
