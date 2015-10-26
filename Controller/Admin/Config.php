@@ -22,8 +22,6 @@ final class Config extends AbstractConfigController
 	protected function getValidationRules()
 	{
 		return array(
-			'time_format_in_list' => new Pattern\DateFormat(),
-			'time_format_in_post' => new Pattern\DateFormat(),
 			'per_page_count' => new Pattern\PerPageCount(),
 			'block_per_page_count' => new Pattern\PerPageCount(),
 			'cover_quality' => new Pattern\ImageQuality(),
