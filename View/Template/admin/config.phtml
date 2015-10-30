@@ -4,7 +4,8 @@ use Krystal\Form\Element;
 
 ?>
 
-<form>
+<form data-group="config">
+
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#common" role="tab" data-toggle="tab"><i class="fa fa-home fa-fw"></i> <?php $this->show('Common'); ?></a></li>
 		<?php if ($extendedMode): ?>
@@ -119,12 +120,11 @@ use Krystal\Form\Element;
 						<span class="help-block"><?php $this->show('The width of post thumb images'); ?></span>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 	</div>
 
-	<button data-button="save" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-	<button data-button="cancel" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+	<button data-button="save-changes" data-url="<?php echo $this->url('News:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+	<button data-button="cancel" data-url="<?php echo $this->url('News:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
 
 </form>
