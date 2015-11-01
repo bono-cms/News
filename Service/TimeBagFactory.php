@@ -15,37 +15,37 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class TimeBagFactory
 {
-	/**
-	 * Configuration entity
-	 * 
-	 * @var \Krystal\Stdlib\VirtualEntity
-	 */
-	private $config;
+    /**
+     * Configuration entity
+     * 
+     * @var \Krystal\Stdlib\VirtualEntity
+     */
+    private $config;
 
-	/**
-	 * State initialization
-	 * 
-	 * @param \Krystal\Stdlib\VirtualEntity $config
-	 * @return void
-	 */
-	public function __construct(VirtualEntity $config)
-	{
-		$this->config = $config;
-	}
+    /**
+     * State initialization
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
+     * @return void
+     */
+    public function __construct(VirtualEntity $config)
+    {
+        $this->config = $config;
+    }
 
-	/**
-	 * Builds time bag
-	 * 
-	 * @return \News\Service\TimeBag
-	 */
-	public function build()
-	{
-		// With defaults
-		$listFormat = $this->config->getTimeFormatInList();
-		$postFormat = $this->config->getTimeFormatInPost();
-		$announceFormat = $listFormat;
-		$panelFormat = 'm/d/Y';
+    /**
+     * Builds time bag
+     * 
+     * @return \News\Service\TimeBag
+     */
+    public function build()
+    {
+        // With defaults
+        $listFormat = $this->config->getTimeFormatInList();
+        $postFormat = $this->config->getTimeFormatInPost();
+        $announceFormat = $listFormat;
+        $panelFormat = 'm/d/Y';
 
-		return new TimeBag($listFormat, $postFormat, $announceFormat, $panelFormat);
-	}
+        return new TimeBag($listFormat, $postFormat, $announceFormat, $panelFormat);
+    }
 }

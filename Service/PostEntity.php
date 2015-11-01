@@ -15,13 +15,13 @@ use Krystal\Stdlib\VirtualEntity;
 
 final class PostEntity extends VirtualEntity
 {
-	/**
-	 * Tells whether current bag has a cover
-	 * 
-	 * @return boolean
-	 */
-	public function hasCover()
-	{
-		return $this->getCover() != '';
-	}
+    /**
+     * Tells whether current bag has a cover
+     * 
+     * @return boolean
+     */
+    public function hasCover()
+    {
+        return $this->getCover() != '';
+    }
 }

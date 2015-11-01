@@ -15,43 +15,43 @@ use Cms\Controller\Admin\AbstractController;
 
 abstract class AbstractAdminController extends AbstractController
 {
-	/**
-	 * Returns configuration manager
-	 * 
-	 * @return \News\Service\ConfigManager
-	 */
-	final protected function getConfigManager()
-	{
-		return $this->getModuleService('configManager');
-	}
+    /**
+     * Returns configuration manager
+     * 
+     * @return \News\Service\ConfigManager
+     */
+    final protected function getConfigManager()
+    {
+        return $this->getModuleService('configManager');
+    }
 
-	/**
-	 * Returns post manager
-	 * 
-	 * @return \News\Post\PostManager
-	 */
-	final protected function getPostManager()
-	{
-		return $this->getModuleService('postManager');
-	}
+    /**
+     * Returns post manager
+     * 
+     * @return \News\Post\PostManager
+     */
+    final protected function getPostManager()
+    {
+        return $this->getModuleService('postManager');
+    }
 
-	/** 
-	 * Returns category manager
-	 * 
-	 * @return \News\Service\CategoryManager
-	 */
-	final protected function getCategoryManager()
-	{
-		return $this->getModuleService('categoryManager');
-	}
+    /** 
+     * Returns category manager
+     * 
+     * @return \News\Service\CategoryManager
+     */
+    final protected function getCategoryManager()
+    {
+        return $this->getModuleService('categoryManager');
+    }
 
-	/**
-	 * Returns task manager
-	 * 
-	 * @return \News\Service\TaskManager
-	 */
-	final protected function getTaskManager()
-	{
-		return $this->getModuleService('taskManager');
-	}
+    /**
+     * Returns task manager
+     * 
+     * @return \News\Service\TaskManager
+     */
+    final protected function getTaskManager()
+    {
+        return $this->getModuleService('taskManager');
+    }
 }

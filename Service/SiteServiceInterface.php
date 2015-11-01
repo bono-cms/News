@@ -13,12 +13,12 @@ namespace News\Service;
 
 interface SiteServiceInterface
 {
-	/**
-	 * Returns random posts
-	 * 
-	 * @param integer $amount
-	 * @param string $categoryId Optionally can be filtered by category id
-	 * @return array
-	 */
-	public function getRandom($amount, $categoryId = null);
+    /**
+     * Returns random posts
+     * 
+     * @param integer $amount
+     * @param string $categoryId Optionally can be filtered by category id
+     * @return array
+     */
+    public function getRandom($amount, $categoryId = null);
 }

@@ -15,45 +15,45 @@ use Site\Controller\AbstractController;
 
 final class Category extends AbstractController
 {
-	/**
-	 * Shows a category by its id (Aware of pagination as well)
-	 * 
-	 * @param string $id Category id
-	 * @param integer $pageNumber current page number
-	 * @param string $code Language code
-	 * @param string $slug Category page's slug
-	 * @return string
-	 */
-	public function indexAction($id = false, $pageNumber = 1, $code = null, $slug = null)
-	{
-		$categoryManager = $this->getModuleService('categoryManager');
-		$page = $categoryManager->fetchById($id);
+    /**
+     * Shows a category by its id (Aware of pagination as well)
+     * 
+     * @param string $id Category id
+     * @param integer $pageNumber current page number
+     * @param string $code Language code
+     * @param string $slug Category page's slug
+     * @return string
+     */
+    public function indexAction($id = false, $pageNumber = 1, $code = null, $slug = null)
+    {
+        $categoryManager = $this->getModuleService('categoryManager');
+        $page = $categoryManager->fetchById($id);
 
-		if ($page !== false) {
+        if ($page !== false) {
 
-			$this->loadSitePlugins();
-			$this->view->getBreadcrumbBag()
-					   ->add($categoryManager->getBreadcrumbs($page));
+            $this->loadSitePlugins();
+            $this->view->getBreadcrumbBag()
+                       ->add($categoryManager->getBreadcrumbs($page));
 
-			$postManager = $this->getModuleService('postManager');
-			$config = $this->getModuleService('configManager')->getEntity();
+            $postManager = $this->getModuleService('postManager');
+            $config = $this->getModuleService('configManager')->getEntity();
 
-			// Now get all posts associated with provided category id
-			$posts = $postManager->fetchAllByCategoryIdAndPage($id, true, $pageNumber, $config->getPerPageCount());
+            // Now get all posts associated with provided category id
+            $posts = $postManager->fetchAllByCategoryIdAndPage($id, true, $pageNumber, $config->getPerPageCount());
 
-			// Prepare pagination
-			$paginator = $postManager->getPaginator();
-			$this->preparePaginator($paginator, $code, $slug, $pageNumber);
+            // Prepare pagination
+            $paginator = $postManager->getPaginator();
+            $this->preparePaginator($paginator, $code, $slug, $pageNumber);
 
-			return $this->view->render('news-category', array(
-				'paginator' => $paginator,
-				'posts' => $posts,
-				'page' => $page
-			));
+            return $this->view->render('news-category', array(
+                'paginator' => $paginator,
+                'posts' => $posts,
+                'page' => $page
+            ));
 
-		} else {
+        } else {
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

@@ -13,45 +13,45 @@ namespace News\Controller\Admin\Post;
 
 final class Add extends AbstractPost
 {
-	/**
-	 * Shows adding form
-	 * 
-	 * @return string
-	 */
-	public function indexAction()
-	{
-		$this->view->getPluginBag()
-				   ->load('preview');
+    /**
+     * Shows adding form
+     * 
+     * @return string
+     */
+    public function indexAction()
+    {
+        $this->view->getPluginBag()
+                   ->load('preview');
 
-		$this->loadSharedPlugins();
+        $this->loadSharedPlugins();
 
-		return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
-			'title' => 'Add a post',
-			'post' => $this->getPostManager()->fetchDummy()
-		)));
-	}
+        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+            'title' => 'Add a post',
+            'post' => $this->getPostManager()->fetchDummy()
+        )));
+    }
 
-	/**
-	 * Adds a post
-	 * 
-	 * @return string
-	 */
-	public function addAction()
-	{
-		$formValidator = $this->getValidator($this->request->getPost('post'), $this->request->getFiles());
+    /**
+     * Adds a post
+     * 
+     * @return string
+     */
+    public function addAction()
+    {
+        $formValidator = $this->getValidator($this->request->getPost('post'), $this->request->getFiles());
 
-		if ($formValidator->isValid()) {
-			$postManager = $this->getPostManager();
+        if ($formValidator->isValid()) {
+            $postManager = $this->getPostManager();
 
-			if ($postManager->add($this->request->getAll())) {
+            if ($postManager->add($this->request->getAll())) {
 
-				$this->flashBag->set('success', 'A post has been created successfully');
-				return $postManager->getLastId();
-			}
+                $this->flashBag->set('success', 'A post has been created successfully');
+                return $postManager->getLastId();
+            }
 
-		} else {
+        } else {
 
-			return $formValidator->getErrors();
-		}
-	}
+            return $formValidator->getErrors();
+        }
+    }
 }

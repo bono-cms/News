@@ -16,19 +16,19 @@ use Krystal\Validate\Pattern;
 
 final class Config extends AbstractConfigController
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function getValidationRules()
-	{
-		return array(
-			'per_page_count' => new Pattern\PerPageCount(),
-			'block_per_page_count' => new Pattern\PerPageCount(),
-			'cover_quality' => new Pattern\ImageQuality(),
-			'cover_height' => new Pattern\ImageHeight(),
-			'cover_width' => new Pattern\ImageWidth(),
-			'thumb_height' => new Pattern\ImageHeight(),
-			'thumb_width' => new Pattern\ImageWidth()
-		);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    protected function getValidationRules()
+    {
+        return array(
+            'per_page_count' => new Pattern\PerPageCount(),
+            'block_per_page_count' => new Pattern\PerPageCount(),
+            'cover_quality' => new Pattern\ImageQuality(),
+            'cover_height' => new Pattern\ImageHeight(),
+            'cover_width' => new Pattern\ImageWidth(),
+            'thumb_height' => new Pattern\ImageHeight(),
+            'thumb_width' => new Pattern\ImageWidth()
+        );
+    }
 }

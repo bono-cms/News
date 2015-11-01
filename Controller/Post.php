@@ -15,36 +15,36 @@ use Site\Controller\AbstractController;
 
 final class Post extends AbstractController
 {
-	/**
-	 * Shows a post by its id
-	 * 
-	 * @param string $id Post id
-	 * @return string
-	 */
-	public function indexAction($id)
-	{
-		$postManager = $this->getModuleService('postManager');
-		$post = $postManager->fetchById($id);
+    /**
+     * Shows a post by its id
+     * 
+     * @param string $id Post id
+     * @return string
+     */
+    public function indexAction($id)
+    {
+        $postManager = $this->getModuleService('postManager');
+        $post = $postManager->fetchById($id);
 
-		if ($post !== false) {
+        if ($post !== false) {
 
-			$this->loadSitePlugins();
-			$this->view->getBreadcrumbBag()
-					   ->add($postManager->getBreadcrumbs($post));
+            $this->loadSitePlugins();
+            $this->view->getBreadcrumbBag()
+                       ->add($postManager->getBreadcrumbs($post));
 
-			// Prepare the response
-			$response = $this->view->render('news-post', array(
-				'page' => $post,
-				'post' => $post
-			));
+            // Prepare the response
+            $response = $this->view->render('news-post', array(
+                'page' => $post,
+                'post' => $post
+            ));
 
-			$postManager->incrementViewCount($id);
+            $postManager->incrementViewCount($id);
 
-			return $response;
+            return $response;
 
-		} else {
+        } else {
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

@@ -16,89 +16,89 @@ use News\Storage\CategoryMapperInterface;
 
 final class CategoryMapper extends AbstractMapper implements CategoryMapperInterface
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public static function getTableName()
-	{
-		return 'bono_module_news_categories';
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public static function getTableName()
+    {
+        return 'bono_module_news_categories';
+    }
 
-	/**
-	 * Fetches as a list
-	 * 
-	 * @return array
-	 */
-	public function fetchList()
-	{
-		return $this->db->select(array('id', 'title'))
-						->from(static::getTableName())
-						->whereEquals('lang_id', $this->getLangId())
-						->queryAll();
-	}
+    /**
+     * Fetches as a list
+     * 
+     * @return array
+     */
+    public function fetchList()
+    {
+        return $this->db->select(array('id', 'title'))
+                        ->from(static::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->queryAll();
+    }
 
-	/**
-	 * Fetches category name by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return string
-	 */
-	public function fetchTitleById($id)
-	{
-		return $this->findColumnByPk($id, 'title');
-	}
+    /**
+     * Fetches category name by its associated id
+     * 
+     * @param string $id Category id
+     * @return string
+     */
+    public function fetchTitleById($id)
+    {
+        return $this->findColumnByPk($id, 'title');
+    }
 
-	/**
-	 * Deletes a category by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return boolean
-	 */
-	public function deleteById($id)
-	{
-		return $this->deleteByPk($id);
-	}
+    /**
+     * Deletes a category by its associated id
+     * 
+     * @param string $id Category id
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->deleteByPk($id);
+    }
 
-	/**
-	 * Fetches all categories
-	 * 
-	 * @return array
-	 */
-	public function fetchAll()
-	{
-		return $this->findAllByColumn('lang_id', $this->getLangId());
-	}
+    /**
+     * Fetches all categories
+     * 
+     * @return array
+     */
+    public function fetchAll()
+    {
+        return $this->findAllByColumn('lang_id', $this->getLangId());
+    }
 
-	/**
-	 * Fetches category data by its associated id
-	 * 
-	 * @param string $id Category id
-	 * @return array
-	 */
-	public function fetchById($id)
-	{
-		return $this->findByPk($id);
-	}
+    /**
+     * Fetches category data by its associated id
+     * 
+     * @param string $id Category id
+     * @return array
+     */
+    public function fetchById($id)
+    {
+        return $this->findByPk($id);
+    }
 
-	/**
-	 * Inserts a category
-	 * 
-	 * @param array $input Raw input data
-	 * @return boolean
-	 */
-	public function insert(array $input)
-	{
-		return $this->persist($this->getWithLang($input));
-	}
+    /**
+     * Inserts a category
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function insert(array $input)
+    {
+        return $this->persist($this->getWithLang($input));
+    }
 
-	/**
-	 * Updates a category
-	 * 
-	 * @param array $input Raw input data
-	 * @return boolean
-	 */
-	public function update(array $input)
-	{
-		return $this->persist($input);
-	}
+    /**
+     * Updates a category
+     * 
+     * @param array $input Raw input data
+     * @return boolean
+     */
+    public function update(array $input)
+    {
+        return $this->persist($input);
+    }
 }

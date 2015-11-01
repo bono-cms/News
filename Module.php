@@ -22,69 +22,69 @@ use News\Service\SiteService;
 
 final class Module extends AbstractCmsModule
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getServiceProviders()
-	{
-		$categoryMapper = $this->getMapper('/News/Storage/MySQL/CategoryMapper');
-		$postMapper = $this->getMapper('/News/Storage/MySQL/PostMapper');
+    /**
+     * {@inheritDoc}
+     */
+    public function getServiceProviders()
+    {
+        $categoryMapper = $this->getMapper('/News/Storage/MySQL/CategoryMapper');
+        $postMapper = $this->getMapper('/News/Storage/MySQL/PostMapper');
 
-		$imageManager = $this->getImageManager();
+        $imageManager = $this->getImageManager();
 
-		$webPageManager = $this->getWebPageManager();
-		$historyManager = $this->getHistoryManager();
+        $webPageManager = $this->getWebPageManager();
+        $historyManager = $this->getHistoryManager();
 
-		$postManager = new PostManager($postMapper, $categoryMapper, $this->getTimeBag(), $webPageManager, $imageManager, $historyManager);
+        $postManager = new PostManager($postMapper, $categoryMapper, $this->getTimeBag(), $webPageManager, $imageManager, $historyManager);
 
-		return array(
-			'siteService' => new SiteService($postManager),
-			'configManager' => $this->getConfigService(),
-			'taskManager' => new TaskManager($postMapper),
-			'categoryManager' => new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager, $this->getMenuWidget()),
-			'postManager' => $postManager
-		);
-	}
+        return array(
+            'siteService' => new SiteService($postManager),
+            'configManager' => $this->getConfigService(),
+            'taskManager' => new TaskManager($postMapper),
+            'categoryManager' => new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager, $this->getMenuWidget()),
+            'postManager' => $postManager
+        );
+    }
 
-	/**
-	 * Returns time bag
-	 * 
-	 * @return \News\Service\TimeBag
-	 */
-	private function getTimeBag()
-	{
-		$factory = new TimeBagFactory($this->getConfigEntity());
-		return $factory->build();
-	}
+    /**
+     * Returns time bag
+     * 
+     * @return \News\Service\TimeBag
+     */
+    private function getTimeBag()
+    {
+        $factory = new TimeBagFactory($this->getConfigEntity());
+        return $factory->build();
+    }
 
-	/**
-	 * Returns prepared and configured image manager service
-	 * 
-	 * @return \Krystal\Image\Tool\ImageManager
-	 */
-	private function getImageManager()
-	{
-		$config = $this->getConfigEntity();
+    /**
+     * Returns prepared and configured image manager service
+     * 
+     * @return \Krystal\Image\Tool\ImageManager
+     */
+    private function getImageManager()
+    {
+        $config = $this->getConfigEntity();
 
-		$plugins = array(
-			'thumb' => array(
-				'quality' => $config->getCoverQuality(),
-				'dimensions' => array(
-					// For administration panel
-					array(200, 200),
+        $plugins = array(
+            'thumb' => array(
+                'quality' => $config->getCoverQuality(),
+                'dimensions' => array(
+                    // For administration panel
+                    array(200, 200),
 
-					// Dimensions for the site
-					array($config->getCoverWidth(), $config->getCoverHeight()),
-					array($config->getThumbWidth(), $config->getThumbHeight()),
-				)
-			)
-		);
+                    // Dimensions for the site
+                    array($config->getCoverWidth(), $config->getCoverHeight()),
+                    array($config->getThumbWidth(), $config->getThumbHeight()),
+                )
+            )
+        );
 
-		return new ImageManager(
-			'/data/uploads/module/news/posts/',
-			$this->appConfig->getRootDir(),
-			$this->appConfig->getRootUrl(),
-			$plugins
-		);
-	}
+        return new ImageManager(
+            '/data/uploads/module/news/posts/',
+            $this->appConfig->getRootDir(),
+            $this->appConfig->getRootUrl(),
+            $plugins
+        );
+    }
 }

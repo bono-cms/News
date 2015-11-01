@@ -13,11 +13,11 @@ namespace News\Service;
 
 interface TaskManagerInterface
 {
-	/**
-	 * Count amount of posts in provided category id
-	 * 
-	 * @param string $categoryId
-	 * @return integer
-	 */
-	public function getPostCountByCategoryId($categoryId);
+    /**
+     * Count amount of posts in provided category id
+     * 
+     * @param string $categoryId
+     * @return integer
+     */
+    public function getPostCountByCategoryId($categoryId);
 }

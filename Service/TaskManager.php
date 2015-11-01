@@ -15,32 +15,32 @@ use News\Storage\PostMapperInterface;
 
 final class TaskManager implements TaskManagerInterface
 {
-	/**
-	 * Any compliant post mapper
-	 * 
-	 * @var \News\Storage\PostMapperInterface
-	 */
-	private $postMapper;
+    /**
+     * Any compliant post mapper
+     * 
+     * @var \News\Storage\PostMapperInterface
+     */
+    private $postMapper;
 
-	/**
-	 * State initialization
-	 * 
-	 * @param \News\Storage\PostMapperInterface $postMapper
-	 * @return void
-	 */
-	public function __construct(PostMapperInterface $postMapper)
-	{
-		$this->postMapper = $postMapper;
-	}
+    /**
+     * State initialization
+     * 
+     * @param \News\Storage\PostMapperInterface $postMapper
+     * @return void
+     */
+    public function __construct(PostMapperInterface $postMapper)
+    {
+        $this->postMapper = $postMapper;
+    }
 
-	/**
-	 * Count amount of posts in provided category id
-	 * 
-	 * @param string $categoryId
-	 * @return integer
-	 */
-	public function getPostCountByCategoryId($categoryId)
-	{
-		return $this->postMapper->countAllByCategoryId($categoryId);
-	}
+    /**
+     * Count amount of posts in provided category id
+     * 
+     * @param string $categoryId
+     * @return integer
+     */
+    public function getPostCountByCategoryId($categoryId)
+    {
+        return $this->postMapper->countAllByCategoryId($categoryId);
+    }
 }
