@@ -17,14 +17,6 @@ use Krystal\Stdlib\VirtualEntity;
 interface CategoryManagerInterface
 {
     /**
-     * Returns breadcrumbs for the view layer
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $category
-     * @return array
-     */
-    public function getBreadcrumbs(VirtualEntity $category);
-
-    /**
      * Returns category's last id
      * 
      * @return string

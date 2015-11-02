@@ -65,33 +65,19 @@ abstract class AbstractPost extends AbstractAdminController
     final protected function loadSharedPlugins()
     {
         $this->view->getPluginBag()
-                   ->appendScript($this->getWithAssetPath('/admin/post.form.js'))
+                   ->appendScript('@News/admin/post.form.js')
                    ->load(array($this->getWysiwygPluginName(), 'datepicker'));
     }
 
     /**
-     * Returns shared variables
+     * Loads breadcrumbs
      * 
-     * @param array $overrides
-     * @return array
+     * @param string $title
+     * @return void
      */
-    final protected function getWithSharedVars(array $overrides)
+    final protected function loadBreadcrumbs($title)
     {
-        $this->view->getBreadcrumbBag()->add(array(
-            array(
-                'link' => 'News:Admin:Browser@indexAction',
-                'name' => 'News'
-            ),
-            array(
-                'link' => '#',
-                'name' => $overrides['title']
-            )
-        ));
-
-        $vars = array(
-            'categories' => $this->getCategoryManager()->fetchList(),
-        );
-
-        return array_replace_recursive($vars, $overrides);
+        $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Browser@indexAction')
+                                       ->addOne($title);
     }
 }

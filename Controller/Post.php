@@ -27,7 +27,6 @@ final class Post extends AbstractController
         $post = $postManager->fetchById($id);
 
         if ($post !== false) {
-
             $this->loadSitePlugins();
             $this->view->getBreadcrumbBag()
                        ->add($postManager->getBreadcrumbs($post));
@@ -39,11 +38,9 @@ final class Post extends AbstractController
             ));
 
             $postManager->incrementViewCount($id);
-
             return $response;
 
         } else {
-
             return false;
         }
     }

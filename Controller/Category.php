@@ -26,14 +26,11 @@ final class Category extends AbstractController
      */
     public function indexAction($id = false, $pageNumber = 1, $code = null, $slug = null)
     {
-        $categoryManager = $this->getModuleService('categoryManager');
-        $page = $categoryManager->fetchById($id);
+        $page = $this->getModuleService('categoryManager')->fetchById($id);
 
         if ($page !== false) {
-
             $this->loadSitePlugins();
-            $this->view->getBreadcrumbBag()
-                       ->add($categoryManager->getBreadcrumbs($page));
+            $this->view->getBreadcrumbBag()->addOne($page->getTitle());
 
             $postManager = $this->getModuleService('postManager');
             $config = $this->getModuleService('configManager')->getEntity();
@@ -52,7 +49,6 @@ final class Category extends AbstractController
             ));
 
         } else {
-
             return false;
         }
     }

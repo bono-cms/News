@@ -24,11 +24,13 @@ final class Add extends AbstractPost
                    ->load('preview');
 
         $this->loadSharedPlugins();
+        $this->loadBreadcrumbs('Add a post');
 
-        return $this->view->render($this->getTemplatePath(), $this->getWithSharedVars(array(
+        return $this->view->render($this->getTemplatePath(), array(
+            'categories' => $this->getCategoryManager()->fetchList(),
             'title' => 'Add a post',
             'post' => $this->getPostManager()->fetchDummy()
-        )));
+        ));
     }
 
     /**
@@ -44,13 +46,11 @@ final class Add extends AbstractPost
             $postManager = $this->getPostManager();
 
             if ($postManager->add($this->request->getAll())) {
-
                 $this->flashBag->set('success', 'A post has been created successfully');
                 return $postManager->getLastId();
             }
 
         } else {
-
             return $formValidator->getErrors();
         }
     }

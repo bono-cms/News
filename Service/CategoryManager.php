@@ -89,22 +89,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
-     * Returns breadcrumbs for view
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $category
-     * @return array
-     */
-    public function getBreadcrumbs(VirtualEntity $category)
-    {
-        return array(
-            array(
-                'name' => $category->getTitle(),
-                'link' => '#',
-            )
-        );
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function fetchTitleByWebPageId($webPageId)
