@@ -290,7 +290,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $imageBag = clone $this->imageManager->getImageBag();
         $imageBag->setId((int) $post['id'])
                  ->setCover($post['cover']);
-        
+
         // Configure time bag now
         $timeBag = clone $this->timeBag;
         $timeBag->setTimestamp((int) $post['timestamp']);
