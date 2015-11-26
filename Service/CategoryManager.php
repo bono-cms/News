@@ -122,7 +122,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setKeywords(Filter::escape($category['keywords']))
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
             ->setMetaDescription(Filter::escape($category['meta_description']));
-            
+
         return $entity;
     }
 
