@@ -103,6 +103,14 @@ interface PostManagerInterface
     public function fetchById($id);
 
     /**
+     * Fetches mostly viewed entities
+     * 
+     * @param integer $limit
+     * @return array
+     */
+    public function fetchMostlyViewed($limit);
+
+    /**
      * Fetches all posts filtered by pagination
      * 
      * @param integer $page Current page number

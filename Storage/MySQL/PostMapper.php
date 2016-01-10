@@ -174,6 +174,24 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
+     * Fetches posts ordering by view count
+     * 
+     * @param integer $limit Limit of records to be fetched
+     * @return array
+     */
+    public function fetchMostlyViewed($limit)
+    {
+        return $this->db->select('*')
+                        ->from(self::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->andWhereEquals('published', '1')
+                        ->orderBy('views')
+                        ->desc()
+                        ->limit($limit)
+                        ->queryAll();
+    }
+
+    /**
      * Fetches all posts
      * 
      * @return array

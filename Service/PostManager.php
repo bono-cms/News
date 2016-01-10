@@ -470,6 +470,17 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
+     * Fetches mostly viewed entities
+     * 
+     * @param integer $limit
+     * @return array
+     */
+    public function fetchMostlyViewed($limit)
+    {
+        return $this->prepareResults($this->postMapper->fetchMostlyViewed($limit));
+    }
+
+    /**
      * Fetches all posts filtered by pagination
      * 
      * @param integer $page Current page number

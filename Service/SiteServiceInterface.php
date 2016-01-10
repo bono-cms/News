@@ -14,6 +14,14 @@ namespace News\Service;
 interface SiteServiceInterface
 {
     /**
+     * Returns a collection of mostly viewed article entities
+     * 
+     * @param integer $limit
+     * @return array
+     */
+    public function getMostlyViewed($limit);
+
+    /**
      * Returns random posts
      * 
      * @param integer $amount

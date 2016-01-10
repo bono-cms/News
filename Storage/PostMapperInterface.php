@@ -88,6 +88,14 @@ interface PostMapperInterface
     public function deleteAllByCategoryId($categoryId);
 
     /**
+     * Fetches posts ordering by view count
+     * 
+     * @param integer $limit Limit of records to be fetched
+     * @return array
+     */
+    public function fetchMostlyViewed($limit);
+
+    /**
      * Fetches all posts
      * 
      * @return array
