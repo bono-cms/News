@@ -28,13 +28,8 @@ return array(
         'disallow' => array('guest')
     ),
     
-    '/admin/module/news/save.ajax' => array(
-        'controller' => 'Admin:Browser@saveAction',
-        'disallow' => array('guest')
-    ),
-    
-    '/admin/module/news/delete-selected.ajax' => array(
-        'controller' => 'Admin:Browser@deleteSelectedAction',
+    '/admin/module/news/tweak' => array(
+        'controller' => 'Admin:Post@tweakAction',
         'disallow' => array('guest')
     ),
     
@@ -46,53 +41,43 @@ return array(
         'controller' => 'Admin:Browser@categoryAction'
     ),
     
-    '/admin/module/news/browse/category/(:var)/page/(:var)' =>  array(
+    '/admin/module/news/browse/category/(:var)/page/(:var)' => array(
         'controller' => 'Admin:Browser@categoryAction'
     ),
     
     '/admin/module/news/post/add' => array(
-        'controller' => 'Admin:Post:Add@indexAction'
-    ),
-    
-    '/admin/module/news/post/add.ajax' => array(
-        'controller' => 'Admin:Post:Add@addAction',
-        'disallow' => array('guest')
+        'controller' => 'Admin:Post@addAction'
     ),
     
     '/admin/module/news/post/edit/(:var)' => array(
-        'controller' => 'Admin:Post:Edit@indexAction'
+        'controller' => 'Admin:Post@editAction'
     ),
     
-    '/admin/module/news/post/edit.ajax' => array(
-        'controller' => 'Admin:Post:Edit@updateAction',
+    '/admin/module/news/post/save' => array(
+        'controller' => 'Admin:Post@saveAction',
         'disallow' => array('guest')
     ),
     
-    '/admin/module/news/post/delete.ajax' => array(
-        'controller' => 'Admin:Browser@deleteAction',
+    '/admin/module/news/post/delete' => array(
+        'controller' => 'Admin:Post@deleteAction',
         'disallow' => array('guest')
     ),
     
     '/admin/module/news/category/add' => array(
-        'controller' => 'Admin:Category:Add@indexAction'
-    ),
-    
-    '/admin/module/news/category/add.ajax' => array(
-        'controller' => 'Admin:Category:Add@addAction',
-        'disallow' => array('guest')
+        'controller' => 'Admin:Category@addAction'
     ),
     
     '/admin/module/news/category/edit/(:var)' => array(
-        'controller' => 'Admin:Category:Edit@indexAction'
+        'controller' => 'Admin:Category@editAction'
     ),
     
-    '/admin/module/news/category/edit.ajax' => array(
-        'controller' => 'Admin:Category:Edit@updateAction',
+    '/admin/module/news/category/save' => array(
+        'controller' => 'Admin:Category@saveAction',
         'disallow' => array('guest')
     ),
     
-    '/admin/module/news/category/delete.ajax' => array(
-        'controller' => 'Admin:Browser@deleteCategoryAction',
+    '/admin/module/news/category/delete' => array(
+        'controller' => 'Admin:Category@deleteAction',
         'disallow' => array('guest')
     )
 );
