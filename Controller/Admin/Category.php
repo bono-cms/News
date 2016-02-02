@@ -28,8 +28,7 @@ final class Category extends AbstractAdminController
         // Load view plugins
         $this->loadMenuWidget();
         $this->view->getPluginBag()
-                    ->load($this->getWysiwygPluginName())
-                    ->appendScript('@News/admin/category.form.js');
+                    ->load($this->getWysiwygPluginName());
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Browser@indexAction')
@@ -77,14 +76,7 @@ final class Category extends AbstractAdminController
      */
     public function deleteAction()
     {
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getCategoryManager()->deleteById($id)) {
-                $this->flashBag->set('success', 'Selected category has been removed successfully');
-                return '1';
-            }
-        }
+        return $this->invokeRemoval('categoryManager');
     }
 
     /**
@@ -96,7 +88,7 @@ final class Category extends AbstractAdminController
     {
         $input = $this->request->getPost('category');
 
-        $formValidator = $this->validatorFactory->build(array(
+        return $this->invokeSave('categoryManager', $input['id'], $this->request->getPost(), array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -104,25 +96,5 @@ final class Category extends AbstractAdminController
                 )
             )
         ));
-
-        if ($formValidator->isValid()) {
-            $categoryManager = $this->getCategoryManager();
-
-            if ($input['id']) {
-                if ($categoryManager->update($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The category has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                if ($categoryManager->add($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The category has been created successfully');
-                    return $categoryManager->getLastId();
-                }
-            }
-
-        } else {
-            return $formValidator->getErrors();
-        }
     }
 }

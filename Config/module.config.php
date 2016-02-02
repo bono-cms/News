@@ -4,7 +4,7 @@
   array (
     'name' => 'News',
     'url' => '/admin/module/news',
-    'icon' => '/module/News/Assets/news.png',
+    'icon' => 'fa fa-newspaper-o fa-5x',
     'order' => 1,
     'description' => 'News module allows you to manage news on your site',
   ),

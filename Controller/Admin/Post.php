@@ -78,28 +78,7 @@ final class Post extends AbstractAdminController
      */
     public function deleteAction()
     {
-        // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
-
-            $postManager = $this->getPostManager();
-            $postManager->deleteByIds($ids);
-
-            $this->flashBag->set('success', 'Selected posts have been removed successfully');
-        } else {
-            $this->flashBag->set('warning', 'You should select at least one post to remove');
-        }
-
-        // Single removal
-        if ($this->request->hasPost('id')) {
-            $id = $this->request->getPost('id');
-
-            if ($this->getPostManager()->deleteById($id)) {
-                $this->flashBag->set('success', 'Selected post has been removed successfully');
-            }
-        }
-
-        return '1';
+        return $this->invokeRemoval('postManager');
     }
 
     /**
@@ -131,7 +110,7 @@ final class Post extends AbstractAdminController
     {
         $input = $this->request->getPost('post');
 
-        $formValidator = $this->validatorFactory->build(array(
+        return $this->invokeSave('postManager', $input['id'], $this->request->getAll(), array(
             'input' => array(
                 'source' => $input,
                 'definition' => array(
@@ -150,25 +129,5 @@ final class Post extends AbstractAdminController
                 )
             )
         ));
-
-        if ($formValidator->isValid()) {
-            $postManager = $this->getPostManager();
-
-            if ($input['id']) {
-                if ($postManager->update($this->request->getAll())) {
-                    $this->flashBag->set('success', 'A post has been updated successfully');
-                    return '1';
-                }
-
-            } else {
-                if ($postManager->add($this->request->getAll())) {
-                    $this->flashBag->set('success', 'A post has been created successfully');
-                    return $postManager->getLastId();
-                }
-            }
-
-        } else {
-            return $formValidator->getErrors();
-        }
     }
 }
