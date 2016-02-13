@@ -49,7 +49,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         if ($sort == 'rand') {
             $db->orderBy()
                ->rand();
-               
+
         } else {
             $db->orderBy($sort);
         }

@@ -380,7 +380,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $input = $this->prepareInput($input);
         $data =& $input['data']['post'];
 
-        // By default there's 0 views
+        // By default there are 0 views
         $data['views'] = 0;
 
         // Handle cover
@@ -537,7 +537,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchAll()
     {
-        return ($this->postMapper->fetchAll());
+        return $this->postMapper->fetchAll();
     }
 
     /**
