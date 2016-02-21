@@ -107,7 +107,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Updates whether post's seo is enabled or not by its associated id
+     * Updates whether post's SEO is enabled or not by its associated id
      * 
      * @param string $id Post id
      * @param string $published Either 0 or 1
