@@ -76,7 +76,7 @@ use Krystal\Form\Element;
 				<label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-                        <?php echo Element::text('post[slug]', $post->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => 'URL slug for this post. By default is taken from a title')); ?>
+                        <?php echo Element::text('post[slug]', $post->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this post. By default is taken from a title'))); ?>
 						<span class="input-group-addon">
 							<a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh the slug'); ?>"></i></a>
 						</span>
@@ -88,7 +88,7 @@ use Krystal\Form\Element;
 				<label class="col-lg-2 control-label"><?php $this->show('Keywords'); ?></label>
 				<div class="col-lg-10">
 					<div class="input-group">
-                        <?php echo Element::text('post[keywords]', $post->getKeywords(), array('class' => 'form-control', 'placeholder' => 'Keywords used for search engines')); ?>
+                        <?php echo Element::text('post[keywords]', $post->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
 						<span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
 					</div>
 				</div>
@@ -97,7 +97,7 @@ use Krystal\Form\Element;
 			<div class="form-group clearfix">
 				<label class="col-lg-2 control-label"><?php $this->show('Description'); ?></label>
 				<div class="col-lg-10">
-                    <?php echo Element::textarea('post[meta_description]', $post->getMetaDescription(), array('class' => 'form-control', 'placeholder' => 'Meta description for search engines')); ?>
+                    <?php echo Element::textarea('post[meta_description]', $post->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
 				</div>
 			</div>
 			
