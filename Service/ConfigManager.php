@@ -22,8 +22,8 @@ final class ConfigManager extends AbstractConfigManager
     protected function populate()
     {
         $entity = $this->getEntity();
-        $entity->setCoverHeight(floatval($this->get('cover_Height', 300)))
-               ->setCoverWidth(floatval($this->get('cover_Height', 300)))
+        $entity->setCoverHeight(floatval($this->get('cover_height', 300)))
+               ->setCoverWidth(floatval($this->get('cover_width', 300)))
                ->setThumbHeight(floatval($this->get('thumb_height', 30)))
                ->setThumbWidth(floatval($this->get('thumb_width', 30)))
                ->setCoverQuality((int) $this->get('cover_quality', 75))
