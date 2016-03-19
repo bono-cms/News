@@ -66,7 +66,12 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchAll()
     {
-        return $this->findAllByColumn('lang_id', $this->getLangId());
+        return $this->db->select('*')
+                        ->from(self::getTableName())
+                        ->whereEquals('lang_id', $this->getLangId())
+                        ->orderBy('id')
+                        ->desc()
+                        ->queryAll();
     }
 
     /**
