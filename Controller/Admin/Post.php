@@ -49,7 +49,7 @@ final class Post extends AbstractAdminController
     {
         $this->view->getPluginBag()
                    ->load('preview');
-        
+
         $entity = $this->getPostManager()->fetchDummy();
         return $this->createForm($entity, 'Add a post');
     }
