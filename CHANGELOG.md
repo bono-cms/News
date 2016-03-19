@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Changed default sorting order to DESC when displaying categories
  * Fixed issue with saving cover sizes in configuration
  * Changed module icon
  * Improved internal structure
