@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added support for table prefix
  * Added extra buttons in category form
  * Changed default sorting order to DESC when displaying categories
  * Fixed issue with saving cover sizes in configuration

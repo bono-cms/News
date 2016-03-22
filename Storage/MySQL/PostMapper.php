@@ -21,7 +21,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public static function getTableName()
     {
-        return 'bono_module_news_posts';
+        return self::getWithPrefix('bono_module_news_posts');
     }
 
     /**
