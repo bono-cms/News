@@ -30,7 +30,8 @@ final class Category extends AbstractController
 
         if ($page !== false) {
             $this->loadSitePlugins();
-            $this->view->getBreadcrumbBag()->addOne($page->getTitle());
+            $this->view->getBreadcrumbBag()
+                       ->addOne($page->getTitle());
 
             $postManager = $this->getModuleService('postManager');
             $config = $this->getModuleService('configManager')->getEntity();
