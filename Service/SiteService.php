@@ -21,7 +21,7 @@ final class SiteService implements SiteServiceInterface
      * @var \News\Service\PostManagerInterface
      */
     private $postManager;
-    
+
     /**
      * Configuration entity
      * 
