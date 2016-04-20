@@ -14,6 +14,15 @@ namespace News\Service;
 interface SiteServiceInterface
 {
     /**
+     * Returns all entities filtered by category id
+     * 
+     * @param string $id Category id
+     * @param integer $limit Optional limit. If null, then the value is taken from configuration
+     * @return array
+     */
+    public function getAllByCategoryId($id, $limit = null);
+
+    /**
      * Returns a collection of mostly viewed article entities
      * 
      * @param integer $limit

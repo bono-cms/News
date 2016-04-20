@@ -11,6 +11,8 @@
 
 namespace News\Service;
 
+use Krystal\Stdlib\VirtualEntity;
+
 final class SiteService implements SiteServiceInterface
 {
     /**
@@ -19,16 +21,41 @@ final class SiteService implements SiteServiceInterface
      * @var \News\Service\PostManagerInterface
      */
     private $postManager;
+    
+    /**
+     * Configuration entity
+     * 
+     * @var \Krystal\Stdlib\VirtualEntity
+     */
+    private $config;
 
     /**
      * State initialization
      * 
      * @param \News\Service\PostManagerInterface $postManager
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
-    public function __construct(PostManagerInterface $postManager)
+    public function __construct(PostManagerInterface $postManager, VirtualEntity $config)
     {
         $this->postManager = $postManager;
+        $this->config = $config;
+    }
+
+    /**
+     * Returns all entities filtered by category id
+     * 
+     * @param string $id Category id
+     * @param integer $limit Optional limit. If null, then the value is taken from configuration
+     * @return array
+     */
+    public function getAllByCategoryId($id, $limit = null)
+    {
+        if (is_null($limit)) {
+            $limit = $this->config->getBlockPerPageCount();
+        }
+
+        return $this->postManager->fetchAllPublishedByCategoryId($id, $limit);
     }
 
     /**

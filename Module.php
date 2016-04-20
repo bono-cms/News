@@ -36,10 +36,11 @@ final class Module extends AbstractCmsModule
         $historyManager = $this->getHistoryManager();
 
         $postManager = new PostManager($postMapper, $categoryMapper, $this->getTimeBag(), $webPageManager, $imageManager, $historyManager);
+        $configManager = $this->getConfigService();
 
         return array(
-            'siteService' => new SiteService($postManager),
-            'configManager' => $this->getConfigService(),
+            'siteService' => new SiteService($postManager, $configManager->getEntity()),
+            'configManager' => $configManager,
             'taskManager' => new TaskManager($postMapper),
             'categoryManager' => new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager, $this->getMenuWidget()),
             'postManager' => $postManager
