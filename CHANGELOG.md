@@ -4,7 +4,8 @@ CHANGELOG
 1.2
 ---
 
- * Added getImageUrl() shortcut in `PostEntity`
+ * Added missing `getAllByCategoryId()` in the site service
+ * Added `getImageUrl()` shortcut in `PostEntity`
  * Added support for table prefix
  * Added extra buttons in category form
  * Changed default sorting order to DESC when displaying categories
