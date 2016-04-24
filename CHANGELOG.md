@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added missing `$category` variable for category templates
  * Added missing `getAllByCategoryId()` in the site service
  * Added `getImageUrl()` shortcut in `PostEntity`
  * Added support for table prefix
