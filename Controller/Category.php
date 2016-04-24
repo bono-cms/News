@@ -46,7 +46,8 @@ final class Category extends AbstractController
             return $this->view->render('news-category', array(
                 'paginator' => $paginator,
                 'posts' => $posts,
-                'page' => $page
+                'page' => $page,
+                'category' => $page
             ));
 
         } else {
