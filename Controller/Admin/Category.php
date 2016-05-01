@@ -72,11 +72,12 @@ final class Category extends AbstractAdminController
     /**
      * Removes a category
      * 
+     * @param string $id
      * @return string
      */
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        return $this->invokeRemoval('categoryManager');
+        return $this->invokeRemoval('categoryManager', $id);
     }
 
     /**

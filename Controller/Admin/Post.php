@@ -72,13 +72,14 @@ final class Post extends AbstractAdminController
     }
 
     /**
-     * Deletes a post
+     * Deletes a post or a collection of them
      * 
+     * @param string $id
      * @return string
      */
-    public function deleteAction()
+    public function deleteAction($id)
     {
-        return $this->invokeRemoval('postManager');
+        return $this->invokeRemoval('postManager', $id);
     }
 
     /**

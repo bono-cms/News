@@ -18,7 +18,7 @@ use Krystal\Form\Element;
 		 
 		 <?php if (!empty($posts)): ?>
 		 <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('News:Admin:Post@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('News:Admin:Post@deleteAction'); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+		 <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('News:Admin:Post@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
 		 
 		 <?php else: ?>
 		 <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
@@ -70,7 +70,7 @@ use Krystal\Form\Element;
 					<td class="text-center">
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this post'); ?>" data-button="view" target="_blank" href="<?php echo $post->getUrl(); ?>"><i class="glyphicon glyphicon-search"></i></a>
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this post'); ?>" data-button="edit" href="<?php echo $this->url('News:Admin:Post@editAction', $post->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this post'); ?>" data-button="delete" href="#" data-id="<?php echo $post->getId(); ?>" data-category="post"><i class="glyphicon glyphicon-remove"></i></a>
+						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this post'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('News:Admin:Post@deleteAction', $post->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
 					</td>
 				</tr>
 				
@@ -122,7 +122,7 @@ use Krystal\Form\Element;
 					<td class="text-center">
 						<a data-button="view" data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this category on site'); ?>" target="_blank" href="<?php echo $category->getUrl();?>"><i class="glyphicon glyphicon-search"></i></a>
 						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this category'); ?>" data-button="edit" href="<?php echo $this->url('News:Admin:Category@editAction', $category->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this category'); ?>" data-button="delete" data-id="<?php echo $category->getId(); ?>" data-category="category" href="#"><i class="glyphicon glyphicon-remove"></i></a>
+						<a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this category'); ?>" data-button="delete" data-url="<?php echo $this->url('News:Admin:Category@deleteAction', $category->getId()); ?>" href="#"><i class="glyphicon glyphicon-remove"></i></a>
 					</td>
 				</tr>
 				<?php endforeach; ?>

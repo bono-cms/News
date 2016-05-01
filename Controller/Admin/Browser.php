@@ -26,10 +26,6 @@ final class Browser extends AbstractAdminController
         $paginator = $this->getPostManager()->getPaginator();
         $paginator->setUrl($url);
 
-        // Load view plugins
-        $this->view->getPluginBag()
-                   ->appendScript('@News/admin/browser.js');
-
         // Append a breadcrumb
         $this->view->getBreadcrumbBag()
                    ->addOne('News');
