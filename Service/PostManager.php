@@ -241,34 +241,15 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     private function removeAllById($id)
     {
-        // Order of execution is important
-        $this->removeWebPageById($id);
-        $this->removeImagesById($id);
-
-        return $this->postMapper->deleteById($id);
-    }
-
-    /**
-     * Removes all images by associated post id
-     * 
-     * @param string $id Post's id
-     * @return boolean
-     */
-    private function removeImagesById($id)
-    {
-        return $this->imageManager->delete($id);
-    }
-
-    /**
-     * Removes a web page by post's associated id
-     * 
-     * @param string $id Post's id
-     * @return boolean
-     */
-    private function removeWebPageById($id)
-    {
+        // Remove a web page
         $webPageId = $this->postMapper->fetchWebPageIdById($id);
-        return $this->webPageManager->deleteById($webPageId);
+        $this->webPageManager->deleteById($webPageId);
+
+        // Remove images
+        $this->imageManager->delete($id);
+
+        // And finally removal the post itself
+        return $this->postMapper->deleteById($id);
     }
 
     /**
