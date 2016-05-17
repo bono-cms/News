@@ -149,12 +149,12 @@ interface PostMapperInterface
     public function fetchAllByCategoryIdAndPage($categoryId, $published, $page, $itemsPerPage);
 
     /**
-     * Fetches post title by its associated id
+     * Fetches post name by its associated id
      * 
      * @param string $id Post id
      * @return string
      */
-    public function fetchTitleById($id);
+    public function fetchNameById($id);
 
     /**
      * Counts all posts by associated category id

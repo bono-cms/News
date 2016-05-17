@@ -36,12 +36,12 @@ interface CategoryMapperInterface
     public function fetchAll();
 
     /**
-     * Fetches category title by its associated id
+     * Fetches category name by its associated id
      * 
      * @param string $id Category id
      * @return string
      */
-    public function fetchTitleById($id);
+    public function fetchNameById($id);
 
     /**
      * Fetches category data by its associated id

@@ -115,7 +115,7 @@ final class Post extends AbstractAdminController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'title' => new Pattern\Title(),
+                    'name' => new Pattern\Name(),
                     'intro' => new Pattern\IntroText(),
                     'full'  => new Pattern\FullText(),
                     'date' => new Pattern\DateFormat('m/d/Y')

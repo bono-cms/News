@@ -41,7 +41,7 @@ use Krystal\Form\Element;
 						<?php endif; ?>
 					</th>
 					<th class="text-center"><?php $this->show('#'); ?></th>
-					<th class="text-center"><?php $this->show('Title'); ?></th>
+					<th class="text-center"><?php $this->show('Name'); ?></th>
 					<th class="text-center"><?php $this->show('Date'); ?></th>
 					<th class="text-center"><?php $this->show('Category'); ?></th>
 					<th class="text-center"><?php $this->show('Published'); ?></th>
@@ -58,7 +58,7 @@ use Krystal\Form\Element;
 						<input type="checkbox" name="toDelete[<?php echo $post->getId(); ?>]" />
 					</td>
 					<td class="text-center text-muted"><?php echo $post->getId(); ?></td>
-					<td class="text-center"><?php echo $post->getTitle(); ?></td>
+					<td class="text-center"><?php echo $post->getName(); ?></td>
 					<td class="text-center"><?php echo $post->getTimeBag()->getPanelFormat(); ?></td>
 					<td class="text-center"><?php echo $post->getCategoryName(); ?></td>
 					<td class="text-center">
@@ -112,9 +112,9 @@ use Krystal\Form\Element;
 					<td class="text-center">
 						<a href="<?php echo $this->url('News:Admin:Browser@categoryAction', $category->getId()); ?>">
 							<?php if (isset($categoryId) && $categoryId == $category->getId()): ?>
-							<strong><?php echo $category->getTitle(); ?></strong>
+							<strong><?php echo $category->getName(); ?></strong>
 							<?php else: ?>
-							<?php echo $category->getTitle(); ?>
+							<?php echo $category->getName(); ?>
 							<?php endif; ?>
 						</a>
 					</td>

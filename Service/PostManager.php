@@ -118,7 +118,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
 
         return array(
             array(
-                'name' => $category['title'],
+                'name' => $category['name'],
                 'link' => $this->webPageManager->surround($categoryWebPage['slug'], $categoryWebPage['lang_id']),
             )
         );
@@ -148,7 +148,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchTitleByWebPageId($webPageId)
     {
-        return $this->postMapper->fetchTitleByWebPageId($webPageId);
+        return $this->postMapper->fetchNameByWebPageId($webPageId);
     }
 
     /**
@@ -223,7 +223,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     public function deleteById($id)
     {
         // Grab post's title before we remove it
-        $title = Filter::escape($this->postMapper->fetchTitleById($id));
+        $title = Filter::escape($this->postMapper->fetchNameById($id));
 
         if ($this->removeAllById($id)) {
             $this->track('Post "%s" has been removed', $title);
@@ -286,8 +286,8 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             ->setCategoryId((int) $post['category_id'])
             ->setPublished((bool) $post['published'])
             ->setSeo((bool) $post['seo'])
-            ->setTitle(Filter::escape($post['title']))
-            ->setCategoryName(Filter::escape($this->categoryMapper->fetchTitleById($post['category_id'])))
+            ->setName(Filter::escape($post['name']))
+            ->setCategoryName(Filter::escape($this->categoryMapper->fetchNameById($post['category_id'])))
             ->setIntro(Filter::escapeContent($post['intro']))
             ->setFull(Filter::escapeContent($post['full']))
             ->setSlug(Filter::escape($this->webPageManager->fetchSlugByWebPageId($post['web_page_id'])))
@@ -341,9 +341,9 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $data =& $input['data']['post'];
         $data['timestamp'] = strtotime($data['date']);
 
-        // Take a slug from a title if empty
+        // Take a slug from a name if empty
         if (empty($data['slug'])) {
-            $data['slug'] = $data['title'];
+            $data['slug'] = $data['name'];
         }
 
         $data['slug'] = $this->webPageManager->sluggify($data['slug']);
@@ -383,7 +383,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             $this->imageManager->upload($this->getLastId(), $file);
         }
 
-        $this->track('New post "%s" has been created', $data['title']);
+        $this->track('New post "%s" has been created', $data['name']);
         $this->webPageManager->add($this->getLastId(), $data['slug'], 'News (Posts)', 'News:Post@indexAction', $this->postMapper);
 
         return true;
@@ -434,7 +434,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $this->webPageManager->update($post['web_page_id'], $post['slug']);
 
         // And finally now just track it
-        $this->track('Post "%s" has been updated', $post['title']);
+        $this->track('Post "%s" has been updated', $post['name']);
 
         return true;
     }

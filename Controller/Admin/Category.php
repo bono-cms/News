@@ -93,7 +93,7 @@ final class Category extends AbstractAdminController
             'input' => array(
                 'source' => $input,
                 'definition' => array(
-                    'title' => new Pattern\Title()
+                    'name' => new Pattern\Name()
                 )
             )
         ));

@@ -14,10 +14,10 @@ use Krystal\Form\Element;
         <?php echo Element::hidden('post[cover]', $post->getCover()); ?>
         
         <div class="form-group clearfix">
-            <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
+            <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
             <div class="col-lg-10">
                 <div class="input-group">
-                    <?php echo Element::text('post[title]', $post->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's title"))); ?>
+                    <?php echo Element::text('post[name]', $post->getName(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's name"))); ?>
                     <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                 </div>
             </div>

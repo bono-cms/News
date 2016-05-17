@@ -115,7 +115,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $entity->setId((int) $category['id'])
             ->setWebPageId((int) $category['web_page_id'])
             ->setLangId((int) $category['lang_id'])
-            ->setTitle(Filter::escape($category['title']))
+            ->setName(Filter::escape($category['name']))
             ->setDescription(Filter::escapeContent($category['description']))
             ->setSlug(Filter::escape($this->webPageManager->fetchSlugByWebPageId($category['web_page_id'])))
             ->setSeo((bool) $category['seo'])
@@ -133,7 +133,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function fetchList()
     {
-        return ArrayUtils::arrayList($this->categoryMapper->fetchList(), 'id', 'title');
+        return ArrayUtils::arrayList($this->categoryMapper->fetchList(), 'id', 'name');
     }
 
     /**
@@ -213,11 +213,11 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
 
         // If at least one menu widget it added
         if ($this->hasMenuWidget() && isset($input['menu'])) {
-            $this->updateMenuItem($category['web_page_id'], $category['title'], $input['menu']);
+            $this->updateMenuItem($category['web_page_id'], $category['name'], $input['menu']);
         }
 
         // Track it
-        $this->track('Category "%s" has been updated', $category['title']);
+        $this->track('Category "%s" has been updated', $category['name']);
         return $this->categoryMapper->update(ArrayUtils::arrayWithout($category, array('slug', 'menu')));
     }
 
@@ -241,7 +241,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function deleteById($id)
     {
         // Grab category's title before we remove it
-        $title = Filter::escape($this->categoryMapper->fetchTitleById($id));
+        $title = Filter::escape($this->categoryMapper->fetchNameById($id));
 
         if ($this->removeAllById($id)) {
             $this->track('Category "%s" has been removed', $title);
