@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added `name` attribute for posts and categories
  * Added missing `$category` variable for category templates
  * Added missing `getAllByCategoryId()` in the site service
  * Added `getImageUrl()` shortcut in `PostEntity`
