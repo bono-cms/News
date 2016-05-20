@@ -116,6 +116,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
             ->setWebPageId((int) $category['web_page_id'])
             ->setLangId((int) $category['lang_id'])
             ->setName(Filter::escape($category['name']))
+            ->setTitle(Filter::escape($category['title']))
             ->setDescription(Filter::escapeContent($category['description']))
             ->setSlug(Filter::escape($this->webPageManager->fetchSlugByWebPageId($category['web_page_id'])))
             ->setSeo((bool) $category['seo'])
@@ -158,7 +159,12 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
 
         // By default a slug is taken from a title as well
         if (empty($category['slug'])) {
-            $category['slug'] = $category['title'];
+            $category['slug'] = $category['name'];
+        }
+
+        // Use name for empty titles
+        if (empty($category['title'])) {
+            $category['title'] = $category['name'];
         }
 
         // Force a string to be slugiffied
@@ -180,13 +186,13 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $category['web_page_id'] = '';
 
         if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug', 'menu')))) {
-            $this->track('Category "%s" has been created', $category['title']);
+            $this->track('Category "%s" has been created', $category['name']);
 
             if ($this->webPageManager->add($this->getLastId(), $category['slug'], 'News (Categories)', 'News:Category@indexAction', $this->categoryMapper)) {
                 if ($this->hasMenuWidget()) {
                     // If at least one menu widget it added
                     if (isset($input['menu']['widget']) && is_array($input['menu']['widget'])) {
-                        $this->addMenuItem($this->webPageManager->getLastId(), $category['title'], $input);
+                        $this->addMenuItem($this->webPageManager->getLastId(), $category['name'], $input);
                     }
                 }
             }

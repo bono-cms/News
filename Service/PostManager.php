@@ -287,6 +287,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             ->setPublished((bool) $post['published'])
             ->setSeo((bool) $post['seo'])
             ->setName(Filter::escape($post['name']))
+            ->setTitle(Filter::escape($post['title']))
             ->setCategoryName(Filter::escape($this->categoryMapper->fetchNameById($post['category_id'])))
             ->setIntro(Filter::escapeContent($post['intro']))
             ->setFull(Filter::escapeContent($post['full']))
@@ -344,6 +345,11 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         // Take a slug from a name if empty
         if (empty($data['slug'])) {
             $data['slug'] = $data['name'];
+        }
+
+        // Take empty name from title
+        if (empty($data['title'])) {
+            $data['title'] = $data['name'];
         }
 
         $data['slug'] = $this->webPageManager->sluggify($data['slug']);

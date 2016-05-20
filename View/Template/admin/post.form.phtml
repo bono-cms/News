@@ -17,7 +17,7 @@ use Krystal\Form\Element;
             <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
             <div class="col-lg-10">
                 <div class="input-group">
-                    <?php echo Element::text('post[name]', $post->getName(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's name"))); ?>
+                    <?php echo Element::text('post[name]', $post->getName(), array('class' => 'form-control', 'placeholder' => $this->translate("Post's name"))); ?>
                     <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                 </div>
             </div>
@@ -50,7 +50,6 @@ use Krystal\Form\Element;
                 <label class="col-lg-2 control-label"><?php $this->show('Date'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group date">
-
                         <?php echo Element::text('post[date]', $post->getTimeBag()->getPanelFormat(), array('class' => 'form-control', 'placeholder' => $this->translate('Date of the post'))); ?>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" data-toggle="tooltip" title="<?php $this->show('Change the date'); ?>"></i></span>
                     </div>
@@ -75,10 +74,20 @@ use Krystal\Form\Element;
                 <label class="col-lg-2 control-label"><?php $this->show('Slug'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <?php echo Element::text('post[slug]', $post->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this post. By default is taken from a title'))); ?>
+                        <?php echo Element::text('post[slug]', $post->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this post. By default is taken from the name'))); ?>
                         <span class="input-group-addon">
                             <a href="#" data-button="slug"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="<?php $this->show('Refresh the slug'); ?>"></i></a>
                         </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group clearfix">
+                <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
+                <div class="col-lg-10">
+                    <div class="input-group">
+                        <?php echo Element::text('post[title]', $post->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's title"))); ?>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                     </div>
                 </div>
             </div>
