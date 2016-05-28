@@ -17,7 +17,7 @@ use Krystal\Form\Element;
             <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
             <div class="col-lg-10">
                 <div class="input-group">
-                    <?php echo Element::text('post[name]', $post->getName(), array('class' => 'form-control', 'placeholder' => $this->translate("Post's name"))); ?>
+                    <?php echo Element::text('post[name]', $post->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Post name'))); ?>
                     <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                 </div>
             </div>
