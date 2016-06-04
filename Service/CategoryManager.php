@@ -112,17 +112,17 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     protected function toEntity(array $category)
     {
         $entity = new VirtualEntity();
-        $entity->setId((int) $category['id'])
-            ->setWebPageId((int) $category['web_page_id'])
-            ->setLangId((int) $category['lang_id'])
-            ->setName(Filter::escape($category['name']))
-            ->setTitle(Filter::escape($category['title']))
-            ->setDescription(Filter::escapeContent($category['description']))
-            ->setSlug(Filter::escape($this->webPageManager->fetchSlugByWebPageId($category['web_page_id'])))
-            ->setSeo((bool) $category['seo'])
-            ->setKeywords(Filter::escape($category['keywords']))
+        $entity->setId($category['id'], VirtualEntity::FILTER_INT)
+            ->setWebPageId($category['web_page_id'], VirtualEntity::FILTER_INT)
+            ->setLangId($category['lang_id'], VirtualEntity::FILTER_INT)
+            ->setName($category['name'], VirtualEntity::FILTER_TAGS)
+            ->setTitle($category['title'], VirtualEntity::FILTER_TAGS)
+            ->setDescription($category['description'], VirtualEntity::FILTER_SAFE_TAGS)
+            ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), VirtualEntity::FILTER_TAGS)
+            ->setSeo($category['seo'], VirtualEntity::FILTER_BOOL)
+            ->setKeywords($category['keywords'], VirtualEntity::FILTER_TAGS)
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setMetaDescription(Filter::escape($category['meta_description']));
+            ->setMetaDescription($category['meta_description'], VirtualEntity::FILTER_TAGS);
 
         return $entity;
     }
