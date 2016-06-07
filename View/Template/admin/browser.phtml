@@ -29,7 +29,7 @@ use Krystal\Form\Element;
 	</div>
 </div>
 
-<?php $this->loadBlock('items-per-page', array('caption' => 'News')); ?>
+<?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
 
 <form>
 	<div class="table-responsive">
@@ -89,7 +89,7 @@ use Krystal\Form\Element;
 	</div>
 </form>
 
-<?php $this->loadBlock('paginator'); ?>
+<?php $this->loadPartial('paginator'); ?>
 
 <div class="table-responsive">
 	<h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
