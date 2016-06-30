@@ -13,6 +13,7 @@ namespace News;
 
 use Cms\AbstractCmsModule;
 use Krystal\Image\Tool\ImageManager;
+use Krystal\Stdlib\VirtualEntity;
 use News\Service\CategoryManager;
 use News\Service\PostManager;
 use News\Service\TaskManager;
@@ -30,16 +31,17 @@ final class Module extends AbstractCmsModule
         $categoryMapper = $this->getMapper('/News/Storage/MySQL/CategoryMapper');
         $postMapper = $this->getMapper('/News/Storage/MySQL/PostMapper');
 
-        $imageManager = $this->getImageManager();
-
         $webPageManager = $this->getWebPageManager();
         $historyManager = $this->getHistoryManager();
 
-        $postManager = new PostManager($postMapper, $categoryMapper, $this->getTimeBag(), $webPageManager, $imageManager, $historyManager);
-        $configManager = $this->getConfigService();
+        $configManager = $this->createConfigService();
+        $config = $configManager->getEntity();
+
+        $imageManager = $this->getImageManager($config);
+        $postManager = new PostManager($postMapper, $categoryMapper, $this->getTimeBag($config), $webPageManager, $imageManager, $historyManager);
 
         return array(
-            'siteService' => new SiteService($postManager, $configManager->getEntity()),
+            'siteService' => new SiteService($postManager, $config),
             'configManager' => $configManager,
             'taskManager' => new TaskManager($postMapper),
             'categoryManager' => new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager, $this->getMenuWidget()),
@@ -50,23 +52,23 @@ final class Module extends AbstractCmsModule
     /**
      * Returns time bag
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \News\Service\TimeBag
      */
-    private function getTimeBag()
+    private function getTimeBag(VirtualEntity $config)
     {
-        $factory = new TimeBagFactory($this->getConfigEntity());
+        $factory = new TimeBagFactory($config);
         return $factory->build();
     }
 
     /**
      * Returns prepared and configured image manager service
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Image\Tool\ImageManager
      */
-    private function getImageManager()
+    private function getImageManager(VirtualEntity $config)
     {
-        $config = $this->getConfigEntity();
-
         $plugins = array(
             'thumb' => array(
                 'quality' => $config->getCoverQuality(),

@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Changed the way of storing configuration data. Since now its stored in the database
  * Added `name` attribute for posts and categories
  * Added missing `$category` variable for category templates
  * Added missing `getAllByCategoryId()` in the site service

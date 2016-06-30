@@ -11,25 +11,27 @@
 
 namespace News\Service;
 
-use Krystal\Config\File\AbstractConfigManager;
-use Krystal\Security\Filter;
+use Krystal\Config\ConfigModuleService;
+use Krystal\Stdlib\VirtualEntity;
 
-final class ConfigManager extends AbstractConfigManager
+final class ConfigManager extends ConfigModuleService
 {
     /**
      * {@inheritDoc}
      */
-    protected function populate()
+    public function getEntity()
     {
-        $entity = $this->getEntity();
-        $entity->setCoverHeight(floatval($this->get('cover_height', 300)))
-               ->setCoverWidth(floatval($this->get('cover_width', 300)))
-               ->setThumbHeight(floatval($this->get('thumb_height', 30)))
-               ->setThumbWidth(floatval($this->get('thumb_width', 30)))
-               ->setCoverQuality((int) $this->get('cover_quality', 75))
-               ->setTimeFormatInList(Filter::escape($this->get('time_format_in_list', 'm/d/Y')))
-               ->setTimeFormatInPost(Filter::escape($this->get('time_format_in_post', 'm/d/Y')))
-               ->setBlockPerPageCount((int)($this->get('block_per_page_count', 3)))
-               ->setPerPageCount((int)($this->get('per_page_count', 5)));
+        $entity = new VirtualEntity();
+        $entity->setCoverHeight($this->get('cover_height', 300), VirtualEntity::FILTER_FLOAT)
+               ->setCoverWidth($this->get('cover_width', 300), VirtualEntity::FILTER_FLOAT)
+               ->setThumbHeight($this->get('thumb_height', 30), VirtualEntity::FILTER_FLOAT)
+               ->setThumbWidth($this->get('thumb_width', 30), VirtualEntity::FILTER_FLOAT)
+               ->setCoverQuality($this->get('cover_quality', 75), VirtualEntity::FILTER_FLOAT)
+               ->setTimeFormatInList($this->get('time_format_in_list', 'm/d/Y'), VirtualEntity::FILTER_TAGS)
+               ->setTimeFormatInPost($this->get('time_format_in_post', 'm/d/Y'), VirtualEntity::FILTER_TAGS)
+               ->setBlockPerPageCount($this->get('block_per_page_count', 3), VirtualEntity::FILTER_INT)
+               ->setPerPageCount($this->get('per_page_count', 5), VirtualEntity::FILTER_INT);
+
+        return $entity;
     }
 }
