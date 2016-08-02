@@ -2,6 +2,7 @@
 
 return array(
  'name' => 'News',
+ 'caption' => 'News',
  'route' => 'News:Admin:Browser@indexAction',
  'icon' => 'fa fa-newspaper-o fa-5x',
  'order' => 1,
