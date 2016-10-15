@@ -115,14 +115,14 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $entity->setId($category['id'], VirtualEntity::FILTER_INT)
             ->setWebPageId($category['web_page_id'], VirtualEntity::FILTER_INT)
             ->setLangId($category['lang_id'], VirtualEntity::FILTER_INT)
-            ->setName($category['name'], VirtualEntity::FILTER_TAGS)
-            ->setTitle($category['title'], VirtualEntity::FILTER_TAGS)
+            ->setName($category['name'], VirtualEntity::FILTER_HTML)
+            ->setTitle($category['title'], VirtualEntity::FILTER_HTML)
             ->setDescription($category['description'], VirtualEntity::FILTER_SAFE_TAGS)
-            ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), VirtualEntity::FILTER_TAGS)
+            ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), VirtualEntity::FILTER_HTML)
             ->setSeo($category['seo'], VirtualEntity::FILTER_BOOL)
-            ->setKeywords($category['keywords'], VirtualEntity::FILTER_TAGS)
+            ->setKeywords($category['keywords'], VirtualEntity::FILTER_HTML)
             ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setMetaDescription($category['meta_description'], VirtualEntity::FILTER_TAGS);
+            ->setMetaDescription($category['meta_description'], VirtualEntity::FILTER_HTML);
 
         return $entity;
     }
