@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * In administration panel, replaced text input with textarea (keywords)
  * Fixed issue with quote escaping
  * Changed the way of storing configuration data. Since now its stored in the database
  * Added `name` attribute for posts and categories
