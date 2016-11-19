@@ -134,7 +134,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     {
         return $this->getWithCategoryBreadcrumbs($post->getCategoryId(), array(
             array(
-                'name' => $post->getTitle(),
+                'name' => $post->getName(),
                 'link' => '#',
             )
         ));
