@@ -10,6 +10,11 @@
  */
 
 return array(
+    
+    '/news/pg/(:var)' => array(
+        'controller' => 'Home@indexAction'
+    ),
+    
     '/module/news/post/(:var)' => array(
         'controller' => 'Post@indexAction'
     ),

@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added `Home` controller
  * Switched to column grid layout in main module page
  * In administration panel, replaced text input with textarea (keywords)
  * Fixed issue with quote escaping
