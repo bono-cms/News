@@ -109,20 +109,24 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     /**
      * {@inheritDoc}
      */
-    protected function toEntity(array $category)
+    protected function toEntity(array $category, $all = true)
     {
         $entity = new VirtualEntity();
         $entity->setId($category['id'], VirtualEntity::FILTER_INT)
-            ->setWebPageId($category['web_page_id'], VirtualEntity::FILTER_INT)
-            ->setLangId($category['lang_id'], VirtualEntity::FILTER_INT)
-            ->setName($category['name'], VirtualEntity::FILTER_HTML)
-            ->setTitle($category['title'], VirtualEntity::FILTER_HTML)
-            ->setDescription($category['description'], VirtualEntity::FILTER_SAFE_TAGS)
-            ->setSlug($this->webPageManager->fetchSlugByWebPageId($category['web_page_id']), VirtualEntity::FILTER_HTML)
-            ->setSeo($category['seo'], VirtualEntity::FILTER_BOOL)
-            ->setKeywords($category['keywords'], VirtualEntity::FILTER_HTML)
-            ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setMetaDescription($category['meta_description'], VirtualEntity::FILTER_HTML);
+               ->setWebPageId($category['web_page_id'], VirtualEntity::FILTER_INT)
+               ->setLangId($category['lang_id'], VirtualEntity::FILTER_INT)
+               ->setName($category['name'], VirtualEntity::FILTER_HTML)
+               ->setSlug($category['slug'], VirtualEntity::FILTER_HTML)
+               ->setPostCount(isset($category['post_count']) ? $category['post_count'] : 0, VirtualEntity::FILTER_INT)
+               ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()));
+
+        if ($all === true) {
+            $entity->setTitle($category['title'], VirtualEntity::FILTER_HTML)
+                   ->setDescription($category['description'], VirtualEntity::FILTER_SAFE_TAGS)
+                   ->setSeo($category['seo'], VirtualEntity::FILTER_BOOL)
+                   ->setKeywords($category['keywords'], VirtualEntity::FILTER_HTML)
+                   ->setMetaDescription($category['meta_description'], VirtualEntity::FILTER_HTML);
+        }
 
         return $entity;
     }
@@ -144,7 +148,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function fetchAll()
     {
-        return $this->prepareResults($this->categoryMapper->fetchAll());
+        return $this->prepareResults($this->categoryMapper->fetchAll(), false);
     }
 
     /**
