@@ -112,13 +112,6 @@ interface PostMapperInterface
     public function fetchRandomPublished($amount, $categoryId = null);
 
     /**
-     * Fetches all published posts
-     * 
-     * @return array
-     */
-    public function fetchAllPublished();
-
-    /**
      * Fetches all posts filtered by pagination
      * 
      * @param string $categoryId Category ID

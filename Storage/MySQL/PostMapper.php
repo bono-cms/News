@@ -218,17 +218,6 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Fetches all published posts
-     * 
-     * @return array
-     */
-    public function fetchAllPublished()
-    {
-        return $this->getSelectQuery(true, null, 'timestamp')
-                    ->queryAll();
-    }
-
-    /**
      * Fetches all posts filtered by pagination
      * 
      * @param string $categoryId Category ID
