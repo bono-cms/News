@@ -293,8 +293,17 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                ->desc();
         }
 
-        return $db->paginate($page, $itemsPerPage)
-                  ->queryAll();
+        // If page number and per page count provided, apply pagination
+        if ($page !== null && $itemsPerPage !== null) {
+            $db->paginate($page, $itemsPerPage);
+        }
+
+        // If only per page count provided, apply limit only
+        if ($page === null && $itemsPerPage !== null) {
+            $db->limit($itemsPerPage);
+        }
+
+        return $db->queryAll();
     }
 
     /**
