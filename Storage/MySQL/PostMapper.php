@@ -11,6 +11,8 @@
 
 namespace News\Storage\MySQL;
 
+use Krystal\Db\Sql\RawSqlFragment;
+use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use News\Storage\PostMapperInterface;
 
@@ -243,33 +245,56 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     /**
      * Fetches all posts filtered by pagination
      * 
+     * @param string $categoryId Category ID
+     * @param boolean $published Whether to fetch only published records
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
-     * @param boolean $published Whether to fetch only published records
      * @return array
      */
-    public function fetchAllByPage($page, $itemsPerPage, $published)
+    public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage)
     {
-        return $this->getSelectQuery($published)
-                    ->desc()
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
-    }
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('timestamp'),
+            self::getFullColumnName('published'),
+            self::getFullColumnName('seo'),
+            WebPageMapper::getFullColumnName('slug'),
+            CategoryMapper::getFullColumnName('name') => 'category_name',
+        );
 
-    /**
-     * Fetches all posts by associated category id and filtered by pagination
-     * 
-     * @param string $categoryId
-     * @param boolean $published Whether to fetch only published records
-     * @param integer $page Current page number
-     * @param integer $itemsPerPage Per page count
-     * @return array
-     */
-    public function fetchAllByCategoryIdAndPage($categoryId, $published, $page, $itemsPerPage)
-    {
-        return $this->getSelectQuery($published, $categoryId, array('timestamp' => 'DESC', 'id' => 'DESC'))
-                    ->paginate($page, $itemsPerPage)
-                    ->queryAll();
+        $db = $this->db->select($columns)
+                       ->from(self::getTableName())
+                       ->innerJoin(CategoryMapper::getTableName())
+                       ->on()
+                       ->equals(CategoryMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('category_id')))
+                       ->leftJoin(WebPageMapper::getTableName())
+                       ->on()
+                       ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
+                       ->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId());
+
+        // Append category ID if provided
+        if ($categoryId !== null) {
+            $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
+        }
+
+        // If needed to fetch by published, then sort by time
+        if ($published) {
+            $db->andWhereEquals(self::getFullColumnName('published'), '1')
+               ->orderBy(array(
+                    self::getFullColumnName('timestamp') => 'DESC', 
+                    self::getFullColumnName('id') => 'DESC'
+                ));
+        } else {
+            $db->orderBy(self::getFullColumnName('id'))
+               ->desc();
+        }
+
+        return $db->paginate($page, $itemsPerPage)
+                  ->queryAll();
     }
 
     /**

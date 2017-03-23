@@ -46,7 +46,7 @@ final class Browser extends AbstractAdminController
      */
     public function indexAction($page = 1)
     {
-        $posts = $this->getPostManager()->fetchAllByPage(false, $page, $this->getSharedPerPageCount());
+        $posts = $this->getPostManager()->fetchAllByPage(null, false, $page, $this->getSharedPerPageCount());
         $url = $this->createUrl('News:Admin:Browser@indexAction', array(), 1);
 
         return $this->createGrid($posts, $url, null);
@@ -61,7 +61,7 @@ final class Browser extends AbstractAdminController
      */
     public function categoryAction($id, $page = 1)
     {
-        $posts = $this->getPostManager()->fetchAllByCategoryIdAndPage($id, false, $page, $this->getSharedPerPageCount());
+        $posts = $this->getPostManager()->fetchAllByPage($id, false, $page, $this->getSharedPerPageCount());
         $url = $this->createUrl('News:Admin:Browser@categoryAction', array($id), 1);
 
         return $this->createGrid($posts, $url, $id);
