@@ -101,7 +101,27 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
      */
     public function fetchById($id)
     {
-        return $this->findByPk($id);
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('title'),
+            self::getFullColumnName('description'),
+            self::getFullColumnName('seo'),
+            self::getFullColumnName('keywords'),
+            self::getFullColumnName('meta_description'),
+            WebPageMapper::getFullColumnName('slug'),
+        );
+
+        return $this->db->select($columns)
+                        ->from(self::getTableName())
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
+                        ->whereEquals(self::getFullColumnName('id'), $id)
+                        ->query();
     }
 
     /**
