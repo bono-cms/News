@@ -307,16 +307,4 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     {
         return $this->findColumnByPk($id, 'name');
     }
-
-    /**
-     * Counts all posts by associated category id
-     * Public intentionally
-     * 
-     * @param string $categoryId
-     * @return integer
-     */
-    public function countAllByCategoryId($categoryId)
-    {
-        return $this->countByColumn('category_id', $categoryId);
-    }
 }

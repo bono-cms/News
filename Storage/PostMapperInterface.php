@@ -147,14 +147,6 @@ interface PostMapperInterface
     public function fetchNameById($id);
 
     /**
-     * Counts all posts by associated category id
-     * 
-     * @param string $categoryId
-     * @return integer
-     */
-    public function countAllByCategoryId($categoryId);
-
-    /**
      * Fetches post data by its associated id
      * 
      * @param string $id Post id
