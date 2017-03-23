@@ -262,40 +262,43 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     /**
      * {@inheritDoc}
      */
-    protected function toEntity(array $post)
+    protected function toEntity(array $post, $full = true)
     {
-        // Configure image bag
-        $imageBag = clone $this->imageManager->getImageBag();
-        $imageBag->setId((int) $post['id'])
-                 ->setCover($post['cover']);
+        $entity = new PostEntity();
 
-        // Configure time bag now
+        // Configure time
         $timeBag = clone $this->timeBag;
         $timeBag->setTimestamp((int) $post['timestamp']);
 
-        // And finally prepare post's entity
-        $entity = new PostEntity();
-        $entity->setImageBag($imageBag)
-            ->setTimeBag($timeBag)
-            ->setId($post['id'], PostEntity::FILTER_INT)
-            ->setLangId($post['lang_id'], PostEntity::FILTER_INT)
-            ->setWebPageId($post['web_page_id'], PostEntity::FILTER_INT)
-            ->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
-            ->setPublished($post['published'], PostEntity::FILTER_BOOL)
-            ->setSeo($post['seo'], PostEntity::FILTER_BOOL)
-            ->setName($post['name'], PostEntity::FILTER_HTML)
-            ->setTitle($post['title'], PostEntity::FILTER_HTML)
-            ->setCategoryName($this->categoryMapper->fetchNameById($post['category_id']), PostEntity::FILTER_HTML)
-            ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS)
-            ->setFull($post['full'], PostEntity::FILTER_SAFE_TAGS)
-            ->setSlug(Filter::escape($this->webPageManager->fetchSlugByWebPageId($post['web_page_id'])))
-            ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
-            ->setPermanentUrl('/module/news/post/'.$entity->getId())
-            ->setTimestamp($post['timestamp'], PostEntity::FILTER_INT)
-            ->setKeywords($post['keywords'], PostEntity::FILTER_HTML)
-            ->setMetaDescription($post['meta_description'], PostEntity::FILTER_HTML)
-            ->setCover($post['cover'], PostEntity::FILTER_HTML)
-            ->setViewCount($post['views'], PostEntity::FILTER_INT);
+        if ($full === true) {
+            // Configure image bag
+            $imageBag = clone $this->imageManager->getImageBag();
+            $imageBag->setId((int) $post['id'])
+                     ->setCover($post['cover']);
+
+            $entity->setImageBag($imageBag)
+                   ->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
+                   ->setTitle($post['title'], PostEntity::FILTER_HTML)
+                   ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS)
+                   ->setFull($post['full'], PostEntity::FILTER_SAFE_TAGS)
+                   ->setPermanentUrl('/module/news/post/'.$entity->getId())
+                   ->setKeywords($post['keywords'], PostEntity::FILTER_HTML)
+                   ->setMetaDescription($post['meta_description'], PostEntity::FILTER_HTML)
+                   ->setCover($post['cover'], PostEntity::FILTER_HTML)
+                   ->setViewCount($post['views'], PostEntity::FILTER_INT);
+        }
+
+        $entity->setCategoryName($post['category_name'], PostEntity::FILTER_HTML)
+               ->setSlug($post['slug'], PostEntity::FILTER_HTML)
+               ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
+               ->setName($post['name'], PostEntity::FILTER_HTML)
+               ->setId($post['id'], PostEntity::FILTER_INT)
+               ->setLangId($post['lang_id'], PostEntity::FILTER_INT)
+               ->setWebPageId($post['web_page_id'], PostEntity::FILTER_INT)
+               ->setTimestamp($post['timestamp'], PostEntity::FILTER_INT)
+               ->setTimeBag($timeBag)
+               ->setPublished($post['published'], PostEntity::FILTER_BOOL)
+               ->setSeo($post['seo'], PostEntity::FILTER_BOOL);
 
         return $entity;
     }
@@ -475,7 +478,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage)
     {
-        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, $published, $page, $itemsPerPage));
+        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, $published, $page, $itemsPerPage), false);
     }
 
     /**
