@@ -11,8 +11,10 @@
 
 namespace News\Storage\MySQL;
 
+use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use News\Storage\CategoryMapperInterface;
+use Krystal\Db\Sql\RawSqlFragment;
 
 final class CategoryMapper extends AbstractMapper implements CategoryMapperInterface
 {
@@ -60,16 +62,33 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Fetches all categories
+     * Fetch all categories
      * 
      * @return array
      */
     public function fetchAll()
     {
-        return $this->db->select('*')
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('name'),
+            self::getFullColumnName('id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('web_page_id'),
+            WebPageMapper::getFullColumnName('slug')
+        );
+
+        return $this->db->select($columns)
+                        ->append(', ')
+                        ->count(PostMapper::getFullColumnName('id'), 'post_count')
                         ->from(self::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->orderBy('id')
+                        ->innerJoin(PostMapper::getTableName())
+                        ->on()
+                        ->equals(PostMapper::getFullColumnName('category_id'), new RawSqlFragment(self::getFullColumnName('id')))
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(CategoryMapper::getFullColumnName('web_page_id')))
+                        ->groupBy(self::getFullColumnName('id'))
+                        ->orderBy(self::getFullColumnName('id'))
                         ->desc()
                         ->queryAll();
     }
