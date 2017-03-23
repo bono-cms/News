@@ -16,7 +16,6 @@ use Krystal\Image\Tool\ImageManager;
 use Krystal\Stdlib\VirtualEntity;
 use News\Service\CategoryManager;
 use News\Service\PostManager;
-use News\Service\TaskManager;
 use News\Service\PostImageManagerFactory;
 use News\Service\TimeBagFactory;
 use News\Service\SiteService;
@@ -43,7 +42,6 @@ final class Module extends AbstractCmsModule
         return array(
             'siteService' => new SiteService($postManager, $config),
             'configManager' => $configManager,
-            'taskManager' => new TaskManager($postMapper),
             'categoryManager' => new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager, $this->getMenuWidget()),
             'postManager' => $postManager
         );
