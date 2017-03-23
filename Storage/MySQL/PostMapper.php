@@ -229,20 +229,6 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Fetches all published posts associated with given category id
-     * 
-     * @param string $categoryId
-     * @param integer $limit Limit for posts to be fetched
-     * @return array
-     */
-    public function fetchAllPublishedByCategoryId($categoryId, $limit)
-    {
-        return $this->getSelectQuery(true, $categoryId)
-                    ->limit($limit)
-                    ->queryAll();
-    }
-
-    /**
      * Fetches all posts filtered by pagination
      * 
      * @param string $categoryId Category ID

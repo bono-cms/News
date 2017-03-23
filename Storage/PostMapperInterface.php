@@ -119,15 +119,6 @@ interface PostMapperInterface
     public function fetchAllPublished();
 
     /**
-     * Fetches all published posts associated with given category id
-     * 
-     * @param string $categoryId
-     * @param integer $limit Limit for posts to be fetched
-     * @return array
-     */
-    public function fetchAllPublishedByCategoryId($categoryId, $limit);
-
-    /**
      * Fetches all posts filtered by pagination
      * 
      * @param string $categoryId Category ID
