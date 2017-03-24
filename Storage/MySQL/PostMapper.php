@@ -27,39 +27,6 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Builds shared select query
-     * 
-     * @param boolean $published
-     * @param string $categoryId Optionally can be filtered by category id
-     * @param string $sort Column name to sort by
-     * @return \Krystal\Db\Sql\Db
-     */
-    private function getSelectQuery($published, $categoryId = null, $sort = 'id')
-    {
-        $db = $this->db->select('*')
-                       ->from(static::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId());
-
-        if ($published === true) {
-            $db->andWhereEquals('published', '1');
-        }
-
-        if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
-        }
-
-        if ($sort == 'rand') {
-            $db->orderBy()
-               ->rand();
-
-        } else {
-            $db->orderBy($sort);
-        }
-
-        return $db;
-    }
-
-    /**
      * Removes all web pages by associated category id
      * 
      * @param string $categoryId
@@ -236,15 +203,25 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     /**
      * Fetches random published posts
      * 
-     * @param integer $amount
+     * @param integer $limit
      * @param string $categoryId Optionally can be filtered by category id
      * @return array
      */
-    public function fetchRandomPublished($amount, $categoryId = null)
+    public function fetchRandomPublished($limit, $categoryId = null)
     {
-        return $this->getSelectQuery(true, $categoryId, 'rand')
-                    ->limit($amount)
-                    ->queryAll();
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('lang_id', $this->getLangId())
+                       ->andWhereEquals('published', '1');
+
+        if ($categoryId !== null) {
+            $db->andWhereEquals('category_id', $categoryId);
+        }
+
+        return $db->orderBy()
+                  ->rand()
+                  ->limit($limit)
+                  ->queryAll();
     }
 
     /**
