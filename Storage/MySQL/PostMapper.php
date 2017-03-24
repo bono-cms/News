@@ -172,7 +172,37 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchById($id)
     {
-        return $this->findByPk($id);
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('category_id'),
+            self::getFullColumnName('published'),
+            self::getFullColumnName('seo'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('title'),
+            self::getFullColumnName('intro'),
+            self::getFullColumnName('full'),
+            self::getFullColumnName('timestamp'),
+            self::getFullColumnName('keywords'),
+            self::getFullColumnName('meta_description'),
+            self::getFullColumnName('cover'),
+            self::getFullColumnName('views'),
+            CategoryMapper::getFullColumnName('name') => 'category_name',
+            WebPageMapper::getFullColumnName('slug')
+        );
+
+        return $this->db->select($columns)
+                        ->from(self::getTableName())
+                        ->innerJoin(CategoryMapper::getTableName())
+                        ->on()
+                        ->equals(CategoryMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('category_id')))
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')))
+                        ->whereEquals(self::getFullColumnName('id'), $id)
+                        ->query();
     }
 
     /**
