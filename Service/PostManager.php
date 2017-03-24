@@ -288,18 +288,18 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                    ->setViewCount($post['views'], PostEntity::FILTER_INT);
         }
 
-        $entity->setCategoryName($post['category_name'], PostEntity::FILTER_HTML)
+        $entity->setId($post['id'], PostEntity::FILTER_INT)
+               ->setLangId($post['lang_id'], PostEntity::FILTER_INT)
+               ->setWebPageId($post['web_page_id'], PostEntity::FILTER_INT)
+               ->setCategoryName($post['category_name'], PostEntity::FILTER_HTML)
                ->setSlug($post['slug'], PostEntity::FILTER_HTML)
                ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
                ->setName($post['name'], PostEntity::FILTER_HTML)
-               ->setId($post['id'], PostEntity::FILTER_INT)
-               ->setLangId($post['lang_id'], PostEntity::FILTER_INT)
-               ->setWebPageId($post['web_page_id'], PostEntity::FILTER_INT)
                ->setTimestamp($post['timestamp'], PostEntity::FILTER_INT)
                ->setTimeBag($timeBag)
                ->setPublished($post['published'], PostEntity::FILTER_BOOL)
                ->setSeo($post['seo'], PostEntity::FILTER_BOOL);
-
+               
         return $entity;
     }
 
@@ -490,7 +490,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchAllPublishedByCategoryId($categoryId, $limit)
     {
-        return $this->prepareResults($this->postMapper->fetchAllPublishedByCategoryId($categoryId, $limit));
+        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, true, null, $limit));
     }
 
     /**
