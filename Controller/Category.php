@@ -37,7 +37,7 @@ final class Category extends AbstractController
             $config = $this->getModuleService('configManager')->getEntity();
 
             // Now get all posts associated with provided category id
-            $posts = $postManager->fetchAllByCategoryIdAndPage($id, true, $pageNumber, $config->getPerPageCount());
+            $posts = $postManager->fetchAllByPage($id, true, $pageNumber, $config->getPerPageCount());
 
             // Prepare pagination
             $paginator = $postManager->getPaginator();
