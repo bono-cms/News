@@ -1,9 +1,3 @@
 $(function(){
-	$("[name='post[date]']").datepicker();
-
-	if (jQuery().preview) {
-		$("[name='file']").preview(function(data){
-			$("[data-image='preview']").fadeIn(1000).attr('src', data);
-		});
-	}
+    $("[name='post[date]']").datepicker();
 });
