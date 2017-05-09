@@ -61,7 +61,7 @@ use Krystal\Form\HtmlHelper;
                                 <input type="checkbox" name="toDelete[<?php echo $post->getId(); ?>]" />
                             </td>
                             <td class="text-center text-muted"><?php echo $post->getId(); ?></td>
-                            <td class="text-center"><?php echo $post->getName(); ?></td>
+                            <td><?php echo $post->getName(); ?></td>
                             <td class="text-center"><?php echo $post->getTimeBag()->getPanelFormat(); ?></td>
                             <td class="text-center"><?php echo $post->getCategoryName(); ?></td>
                             <td class="text-center">
@@ -113,7 +113,7 @@ use Krystal\Form\HtmlHelper;
                         <?php foreach ($categories as $category): ?>
                         <tr class="<?php echo HtmlHelper::addOnDemand(isset($categoryId) && $categoryId == $category->getId(), 'info'); ?>">
                             <td class="text-center text-muted"><?php echo $category->getId(); ?></td>
-                            <td class="text-center">
+                            <td>
                                 <a href="<?php echo $this->url('News:Admin:Browser@categoryAction', $category->getId()); ?>"><?php echo $category->getName(); ?></a>
                             </td>
                             <td class="text-center"><?php echo $category->getPostCount(); ?></td>
