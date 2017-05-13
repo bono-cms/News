@@ -81,7 +81,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->append(', ')
                         ->count(PostMapper::getFullColumnName('id'), 'post_count')
                         ->from(self::getTableName())
-                        ->innerJoin(PostMapper::getTableName())
+                        ->leftJoin(PostMapper::getTableName())
                         ->on()
                         ->equals(PostMapper::getFullColumnName('category_id'), new RawSqlFragment(self::getFullColumnName('id')))
                         ->leftJoin(WebPageMapper::getTableName())
