@@ -353,6 +353,10 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         }
 
         $data['slug'] = $this->webPageManager->sluggify($data['slug']);
+
+        // Safe type casting
+        $data['web_page_id'] = (int) $data['web_page_id'];
+
         return $input;
     }
 

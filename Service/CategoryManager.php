@@ -173,6 +173,10 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
 
         // Force a string to be slugiffied
         $category['slug'] = $this->webPageManager->sluggify($category['slug']);
+
+        // Safe type casting
+        $category['web_page_id'] = (int) $category['web_page_id'];
+
         return $input;
     }
 
@@ -186,8 +190,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     {
         $input = $this->prepareInput($input);
         $category =& $input['category'];
-
-        $category['web_page_id'] = '';
 
         if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug', 'menu')))) {
             $this->track('Category "%s" has been created', $category['name']);
