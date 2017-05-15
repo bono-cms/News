@@ -16,11 +16,18 @@ use Krystal\Stdlib\VirtualEntity;
 final class SiteService implements SiteServiceInterface
 {
     /**
-     * Post manager
+     * Post service
      * 
      * @var \News\Service\PostManagerInterface
      */
     private $postManager;
+
+    /**
+     * Category service
+     * 
+     * @var \News\Service\CategoryManagerInterface
+     */
+    private $categoryManager;
 
     /**
      * Configuration entity
@@ -33,13 +40,25 @@ final class SiteService implements SiteServiceInterface
      * State initialization
      * 
      * @param \News\Service\PostManagerInterface $postManager
+     * @param \News\Service\CategoryManagerInterface $categoryManager
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
-    public function __construct(PostManagerInterface $postManager, VirtualEntity $config)
+    public function __construct(PostManagerInterface $postManager, CategoryManagerInterface $categoryManager, VirtualEntity $config)
     {
         $this->postManager = $postManager;
+        $this->categoryManager = $categoryManager;
         $this->config = $config;
+    }
+
+    /**
+     * Returns a collection of category entities
+     * 
+     * @return array
+     */
+    public function getCategories()
+    {
+        return $this->categoryManager->fetchAll();
     }
 
     /**

@@ -14,6 +14,13 @@ namespace News\Service;
 interface SiteServiceInterface
 {
     /**
+     * Returns a collection of category entities
+     * 
+     * @return array
+     */
+    public function getCategories();
+
+    /**
      * Returns all entities filtered by category id
      * 
      * @param string $id Category id
