@@ -225,6 +225,18 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
+     * Fetch recent news post
+     * 
+     * @param string $categoryId Optional category ID filter
+     * @param integer $limit Limit of rows to be returned
+     * @return array
+     */
+    public function fetchRecent($limit, $categoryId = null)
+    {
+        return $this->fetchAllByPage($categoryId, true, null, $limit);
+    }
+
+    /**
      * Fetches all posts filtered by pagination
      * 
      * @param string $categoryId Category ID

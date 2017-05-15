@@ -123,6 +123,15 @@ interface PostMapperInterface
     public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage);
 
     /**
+     * Fetch recent news post
+     * 
+     * @param string $categoryId Optional category ID filter
+     * @param integer $limit Limit of rows to be returned
+     * @return array
+     */
+    public function fetchRecent($limit, $categoryId = null);
+
+    /**
      * Fetches post name by its associated id
      * 
      * @param string $id Post id

@@ -122,6 +122,15 @@ interface PostManagerInterface
     public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage);
 
     /**
+     * Fetch recent news post entities
+     * 
+     * @param string $categoryId Optional category ID filter
+     * @param integer $limit Limit of rows to be returned
+     * @return array
+     */
+    public function fetchRecent($limit, $categoryId = null);
+
+    /**
      * Fetches all published posts associated with category id
      * 
      * @param string $categoryId

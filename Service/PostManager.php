@@ -487,6 +487,18 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
+     * Fetch recent news post entities
+     * 
+     * @param string $categoryId Optional category ID filter
+     * @param integer $limit Limit of rows to be returned
+     * @return array
+     */
+    public function fetchRecent($limit, $categoryId = null)
+    {
+        return $this->prepareResults($this->postMapper->fetchRecent($limit, $categoryId), false);
+    }
+
+    /**
      * Fetches all published post bags associated with category id
      * 
      * @param string $categoryId
