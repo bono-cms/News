@@ -356,6 +356,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
 
         // Safe type casting
         $data['web_page_id'] = (int) $data['web_page_id'];
+        $data['category_id'] = (int) $data['category_id'];
 
         return $input;
     }
