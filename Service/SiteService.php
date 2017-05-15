@@ -78,6 +78,18 @@ final class SiteService implements SiteServiceInterface
     }
 
     /**
+     * Returns recent post entities
+     * 
+     * @param integer $limit Limit of rows to be returned
+     * @param string $categoryId Optional category ID filter
+     * @return array
+     */
+    public function getRecent($limit, $categoryId = null)
+    {
+        return $this->postManager->fetchRecent($limit, $categoryId);
+    }
+
+    /**
      * Returns a collection of mostly viewed article entities
      * 
      * @param integer $limit

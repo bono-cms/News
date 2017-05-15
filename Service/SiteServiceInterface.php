@@ -30,6 +30,15 @@ interface SiteServiceInterface
     public function getAllByCategoryId($id, $limit = null);
 
     /**
+     * Returns recent post entities
+     * 
+     * @param integer $limit Limit of rows to be returned
+     * @param string $categoryId Optional category ID filter
+     * @return array
+     */
+    public function getRecent($limit, $categoryId = null);
+
+    /**
      * Returns a collection of mostly viewed article entities
      * 
      * @param integer $limit

@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added `getRecent()` in `SiteService`
  * Added getCategories() in `SiteService`
  * Added `Home` controller
  * Switched to column grid layout in main module page
