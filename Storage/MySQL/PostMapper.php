@@ -15,6 +15,7 @@ use Krystal\Db\Sql\RawSqlFragment;
 use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use News\Storage\PostMapperInterface;
+use Closure;
 
 final class PostMapper extends AbstractMapper implements PostMapperInterface
 {
@@ -24,6 +25,66 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     public static function getTableName()
     {
         return self::getWithPrefix('bono_module_news_posts');
+    }
+
+    /**
+     * Fetches all posts filtered by pagination
+     * 
+     * @param string $categoryId Category ID
+     * @param boolean $published Whether to fetch only published records
+     * @param integer $page Current page
+     * @param integer $itemsPerPage Per page count
+     * @param \Closure $orderCallback Callback to generate ORDER BY condition
+     * @return array
+     */
+    private function findRecords($categoryId, $published, $page, $itemsPerPage, Closure $orderCallback)
+    {
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('id'),
+            self::getFullColumnName('web_page_id'),
+            self::getFullColumnName('lang_id'),
+            self::getFullColumnName('name'),
+            self::getFullColumnName('timestamp'),
+            self::getFullColumnName('published'),
+            self::getFullColumnName('seo'),
+            WebPageMapper::getFullColumnName('slug'),
+            CategoryMapper::getFullColumnName('name') => 'category_name',
+        );
+
+        $db = $this->db->select($columns)
+                       ->from(self::getTableName())
+                       ->innerJoin(CategoryMapper::getTableName())
+                       ->on()
+                       ->equals(CategoryMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('category_id')))
+                       ->leftJoin(WebPageMapper::getTableName())
+                       ->on()
+                       ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
+                       ->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId());
+
+        // Append category ID if provided
+        if ($categoryId !== null) {
+            $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
+        }
+
+        if ($published) {
+            $db->andWhereEquals(self::getFullColumnName('published'), '1');
+        }
+
+        // Apply order callback
+        $orderCallback($db);
+
+        // If page number and per page count provided, apply pagination
+        if ($page !== null && $itemsPerPage !== null) {
+            $db->paginate($page, $itemsPerPage);
+        }
+
+        // If only per page count provided, apply limit only
+        if ($page === null && $itemsPerPage !== null) {
+            $db->limit($itemsPerPage);
+        }
+
+        return $db->queryAll();
     }
 
     /**
@@ -46,7 +107,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     public function fetchAllIdsWithImagesByCategoryId($categoryId)
     {
         return $this->db->select('id')
-                        ->from(static::getTableName())
+                        ->from(self::getTableName())
                         ->whereEquals('category_id', $categoryId)
                         ->andWhereNotEquals('cover', '')
                         ->queryAll('id');
@@ -180,14 +241,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchMostlyViewed($limit)
     {
-        return $this->db->select('*')
-                        ->from(self::getTableName())
-                        ->whereEquals('lang_id', $this->getLangId())
-                        ->andWhereEquals('published', '1')
-                        ->orderBy('views')
-                        ->desc()
-                        ->limit($limit)
-                        ->queryAll();
+        $orderCallback = function($db){
+            $db->orderBy('views')
+               ->desc();
+        };
+
+        return $this->findRecords(null, true, null, $limit, $orderCallback);
     }
 
     /**
@@ -209,19 +268,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchRandomPublished($limit, $categoryId = null)
     {
-        $db = $this->db->select('*')
-                       ->from(self::getTableName())
-                       ->whereEquals('lang_id', $this->getLangId())
-                       ->andWhereEquals('published', '1');
+        $orderCallback = function($db){
+            $db->orderBy()
+               ->rand();
+        };
 
-        if ($categoryId !== null) {
-            $db->andWhereEquals('category_id', $categoryId);
-        }
-
-        return $db->orderBy()
-                  ->rand()
-                  ->limit($limit)
-                  ->queryAll();
+        return $this->findRecords($categoryId, true, null, $limit, $orderCallback);
     }
 
     /**
@@ -247,57 +299,20 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage)
     {
-        // Columns to be selected
-        $columns = array(
-            self::getFullColumnName('id'),
-            self::getFullColumnName('web_page_id'),
-            self::getFullColumnName('lang_id'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('timestamp'),
-            self::getFullColumnName('published'),
-            self::getFullColumnName('seo'),
-            WebPageMapper::getFullColumnName('slug'),
-            CategoryMapper::getFullColumnName('name') => 'category_name',
-        );
+        $orderCallback = function($db) use ($published){
+            // If needed to fetch by published, then sort by time
+            if ($published) {
+                $db->orderBy(array(
+                        self::getFullColumnName('timestamp') => 'DESC', 
+                        self::getFullColumnName('id') => 'DESC'
+                    ));
+            } else {
+                $db->orderBy(self::getFullColumnName('id'))
+                   ->desc();
+            }
+        };
 
-        $db = $this->db->select($columns)
-                       ->from(self::getTableName())
-                       ->innerJoin(CategoryMapper::getTableName())
-                       ->on()
-                       ->equals(CategoryMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('category_id')))
-                       ->leftJoin(WebPageMapper::getTableName())
-                       ->on()
-                       ->equals(WebPageMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('web_page_id')))
-                       ->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId());
-
-        // Append category ID if provided
-        if ($categoryId !== null) {
-            $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
-        }
-
-        // If needed to fetch by published, then sort by time
-        if ($published) {
-            $db->andWhereEquals(self::getFullColumnName('published'), '1')
-               ->orderBy(array(
-                    self::getFullColumnName('timestamp') => 'DESC', 
-                    self::getFullColumnName('id') => 'DESC'
-                ));
-        } else {
-            $db->orderBy(self::getFullColumnName('id'))
-               ->desc();
-        }
-
-        // If page number and per page count provided, apply pagination
-        if ($page !== null && $itemsPerPage !== null) {
-            $db->paginate($page, $itemsPerPage);
-        }
-
-        // If only per page count provided, apply limit only
-        if ($page === null && $itemsPerPage !== null) {
-            $db->limit($itemsPerPage);
-        }
-
-        return $db->queryAll();
+        return $this->findRecords($categoryId, $published, $page, $itemsPerPage, $orderCallback);
     }
 
     /**

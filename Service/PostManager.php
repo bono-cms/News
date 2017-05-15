@@ -469,7 +469,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchMostlyViewed($limit)
     {
-        return $this->prepareResults($this->postMapper->fetchMostlyViewed($limit));
+        return $this->prepareResults($this->postMapper->fetchMostlyViewed($limit), false);
     }
 
     /**
@@ -519,7 +519,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchRandomPublished($amount, $categoryId = null)
     {
-        return $this->prepareResults($this->postMapper->fetchRandomPublished($amount, $categoryId));
+        return $this->prepareResults($this->postMapper->fetchRandomPublished($amount, $categoryId), false);
     }
 
     /**
