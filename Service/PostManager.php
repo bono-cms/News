@@ -299,7 +299,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                ->setTimeBag($timeBag)
                ->setPublished($post['published'], PostEntity::FILTER_BOOL)
                ->setSeo($post['seo'], PostEntity::FILTER_BOOL);
-               
+
         return $entity;
     }
 

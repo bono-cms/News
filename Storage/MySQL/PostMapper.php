@@ -28,16 +28,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Fetches all posts filtered by pagination
+     * Returns a collection of shared columns to be selected
      * 
-     * @param string $categoryId Category ID
-     * @param boolean $published Whether to fetch only published records
-     * @param integer $page Current page
-     * @param integer $itemsPerPage Per page count
-     * @param \Closure $orderCallback Callback to generate ORDER BY condition
+     * @param array $all Whether to return all columns or not
      * @return array
      */
-    private function findRecords($categoryId, $published, $page, $itemsPerPage, Closure $orderCallback)
+    private function getSharedColumns($all)
     {
         // Columns to be selected
         $columns = array(
@@ -49,10 +45,41 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             self::getFullColumnName('published'),
             self::getFullColumnName('seo'),
             WebPageMapper::getFullColumnName('slug'),
-            CategoryMapper::getFullColumnName('name') => 'category_name',
+            CategoryMapper::getFullColumnName('name') => 'category_name'
         );
 
-        $db = $this->db->select($columns)
+        if ($all) {
+            $columns = array_merge($columns, array(
+                self::getFullColumnName('category_id'),
+                self::getFullColumnName('name'),
+                self::getFullColumnName('title'),
+                self::getFullColumnName('intro'),
+                self::getFullColumnName('full'),
+                self::getFullColumnName('keywords'),
+                self::getFullColumnName('meta_description'),
+                self::getFullColumnName('cover'),
+                self::getFullColumnName('views'),
+                CategoryMapper::getFullColumnName('name') => 'category_name',
+                WebPageMapper::getFullColumnName('slug')
+            ));
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Fetches all posts filtered by pagination
+     * 
+     * @param string $categoryId Category ID
+     * @param boolean $published Whether to fetch only published records
+     * @param integer $page Current page
+     * @param integer $itemsPerPage Per page count
+     * @param \Closure $orderCallback Callback to generate ORDER BY condition
+     * @return array
+     */
+    private function findRecords($categoryId, $published, $page, $itemsPerPage, Closure $orderCallback)
+    {
+        $db = $this->db->select($this->getSharedColumns(false))
                        ->from(self::getTableName())
                        ->innerJoin(CategoryMapper::getTableName())
                        ->on()
@@ -200,28 +227,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchById($id)
     {
-        // Columns to be selected
-        $columns = array(
-            self::getFullColumnName('id'),
-            self::getFullColumnName('lang_id'),
-            self::getFullColumnName('web_page_id'),
-            self::getFullColumnName('category_id'),
-            self::getFullColumnName('published'),
-            self::getFullColumnName('seo'),
-            self::getFullColumnName('name'),
-            self::getFullColumnName('title'),
-            self::getFullColumnName('intro'),
-            self::getFullColumnName('full'),
-            self::getFullColumnName('timestamp'),
-            self::getFullColumnName('keywords'),
-            self::getFullColumnName('meta_description'),
-            self::getFullColumnName('cover'),
-            self::getFullColumnName('views'),
-            CategoryMapper::getFullColumnName('name') => 'category_name',
-            WebPageMapper::getFullColumnName('slug')
-        );
-
-        return $this->db->select($columns)
+        return $this->db->select($this->getSharedColumns(true))
                         ->from(self::getTableName())
                         ->innerJoin(CategoryMapper::getTableName())
                         ->on()
@@ -241,12 +247,10 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchMostlyViewed($limit)
     {
-        $orderCallback = function($db){
+        return $this->findRecords(null, true, null, $limit, function($db){
             $db->orderBy('views')
                ->desc();
-        };
-
-        return $this->findRecords(null, true, null, $limit, $orderCallback);
+        });
     }
 
     /**
@@ -268,12 +272,10 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchRandomPublished($limit, $categoryId = null)
     {
-        $orderCallback = function($db){
+        return $this->findRecords($categoryId, true, null, $limit, function($db){
             $db->orderBy()
                ->rand();
-        };
-
-        return $this->findRecords($categoryId, true, null, $limit, $orderCallback);
+        });
     }
 
     /**
@@ -299,20 +301,18 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage)
     {
-        $orderCallback = function($db) use ($published){
+        return $this->findRecords($categoryId, $published, $page, $itemsPerPage, function($db) use ($published){
             // If needed to fetch by published, then sort by time
             if ($published) {
                 $db->orderBy(array(
-                        self::getFullColumnName('timestamp') => 'DESC', 
-                        self::getFullColumnName('id') => 'DESC'
-                    ));
+                    self::getFullColumnName('timestamp') => 'DESC', 
+                    self::getFullColumnName('id') => 'DESC'
+                ));
             } else {
                 $db->orderBy(self::getFullColumnName('id'))
                    ->desc();
             }
-        };
-
-        return $this->findRecords($categoryId, $published, $page, $itemsPerPage, $orderCallback);
+        });
     }
 
     /**
