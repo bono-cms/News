@@ -36,7 +36,7 @@ final class Home extends AbstractController
         $paginator = $postManager->getPaginator();
 
         // The pattern /(:var)/page/(:var) is reserved, so another one should be used instead
-        $paginator->setUrl('/news/pg/(:var)');
+        $paginator->setUrl($this->createUrl('News:Home@indexAction', array(), 0));
 
         $page = $this->getService('Pages', 'pageManager')->fetchDefault();
 
