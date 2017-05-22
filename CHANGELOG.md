@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added shortcut in administration panel
  * Added `getRecent()` in `SiteService`
  * Added getCategories() in `SiteService`
  * Added `Home` controller
