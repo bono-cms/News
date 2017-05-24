@@ -279,12 +279,10 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             $entity->setImageBag($imageBag)
                    ->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
                    ->setTitle($post['title'], PostEntity::FILTER_HTML)
-                   ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS)
                    ->setFull($post['full'], PostEntity::FILTER_SAFE_TAGS)
                    ->setPermanentUrl('/module/news/post/'.$entity->getId())
                    ->setKeywords($post['keywords'], PostEntity::FILTER_HTML)
                    ->setMetaDescription($post['meta_description'], PostEntity::FILTER_HTML)
-                   ->setCover($post['cover'], PostEntity::FILTER_HTML)
                    ->setViewCount($post['views'], PostEntity::FILTER_INT);
         }
 
@@ -298,7 +296,9 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                ->setTimestamp($post['timestamp'], PostEntity::FILTER_INT)
                ->setTimeBag($timeBag)
                ->setPublished($post['published'], PostEntity::FILTER_BOOL)
-               ->setSeo($post['seo'], PostEntity::FILTER_BOOL);
+               ->setSeo($post['seo'], PostEntity::FILTER_BOOL)
+               ->setCover($post['cover'], PostEntity::FILTER_HTML)
+               ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS);
 
         return $entity;
     }
@@ -507,7 +507,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchAllPublishedByCategoryId($categoryId, $limit)
     {
-        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, true, null, $limit));
+        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, true, null, $limit), false);
     }
 
     /**

@@ -43,6 +43,8 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             self::getFullColumnName('name'),
             self::getFullColumnName('timestamp'),
             self::getFullColumnName('published'),
+            self::getFullColumnName('intro'),
+            self::getFullColumnName('cover'),
             self::getFullColumnName('seo'),
             WebPageMapper::getFullColumnName('slug'),
             CategoryMapper::getFullColumnName('name') => 'category_name'
@@ -53,11 +55,9 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                 self::getFullColumnName('category_id'),
                 self::getFullColumnName('name'),
                 self::getFullColumnName('title'),
-                self::getFullColumnName('intro'),
                 self::getFullColumnName('full'),
                 self::getFullColumnName('keywords'),
                 self::getFullColumnName('meta_description'),
-                self::getFullColumnName('cover'),
                 self::getFullColumnName('views'),
                 CategoryMapper::getFullColumnName('name') => 'category_name',
                 WebPageMapper::getFullColumnName('slug')
