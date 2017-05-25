@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Better interface with tabs in forms
  * Added shortcut in administration panel
  * Added `getRecent()` in `SiteService`
  * Added getCategories() in `SiteService`
