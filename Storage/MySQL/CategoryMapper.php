@@ -27,6 +27,29 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
+     * Fetch all categories with their attached post names
+     * 
+     * @return array
+     */
+    public function fetchAllWithPosts()
+    {
+        // Shared columns to be selected
+        $columns = array(
+            PostMapper::getFullColumnName('id'),
+            PostMapper::getFullColumnName('name') => 'post',
+            self::getFullColumnName('name') => 'category'
+        );
+
+        return $this->db->select($columns)
+                        ->from(PostMapper::getTableName())
+                        ->innerJoin(self::getTableName())
+                        ->on()
+                        ->equals(PostMapper::getFullColumnName('category_id'), new RawSqlFragment(self::getFullColumnName('id')))
+                        ->whereEquals(self::getFullColumnName('lang_id'), $this->getLangId())
+                        ->queryAll();
+    }
+
+    /**
      * Fetches as a list
      * 
      * @return array

@@ -17,6 +17,13 @@ use Krystal\Stdlib\VirtualEntity;
 interface CategoryManagerInterface
 {
     /**
+     * Fetch all categories with their associated posts
+     * 
+     * @return array
+     */
+    public function fetchAllWithPosts();
+
+    /**
      * Returns category's last id
      * 
      * @return string
