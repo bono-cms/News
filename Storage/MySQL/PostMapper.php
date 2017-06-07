@@ -124,6 +124,20 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
+     * Find a collection of post IDs attached to category ID
+     * 
+     * @param string $categoryId
+     * @return array
+     */
+    private function findPostIdsByCategoryId($categoryId)
+    {
+        return $this->db->select($this->getPk())
+                        ->from(self::getTableName())
+                        ->whereEquals('category_id', $categoryId)
+                        ->queryAll($this->getPk());
+    }
+
+    /**
      * Removes all web pages by associated category id
      * 
      * @param string $categoryId
@@ -239,7 +253,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function deleteAllByCategoryId($categoryId)
     {
-        // @TODO: Remove from junction as well
+        $this->removeFromJunction(self::getJunctionTableName(), $this->findPostIdsByCategoryId($categoryId));
         return $this->deleteByColumn('category_id', $categoryId);
     }
 
