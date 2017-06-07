@@ -12,6 +12,7 @@
 namespace News\Storage\MySQL;
 
 use Krystal\Db\Sql\RawSqlFragment;
+use Krystal\Stdlib\ArrayUtils;
 use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use News\Storage\PostMapperInterface;
@@ -25,6 +26,14 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     public static function getTableName()
     {
         return self::getWithPrefix('bono_module_news_posts');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getJunctionTableName()
+    {
+        return self::getWithPrefix('bono_module_news_posts_attached');
     }
 
     /**
@@ -183,7 +192,15 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function insert(array $input)
     {
-        return $this->persist($this->getWithLang($input));
+        $this->persist($this->getWithLang(ArrayUtils::arrayWithout($input, array(self::PARAM_COLUMN_ATTACHED))));
+        $id = $this->getLastId();
+
+        // Insert relational posts if provided
+        if (isset($input[self::PARAM_COLUMN_ATTACHED])) {
+            $this->insertIntoJunction(self::getJunctionTableName(), $id, $input[self::PARAM_COLUMN_ATTACHED]);
+        }
+
+        return true;
     }
 
     /**
@@ -194,7 +211,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function update(array $input)
     {
-        return $this->persist($input);
+        // Synchronize relations if provided
+        if (isset($input[self::PARAM_COLUMN_ATTACHED])) {
+            $this->syncWithJunction(self::getJunctionTableName(), $input[$this->getPk()], $input[self::PARAM_COLUMN_ATTACHED]);
+        }
+
+        return $this->persist(ArrayUtils::arrayWithout($input, array(self::PARAM_COLUMN_ATTACHED)));
     }
 
     /**
@@ -205,6 +227,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function deleteById($id)
     {
+        $this->removeFromJunction(self::getJunctionTableName(), $id);
         return $this->deleteByPk($id);
     }
 
@@ -216,7 +239,34 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function deleteAllByCategoryId($categoryId)
     {
+        // @TODO: Remove from junction as well
         return $this->deleteByColumn('category_id', $categoryId);
+    }
+
+    /**
+     * Fetches post data by associated IDs
+     * 
+     * @param array $ids A collection of post IDs
+     * @param boolean $relational Whether to include relational data
+     * @return array
+     */
+    public function fetchByIds(array $ids, $relational = false)
+    {
+        $db = $this->db->select($this->getSharedColumns(true))
+                        ->from(self::getTableName())
+                        ->innerJoin(CategoryMapper::getTableName())
+                        ->on()
+                        ->equals(CategoryMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('category_id')))
+                        ->leftJoin(WebPageMapper::getTableName())
+                        ->on()
+                        ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')))
+                        ->whereIn(self::getFullColumnName('id'), $ids);
+
+        if ($relational === true) {
+            $db->asManyToMany(self::PARAM_COLUMN_ATTACHED, self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', 'id');
+        }
+
+        return $db->queryAll();
     }
 
     /**
@@ -227,16 +277,13 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchById($id)
     {
-        return $this->db->select($this->getSharedColumns(true))
-                        ->from(self::getTableName())
-                        ->innerJoin(CategoryMapper::getTableName())
-                        ->on()
-                        ->equals(CategoryMapper::getFullColumnName('id'), new RawSqlFragment(self::getFullColumnName('category_id')))
-                        ->leftJoin(WebPageMapper::getTableName())
-                        ->on()
-                        ->equals(self::getFullColumnName('web_page_id'), new RawSqlFragment(WebPageMapper::getFullColumnName('id')))
-                        ->whereEquals(self::getFullColumnName('id'), $id)
-                        ->query();
+        $row = $this->fetchByIds(array($id), true);
+
+        if (isset($row[0])) {
+            return $row[0];
+        } else {
+            return array();
+        }
     }
 
     /**

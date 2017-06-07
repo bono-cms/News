@@ -28,7 +28,7 @@ final class Post extends AbstractAdminController
         // Load view plugins
         $this->view->getPluginBag()
                    ->appendScript('@News/admin/post.form.js')
-                   ->load(array($this->getWysiwygPluginName(), 'datepicker'));
+                   ->load(array($this->getWysiwygPluginName(), 'datepicker', 'chosen'));
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Browser@indexAction')
@@ -36,6 +36,7 @@ final class Post extends AbstractAdminController
 
         return $this->view->render('post.form', array(
             'categories' => $this->getCategoryManager()->fetchList(),
+            'posts' => $this->getCategoryManager()->fetchAllWithPosts(),
             'post' => $post
         ));
     }
@@ -62,7 +63,7 @@ final class Post extends AbstractAdminController
      */
     public function editAction($id)
     {
-        $post = $this->getPostManager()->fetchById($id);
+        $post = $this->getPostManager()->fetchById($id, false);
 
         if ($post !== false) {
             return $this->createForm($post, 'Edit the post');

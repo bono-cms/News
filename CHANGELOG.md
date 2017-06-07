@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Ability to attach related posts
  * Better interface with tabs in forms
  * Added shortcut in administration panel
  * Added `getRecent()` in `SiteService`

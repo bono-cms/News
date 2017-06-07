@@ -86,6 +86,15 @@ defined('KRYSTAL') or die;
 
         <div role="tabpanel" class="tab-pane" id="configuration">
             <div class="well">
+                <?php if (isset($posts)): ?>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Attached posts'); ?></label>
+                    <div class="col-lg-10">
+                        <?php echo Element::select('post[attached][]', $posts, $post->getAttachedIds(), array('class' => 'form-control', 'data-plugin' => 'chosen', 'data-placeholder' => ' ', 'multiple' => true)); ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
                     <div class="col-lg-10">

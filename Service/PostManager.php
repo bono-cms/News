@@ -264,7 +264,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     protected function toEntity(array $post, $full = true)
     {
-        $entity = new PostEntity();
+        $entity = new PostEntity(false);
 
         // Configure time
         $timeBag = clone $this->timeBag;
@@ -284,6 +284,11 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                    ->setKeywords($post['keywords'], PostEntity::FILTER_HTML)
                    ->setMetaDescription($post['meta_description'], PostEntity::FILTER_HTML)
                    ->setViewCount($post['views'], PostEntity::FILTER_INT);
+
+            // Attached ones if available
+            if (isset($post[PostMapperInterface::PARAM_COLUMN_ATTACHED])) {
+                $entity->setAttachedIds(ArrayUtils::arrayList($post[PostMapperInterface::PARAM_COLUMN_ATTACHED], 'id', 'id'));
+            }
         }
 
         $entity->setId($post['id'], PostEntity::FILTER_INT)
@@ -451,14 +456,26 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
-     * Fetches a post by its associated 
+     * Fetches a post entity by its associated ID
      * 
-     * @param string $id
-     * @return array
+     * @param string $id Post ID
+     * @param boolean $withAttached Whether to grab attached entities
+     * @return \News\Service\PostEntity|boolean
      */
-    public function fetchById($id)
+    public function fetchById($id, $withAttached)
     {
-        return $this->prepareResult($this->postMapper->fetchById($id));
+        $entity = $this->prepareResult($this->postMapper->fetchById($id));
+
+        if ($entity !== false) {
+            if ($withAttached === true) {
+                $rows = $this->postMapper->fetchByIds($entity->getAttachedIds());
+                $entity->setAttachedPosts($this->prepareResults($rows, false));
+            }
+
+            return $entity;
+        } else {
+            return false;
+        }
     }
 
     /**
