@@ -36,6 +36,7 @@ final class Post extends AbstractAdminController
 
         return $this->view->render('post.form', array(
             'categories' => $this->getCategoryManager()->fetchList(),
+            // If you don't ability to attach similar posts, you can comment 'posts' key to reduce DB queries
             'posts' => $this->getCategoryManager()->fetchAllWithPosts(),
             'post' => $post
         ));
