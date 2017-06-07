@@ -13,6 +13,8 @@ namespace News\Storage;
 
 interface PostMapperInterface
 {
+    const PARAM_COLUMN_ATTACHED = 'attached';
+
     /**
      * Removes all web pages by associated category id
      * 

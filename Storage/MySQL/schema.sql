@@ -35,3 +35,10 @@ CREATE TABLE `bono_module_news_posts` (
 	`views` INT NOT NULL
 
 ) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_news_posts_attached`;
+CREATE TABLE `bono_module_news_posts_attached` (
+    `master_id` INT NOT NULL COMMENT 'Post ID',
+    `slave_id` INT NOT NULL COMMENT 'Attached post ID'
+) DEFAULT CHARSET = UTF8;
