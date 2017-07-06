@@ -17,6 +17,14 @@ use Krystal\Stdlib\VirtualEntity;
 interface CategoryManagerInterface
 {
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Category ID
+     * @return array
+     */
+    public function getSwitchUrls($id);
+
+    /**
      * Fetch all categories with their associated posts
      * 
      * @return array

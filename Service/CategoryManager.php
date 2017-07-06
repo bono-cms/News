@@ -89,6 +89,17 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Category ID
+     * @return array
+     */
+    public function getSwitchUrls($id)
+    {
+        return $this->categoryMapper->createSwitchUrls($id, 'News (Categories)', 'News:Category@indexAction');
+    }
+
+    /**
      * Fetch all categories with their associated posts
      * 
      * @return array

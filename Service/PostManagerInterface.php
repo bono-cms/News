@@ -17,6 +17,14 @@ namespace News\Service;
 interface PostManagerInterface
 {
     /**
+     * Returns a collection of switching URLs
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function getSwitchUrls($id);
+
+    /**
      * Returns post breadcrumb collection
      * 
      * @param \News\Service\PostEntity $post
