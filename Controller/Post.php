@@ -34,7 +34,8 @@ final class Post extends AbstractController
             // Prepare the response
             $response = $this->view->render('news-post', array(
                 'page' => $post,
-                'post' => $post
+                'post' => $post,
+                'languages' => $postManager->getSwitchUrls($id)
             ));
 
             $postManager->incrementViewCount($id);

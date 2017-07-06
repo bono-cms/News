@@ -47,7 +47,8 @@ final class Category extends AbstractController
                 'paginator' => $paginator,
                 'posts' => $posts,
                 'page' => $page,
-                'category' => $page
+                'category' => $page,
+                'languages' => $this->getModuleService('categoryManager')->getSwitchUrls($id)
             ));
 
         } else {
