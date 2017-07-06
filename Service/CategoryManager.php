@@ -16,14 +16,12 @@ use Cms\Service\WebPageManagerInterface;
 use Cms\Service\HistoryManagerInterface;
 use News\Storage\CategoryMapperInterface;
 use News\Storage\PostMapperInterface;
-use Menu\Contract\MenuAwareManager;
-use Menu\Service\MenuWidgetInterface;
 use Krystal\Stdlib\VirtualEntity;
 use Krystal\Security\Filter;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Stdlib\ArrayUtils;
 
-final class CategoryManager extends AbstractManager implements CategoryManagerInterface, MenuAwareManager
+final class CategoryManager extends AbstractManager implements CategoryManagerInterface
 {
     /**
      * Any compliant category mapper
@@ -68,7 +66,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
      * @param \Cms\Service\HistoryManagerInterface $historyManager
      * @param \Krystal\Image\Tool\ImageManager $imageManager
-     * @param \Menu\Service\MenuWidgetInterface $menuWidget Optional menu widget
      * @return void
      */
     public function __construct(
@@ -76,16 +73,13 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         PostMapperInterface $postMapper, 
         WebPageManagerInterface $webPageManager,
         HistoryManagerInterface $historyManager,
-        ImageManagerInterface $imageManager,
-        MenuWidgetInterface $menuWidget = null
+        ImageManagerInterface $imageManager
     ){
         $this->categoryMapper = $categoryMapper;
         $this->postMapper = $postMapper;
         $this->webPageManager = $webPageManager;
         $this->historyManager = $historyManager;
         $this->imageManager = $imageManager;
-
-        $this->setMenuWidget($menuWidget);
     }
 
     /**
@@ -107,14 +101,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function fetchAllWithPosts()
     {
         return ArrayUtils::arrayDropdown($this->categoryMapper->fetchAllWithPosts(), 'category', 'id', 'post');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchNameByWebPageId($webPageId)
-    {
-        return $this->categoryMapper->fetchNameByWebPageId($webPageId);
     }
 
     /**
@@ -215,15 +201,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug', 'menu')))) {
             $this->track('Category "%s" has been created', $category['name']);
 
-            if ($this->webPageManager->add($this->getLastId(), $category['slug'], 'News (Categories)', 'News:Category@indexAction', $this->categoryMapper)) {
-                if ($this->hasMenuWidget()) {
-                    // If at least one menu widget it added
-                    if (isset($input['menu']['widget']) && is_array($input['menu']['widget'])) {
-                        $this->addMenuItem($this->webPageManager->getLastId(), $category['name'], $input);
-                    }
-                }
-            }
-
+            $this->webPageManager->add($this->getLastId(), $category['slug'], 'News (Categories)', 'News:Category@indexAction', $this->categoryMapper);
             return true;
 
         } else {
@@ -243,11 +221,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         $category =& $input['category'];
 
         $this->webPageManager->update($category['web_page_id'], $category['slug']);
-
-        // If at least one menu widget it added
-        if ($this->hasMenuWidget() && isset($input['menu'])) {
-            $this->updateMenuItem($category['web_page_id'], $category['name'], $input['menu']);
-        }
 
         // Track it
         $this->track('Category "%s" has been updated', $category['name']);
