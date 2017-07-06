@@ -444,25 +444,31 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
-     * Fetches a post entity by its associated ID
+     * Fetches post entity by its associated id
      * 
      * @param string $id Post ID
      * @param boolean $withAttached Whether to grab attached entities
-     * @return \News\Service\PostEntity|boolean
+     * @param boolean $withTranslations Whether to include translations as well
+     * @return \News\Service\PostEntity|boolean|array
      */
-    public function fetchById($id, $withAttached)
+    public function fetchById($id, $withAttached, $withTranslations)
     {
-        $entity = $this->prepareResult($this->postMapper->fetchById($id));
+        if ($withTranslations) {
+            return $this->prepareResults($this->postMapper->fetchById($id, true));
 
-        if ($entity !== false) {
-            if ($withAttached === true) {
-                $rows = $this->postMapper->fetchByIds($entity->getAttachedIds());
-                $entity->setAttachedPosts($this->prepareResults($rows, false));
-            }
-
-            return $entity;
         } else {
-            return false;
+            $entity = $this->prepareResult($this->postMapper->fetchById($id));
+
+            if ($entity !== false) {
+                if ($withAttached === true) {
+                    $rows = $this->postMapper->fetchByIds($entity->getAttachedIds());
+                    $entity->setAttachedPosts($this->prepareResults($rows, false));
+                }
+
+                return $entity;
+            } else {
+                return false;
+            }
         }
     }
 

@@ -95,13 +95,14 @@ interface PostManagerInterface
     public function deleteById($id);
 
     /**
-     * Fetches a post entity by its associated ID
+     * Fetches post entity by its associated id
      * 
      * @param string $id Post ID
      * @param boolean $withAttached Whether to grab attached entities
-     * @return \News\Service\PostEntity|boolean
+     * @param boolean $withTranslations Whether to include translations as well
+     * @return \News\Service\PostEntity|boolean|array
      */
-    public function fetchById($id, $withAttached);
+    public function fetchById($id, $withAttached, $withTranslations);
 
     /**
      * Fetches mostly viewed entities
