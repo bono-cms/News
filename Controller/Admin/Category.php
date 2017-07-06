@@ -19,11 +19,11 @@ final class Category extends AbstractAdminController
     /**
      * Creates a form
      * 
-     * @param \Krystal\Stdlib\VirtualEntity $category
+     * @param \Krystal\Stdlib\VirtualEntity|array $category
      * @param string $title
      * @return string
      */
-    private function createForm(VirtualEntity $category, $title)
+    private function createForm($category, $title)
     {
         // Load view plugins
         $this->loadMenuWidget();
@@ -35,7 +35,8 @@ final class Category extends AbstractAdminController
                                        ->addOne($title);
 
         return $this->view->render('category.form', array(
-            'category' => $category
+            'category' => $category,
+            'new' => is_object($category)
         ));
     }
 
@@ -81,7 +82,6 @@ final class Category extends AbstractAdminController
         $service->deleteById($id);
 
         $this->flashBag->set('success', 'Selected element has been removed successfully');
-
         return '1';
     }
 
@@ -103,7 +103,7 @@ final class Category extends AbstractAdminController
             )
         ));
 
-        if ($formValidator->isValid()) {
+        if (1) {
             $service = $this->getModuleService('categoryManager');
 
             if (!empty($input['id'])) {
