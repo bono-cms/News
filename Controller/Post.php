@@ -24,7 +24,7 @@ final class Post extends AbstractController
     public function indexAction($id)
     {
         $postManager = $this->getModuleService('postManager');
-        $post = $postManager->fetchById($id, true);
+        $post = $postManager->fetchById($id, true, false);
 
         if ($post !== false) {
             $this->loadSitePlugins();
