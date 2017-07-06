@@ -171,37 +171,14 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
-     * Update published by their associated ids
+     * Update settings
      * 
-     * @param array $pair
+     * @param array $settings
      * @return boolean
      */
-    public function updatePublished(array $pair)
+    public function updateSettings(array $settings)
     {
-        foreach ($pair as $id => $published) {
-            if (!$this->postMapper->updatePublishedById($id, $published)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Updates SEO values by associated ids
-     * 
-     * @param array $pair
-     * @return boolean
-     */
-    public function updateSeo(array $pair)
-    {
-        foreach ($pair as $id => $seo) {
-            if (!$this->postMapper->updateSeoById($id, $seo)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->postMapper->updateSettings($settings);
     }
 
     /**

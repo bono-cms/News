@@ -111,16 +111,11 @@ final class Post extends AbstractAdminController
      */
     public function tweakAction()
     {
-        if ($this->request->hasPost('published', 'seo')) {
-            $published = $this->request->getPost('published');
-            $seo = $this->request->getPost('seo');
+        if ($this->request->isPost()) {
+            $this->getPostManager()->updateSettings($this->request->getPost());
 
-            $postManager = $this->getPostManager();
-
-            if ($postManager->updatePublished($published) && $postManager->updateSeo($seo)) {
-                $this->flashBag->set('success', 'Settings have been saved successfully');
-                return '1';
-            }
+            $this->flashBag->set('success', 'Settings have been saved successfully');
+            return '1';
         }
     }
 

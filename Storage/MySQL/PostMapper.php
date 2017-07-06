@@ -175,27 +175,14 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Update post's published state by its associated id
+     * Update settings
      * 
-     * @param string $id Post id
-     * @param string $published Either 0 or 1
+     * @param array $settings
      * @return boolean
      */
-    public function updatePublishedById($id, $published)
+    public function updateSettings(array $settings)
     {
-        return $this->updateColumnByPk($id, 'published', $published);
-    }
-
-    /**
-     * Updates whether post's SEO is enabled or not by its associated id
-     * 
-     * @param string $id Post id
-     * @param string $published Either 0 or 1
-     * @return boolean
-     */
-    public function updateSeoById($id, $seo)
-    {
-        return $this->updateColumnByPk($id, 'seo', $seo);
+        return $this->updateColumns($settings, array('seo', 'published'));
     }
 
     /**

@@ -41,20 +41,12 @@ interface PostManagerInterface
     public function incrementViewCount($id);
 
     /**
-     * Update published by their associated ids
+     * Update settings
      * 
-     * @param array $pair
+     * @param array $settings
      * @return boolean
      */
-    public function updatePublished(array $pair);
-
-    /**
-     * Updates seo values by associated ids
-     * 
-     * @param array $pair
-     * @return boolean
-     */
-    public function updateSeo(array $pair);
+    public function updateSettings(array $settings);
 
     /**
      * Delete posts by their associated ids

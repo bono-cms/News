@@ -40,24 +40,6 @@ interface PostMapperInterface
     public function incrementViewCount($id);
 
     /**
-     * Update post's published state by its associated id
-     * 
-     * @param string $id Post id
-     * @param string $published Either 0 or 1
-     * @return boolean
-     */
-    public function updatePublishedById($id, $published);
-
-    /**
-     * Updates whether post's SEO is enabled or not by its associated id
-     * 
-     * @param string $id Post id
-     * @param string $published Either 0 or 1
-     * @return boolean
-     */
-    public function updateSeoById($id, $seo);
-
-    /**
      * Inserts a post
      * 
      * @param array $data Post data
