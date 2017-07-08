@@ -4,6 +4,8 @@ CHANGELOG
 1.2
 ---
 
+ * Support complete internalization
+ * Removed menu widget
  * Ability to attach related posts
  * Better interface with tabs in forms
  * Added shortcut in administration panel
