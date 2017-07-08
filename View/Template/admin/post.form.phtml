@@ -158,7 +158,7 @@ defined('KRYSTAL') or die;
                     <label class="col-lg-2 control-label"><?php $this->show('Cover'); ?></label>
                     <div class="col-lg-10">
                         <?php if ($entity->hasCover()): ?>
-                        <p><img data-image="preview" src="<?php echo $entity->getImageBag()->getUrl('200x200'); ?>" /></p>
+                        <p><img data-image="preview" src="<?php echo $entity->getImageUrl('200x200'); ?>" /></p>
                         <p>
                             <label for="removeCover"><?php $this->show('Remove this cover'); ?>&nbsp;</label>
                             <input type="checkbox" id="removeCover" name="post[remove_cover]" data-toggle="tooltip" data-placement="left" title="<?php $this->show('Check it if you want to remove this cover'); ?>" />
