@@ -16,6 +16,14 @@ interface PostMapperInterface
     const PARAM_COLUMN_ATTACHED = 'attached';
 
     /**
+     * Find a collection of post IDs attached to category ID
+     * 
+     * @param string $categoryId
+     * @return array
+     */
+    public function findPostIdsByCategoryId($categoryId);
+
+    /**
      * Removes all web pages by associated category id
      * 
      * @param string $categoryId

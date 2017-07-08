@@ -165,7 +165,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      * @param string $categoryId
      * @return array
      */
-    private function findPostIdsByCategoryId($categoryId)
+    public function findPostIdsByCategoryId($categoryId)
     {
         return $this->db->select($this->getPk())
                         ->from(self::getTableName())
