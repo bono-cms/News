@@ -14,7 +14,6 @@ namespace News\Service;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Security\Filter;
 use Krystal\Stdlib\ArrayUtils;
-use Menu\Contract\MenuAwareManager;
 use News\Storage\PostMapperInterface;
 use News\Storage\CategoryMapperInterface;
 use News\Service\TimeBagInterface;
@@ -22,7 +21,7 @@ use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
 use Cms\Service\HistoryManagerInterface;
 
-final class PostManager extends AbstractManager implements PostManagerInterface, MenuAwareManager
+final class PostManager extends AbstractManager implements PostManagerInterface
 {
     /**
      * Any-compliant post mapper
@@ -125,14 +124,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                 'link' => '#',
             )
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fetchNameByWebPageId($webPageId)
-    {
-        return $this->postMapper->fetchNameByWebPageId($webPageId);
     }
 
     /**
