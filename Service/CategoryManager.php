@@ -159,32 +159,15 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
-     * Prepares raw form data before sending to the mapper
+     * Saves a page
      * 
-     * @param array $input Raw input data
-     * @return array
+     * @param array $input
+     * @return boolen
      */
-    private function prepareInput(array $input)
+    private function savePage(array $input)
     {
-        $category =& $input['category'];
-
-        // By default a slug is taken from a title as well
-        if (empty($category['slug'])) {
-            $category['slug'] = $category['name'];
-        }
-
-        // Use name for empty titles
-        if (empty($category['title'])) {
-            $category['title'] = $category['name'];
-        }
-
-        // Force a string to be slugiffied
-        $category['slug'] = $this->webPageManager->sluggify($category['slug']);
-
-        // Safe type casting
-        $category['web_page_id'] = (int) $category['web_page_id'];
-
-        return $input;
+        $input['category'] = ArrayUtils::arrayWithout($input['category'], array('slug'));
+        return $this->categoryMapper->savePage('News (Categories)', 'News:Category@indexAction', $input['category'], $input['translation']);
     }
 
     /**
@@ -195,18 +178,8 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function add(array $input)
     {
-        $input = $this->prepareInput($input);
-        $category =& $input['category'];
-
-        if ($this->categoryMapper->insert(ArrayUtils::arrayWithout($category, array('slug', 'menu')))) {
-            $this->track('Category "%s" has been created', $category['name']);
-
-            $this->webPageManager->add($this->getLastId(), $category['slug'], 'News (Categories)', 'News:Category@indexAction', $this->categoryMapper);
-            return true;
-
-        } else {
-            return false;
-        }
+        #$this->track('Category "%s" has been created', $category['name']);
+        return $this->savePage($input);
     }
 
     /**
@@ -217,25 +190,24 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function update(array $input)
     {
-        $input = $this->prepareInput($input);
-        $category =& $input['category'];
-
-        $this->webPageManager->update($category['web_page_id'], $category['slug']);
-
-        // Track it
-        $this->track('Category "%s" has been updated', $category['name']);
-        return $this->categoryMapper->update(ArrayUtils::arrayWithout($category, array('slug', 'menu')));
+        #$this->track('Category "%s" has been updated', $category['name']);
+        return $this->savePage($input);
     }
 
     /**
-     * Fetches category bag by its associated id
+     * Fetches category's entity by its associated id
      * 
-     * @param string $id Category id
-     * @return \Krystal\Stdlib\VirtualEntity|boolean
+     * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
+     * @return \Krystal\Stdlib\VirtualEntity|boolean|array
      */
-    public function fetchById($id)
+    public function fetchById($id, $withTranslations)
     {
-        return $this->prepareResult($this->categoryMapper->fetchById($id));
+        if ($withTranslations == true) {
+            return $this->prepareResults($this->categoryMapper->fetchById($id, true));
+        } else {
+            return $this->prepareResult($this->categoryMapper->fetchById($id, false));
+        }
     }
 
     /**
@@ -247,10 +219,10 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     public function deleteById($id)
     {
         // Grab category's title before we remove it
-        $title = Filter::escape($this->categoryMapper->fetchNameById($id));
+        #$title = Filter::escape($this->categoryMapper->fetchNameById($id));
 
         if ($this->removeAllById($id)) {
-            $this->track('Category "%s" has been removed', $title);
+            #$this->track('Category "%s" has been removed', $title);
             return true;
 
         } else {
@@ -267,27 +239,12 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     private function removeAllById($id)
     {
         // The order of execution is important
-        $this->removeCategoryById($id);
+        $this->categoryMapper->deletePage($id);
         $this->removeAllPostImagesByCategoryId($id);
-        $this->removeAllPostsById($id);
 
-        return true;
-    }
-
-    /**
-     * Removes a category by its associated id
-     * 
-     * @param string $id Category's id
-     * @return boolean
-     */
-    private function removeCategoryById($id)
-    {
-        $webPageId = $this->categoryMapper->fetchWebPageIdById($id);
-
-        $this->webPageManager->deleteById($webPageId);
-        $this->categoryMapper->deleteById($id);
-
-        return true;
+        // Post IDs to be deleted
+        $ids = $this->postMapper->findPostIdsByCategoryId($id);
+        return $this->postMapper->deletePage($ids);
     }
 
     /**
@@ -306,27 +263,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
                 $this->imageManager->delete($id);
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Removes all posts associated with category id
-     * 
-     * @param string $id Category's id
-     * @return boolean
-     */
-    private function removeAllPostsById($id)
-    {
-        $webPageIds = $this->postMapper->fetchAllWebPageIdsByCategoryId($id);
-
-        // Remove associated web pages, first
-        foreach ($webPageIds as $webPageId) {
-            $this->webPageManager->deleteById($webPageId);
-        }
-
-        // And then remove all posts
-        $this->postMapper->deleteAllByCategoryId($id);
 
         return true;
     }

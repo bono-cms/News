@@ -69,12 +69,13 @@ interface CategoryManagerInterface
     public function update(array $form);
 
     /**
-     * Fetches category bag by its associated id
+     * Fetches category's entity by its associated id
      * 
-     * @param string $id Category id
-     * @return \Krystal\Stdlib\VirtualBag|boolean
+     * @param string $id
+     * @param boolean $withTranslations Whether to fetch translations or not
+     * @return \Krystal\Stdlib\VirtualEntity|boolean|array
      */
-    public function fetchById($id);
+    public function fetchById($id, $withTranslations);
 
     /**
      * Deletes a category by its associated id

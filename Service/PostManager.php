@@ -195,7 +195,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             }
         }
 
-        $this->track('%s posts have been removed', count($ids));
+        #$this->track('%s posts have been removed', count($ids));
         return true;
     }
 
@@ -208,10 +208,10 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     public function deleteById($id)
     {
         // Grab post's title before we remove it
-        $title = Filter::escape($this->postMapper->fetchNameById($id));
+        #$title = Filter::escape($this->postMapper->fetchNameById($id));
 
         if ($this->removeAllById($id)) {
-            $this->track('Post "%s" has been removed', $title);
+            #$this->track('Post "%s" has been removed', $title);
             return true;
         } else {
             return false;
@@ -226,15 +226,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     private function removeAllById($id)
     {
-        // Remove a web page
-        $webPageId = $this->postMapper->fetchWebPageIdById($id);
-        $this->webPageManager->deleteById($webPageId);
-
-        // Remove images
-        $this->imageManager->delete($id);
-
-        // And finally removal the post itself
-        return $this->postMapper->deleteById($id);
+        return $this->postMapper->deletePage($id) && $this->imageManager->delete($id);
     }
 
     /**
@@ -355,6 +347,29 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
+     * Saves a page
+     * 
+     * @param array $input
+     * @return boolean
+     */
+    private function savePage(array $input)
+    {
+        // Grab a reference
+        $data =& $input['data']['post'];
+
+        // Prepare timestamp
+        $data['timestamp'] = (int) strtotime($data['date']);
+
+        // Safe type casting
+        $data['category_id'] = (int) $data['category_id'];
+
+        // Remove extra keys if present
+        $data = ArrayUtils::arrayWithout($data, array('date', 'slug', 'remove_cover', 'attached'));
+
+        return $this->postMapper->savePage('News (Posts)', 'News:Post@indexAction', $data, $input['data']['translation']);
+    }
+
+    /**
      * Adds a post
      * 
      * @param array $input Raw input data
@@ -362,7 +377,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function add(array $input)
     {
-        $input = $this->prepareInput($input);
         $data =& $input['data']['post'];
 
         // By default there are 0 views
@@ -378,18 +392,16 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             $data['cover'] = '';
         }
 
-        $this->postMapper->insert(ArrayUtils::arrayWithout($data, array('date', 'slug')));
+        // Save the page
+        $this->savePage($input);
 
-        // Not sure about this one
+        // Now upload a cover if present
         if (!empty($input['files'])) {
-
             $file =& $input['files']['file'];
             $this->imageManager->upload($this->getLastId(), $file);
         }
 
-        $this->track('New post "%s" has been created', $data['name']);
-        $this->webPageManager->add($this->getLastId(), $data['slug'], 'News (Posts)', 'News:Post@indexAction', $this->postMapper);
-
+        #$this->track('New post "%s" has been created', $data['name']);
         return true;
     }
 
@@ -401,26 +413,24 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function update(array $input)
     {
-        $form = $this->prepareInput($input);
-        $post =& $form['data']['post'];
+        //$form = $this->prepareInput($input);
+        $post =& $input['data']['post'];
 
         // Allow to remove a cover, only it case it exists and checkbox was checked
         if (isset($post['remove_cover']) && !empty($post['cover'])) {
             // Remove a cover, but not a dir itself
             $this->imageManager->delete($post['id'], $post['cover']);
             $post['cover'] = '';
-
         } else {
-
             // Do the check only in case cover doesn't need to be removed
-            if (!empty($form['files'])) {
+            if (!empty($input['files'])) {
                 // If we have a previous cover, then we gotta remove it
                 if (!empty($post['cover'])) {
                     // Remove previous one
                     $this->imageManager->delete($post['id'], $post['cover']);
                 }
 
-                $file = $form['files']['file'];
+                $file = $input['files']['file'];
 
                 // Before we start uploading a file, we need to filter its base name
                 $this->filterFileInput($file);
@@ -431,15 +441,10 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             }
         }
 
-        // Update a record itself now
-        $this->postMapper->update(ArrayUtils::arrayWithout($post, array('date', 'slug', 'remove_cover')));
-
-        // Update a slug
-        $this->webPageManager->update($post['web_page_id'], $post['slug']);
-
+        $this->savePage($input);
+        
         // And finally now just track it
-        $this->track('Post "%s" has been updated', $post['name']);
-
+        #$this->track('Post "%s" has been updated', $post['name']);
         return true;
     }
 
