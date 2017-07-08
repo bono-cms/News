@@ -105,37 +105,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
-     * Returns category breadcrumbs with additional appends
-     * 
-     * @param string $id Category's id
-     * @param array $appends
-     * @return array
-     */
-    private function getWithCategoryBreadcrumbs($id, array $appends)
-    {
-        return array_merge($this->getCategoryBreadcrumbsById($id), $appends);
-    }
-
-    /**
-     * Returns category breadcrumbs by its associated id
-     * 
-     * @param string $id Category's id
-     * @return array
-     */
-    private function getCategoryBreadcrumbsById($id)
-    {
-        $category = $this->categoryMapper->fetchById($id);
-        $categoryWebPage = $this->webPageManager->fetchById($category['web_page_id']);
-
-        return array(
-            array(
-                'name' => $category['name'],
-                'link' => $this->webPageManager->surround($categoryWebPage['slug'], $categoryWebPage['lang_id']),
-            )
-        );
-    }
-
-    /**
      * Returns post breadcrumb collection for view
      * 
      * @param \News\Service\PostEntity $post
@@ -143,12 +112,19 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function getBreadcrumbs(PostEntity $post)
     {
-        return $this->getWithCategoryBreadcrumbs($post->getCategoryId(), array(
+        $category = $this->categoryMapper->fetchById($post->getCategoryId(), false);
+        $categoryWebPage = $this->webPageManager->fetchById($category['web_page_id']);
+
+        return array(
+            array(
+                'name' => $category['name'],
+                'link' => $this->webPageManager->surround($categoryWebPage['slug'], $categoryWebPage['lang_id']),
+            ),
             array(
                 'name' => $post->getName(),
                 'link' => '#',
             )
-        ));
+        );
     }
 
     /**
