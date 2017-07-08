@@ -26,7 +26,7 @@ final class Category extends AbstractController
      */
     public function indexAction($id = false, $pageNumber = 1, $code = null, $slug = null)
     {
-        $page = $this->getModuleService('categoryManager')->fetchById($id);
+        $page = $this->getModuleService('categoryManager')->fetchById($id, false);
 
         if ($page !== false) {
             $this->loadSitePlugins();

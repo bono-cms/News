@@ -61,7 +61,7 @@ final class Category extends AbstractAdminController
      */
     public function editAction($id)
     {
-        $category = $this->getCategoryManager()->fetchById($id);
+        $category = $this->getCategoryManager()->fetchById($id, true);
 
         if ($category !== false) {
             return $this->createForm($category, 'Edit the category');
