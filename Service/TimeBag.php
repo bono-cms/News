@@ -11,6 +11,8 @@
 
 namespace News\Service;
 
+use Krystal\Stdlib\VirtualEntity;
+
 final class TimeBag implements TimeBagInterface
 {
     /**
@@ -63,6 +65,23 @@ final class TimeBag implements TimeBagInterface
         $this->postFormat = $postFormat;
         $this->announceFormat = $announceFormat;
         $this->panelFormat = $panelFormat;
+    }
+
+    /**
+     * Builds the instance
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
+     * @return void
+     */
+    public static function factory(VirtualEntity $config)
+    {
+        // With defaults
+        $listFormat = $config->getTimeFormatInList();
+        $postFormat = $config->getTimeFormatInPost();
+        $announceFormat = $listFormat;
+        $panelFormat = 'm/d/Y';
+
+        return new self($listFormat, $postFormat, $announceFormat, $panelFormat);
     }
 
     /**

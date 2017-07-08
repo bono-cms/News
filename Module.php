@@ -17,7 +17,7 @@ use Krystal\Stdlib\VirtualEntity;
 use News\Service\CategoryManager;
 use News\Service\PostManager;
 use News\Service\PostImageManagerFactory;
-use News\Service\TimeBagFactory;
+use News\Service\TimeBag;
 use News\Service\SiteService;
 
 final class Module extends AbstractCmsModule
@@ -37,7 +37,7 @@ final class Module extends AbstractCmsModule
         $config = $configManager->getEntity();
 
         $imageManager = $this->getImageManager($config);
-        $postManager = new PostManager($postMapper, $categoryMapper, $this->getTimeBag($config), $webPageManager, $imageManager, $historyManager);
+        $postManager = new PostManager($postMapper, $categoryMapper, TimeBag::factory($config), $webPageManager, $imageManager, $historyManager);
         $categoryManager = new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager);
 
         return array(
@@ -46,18 +46,6 @@ final class Module extends AbstractCmsModule
             'categoryManager' => $categoryManager,
             'postManager' => $postManager
         );
-    }
-
-    /**
-     * Returns time bag
-     * 
-     * @param \Krystal\Stdlib\VirtualEntity $config
-     * @return \News\Service\TimeBag
-     */
-    private function getTimeBag(VirtualEntity $config)
-    {
-        $factory = new TimeBagFactory($config);
-        return $factory->build();
     }
 
     /**
