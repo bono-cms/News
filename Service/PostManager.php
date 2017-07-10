@@ -217,14 +217,13 @@ final class PostManager extends AbstractManager implements PostManagerInterface
         $timeBag = clone $this->timeBag;
         $timeBag->setTimestamp((int) $post['timestamp']);
 
-        if ($full === true) {
-            // Configure image bag
-            $imageBag = clone $this->imageManager->getImageBag();
-            $imageBag->setId((int) $post['id'])
-                     ->setCover($post['cover']);
+        // Configure image bag
+        $imageBag = clone $this->imageManager->getImageBag();
+        $imageBag->setId((int) $post['id'])
+                 ->setCover($post['cover']);
 
-            $entity->setImageBag($imageBag)
-                   ->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
+        if ($full === true) {
+            $entity->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
                    ->setTitle($post['title'], PostEntity::FILTER_HTML)
                    ->setFull($post['full'], PostEntity::FILTER_SAFE_TAGS)
                    ->setPermanentUrl('/module/news/post/'.$entity->getId())
@@ -238,7 +237,8 @@ final class PostManager extends AbstractManager implements PostManagerInterface
             }
         }
 
-        $entity->setId($post['id'], PostEntity::FILTER_INT)
+        $entity->setImageBag($imageBag)
+               ->setId($post['id'], PostEntity::FILTER_INT)
                ->setLangId($post['lang_id'], PostEntity::FILTER_INT)
                ->setWebPageId($post['web_page_id'], PostEntity::FILTER_INT)
                ->setCategoryName($post['category_name'], PostEntity::FILTER_HTML)
