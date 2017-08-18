@@ -306,8 +306,24 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                    ->equals(
                         CategoryMapper::getFullColumnName('id', CategoryMapper::getTranslationTable()), 
                         new RawSqlFragment(self::getFullColumnName('category_id'))
-                    )
-                    ->whereIn(self::getFullColumnName('id'), $ids);
+                    );
+
+        if ($withTranslations === false) {
+            $db->rawAnd()
+               ->equals(
+                  CategoryMapper::getFullColumnName('lang_id', CategoryMapper::getTranslationTable()), 
+                  new RawSqlFragment(PostMapper::getFullColumnName('lang_id', PostMapper::getTranslationTable()))
+                );
+        }
+
+        $db->whereIn(self::getFullColumnName('id'), $ids);
+
+        if ($withTranslations === false) {
+			$db->andWhereEquals(
+				PostMapper::getFullColumnName('lang_id', PostMapper::getTranslationTable()), 
+				$this->getLangId()
+			);
+		}
 
         if ($relational === true) {
             $db->asManyToMany(self::PARAM_COLUMN_ATTACHED, self::getJunctionTableName(), self::PARAM_JUNCTION_MASTER_COLUMN, self::getTableName(), 'id', 'id');
