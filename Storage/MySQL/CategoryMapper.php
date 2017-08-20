@@ -45,6 +45,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
         // Basic columns to be selected
         $columns = array(
             self::getFullColumnName('id'),
+            self::getFullColumnName('seo'),
             CategoryTranslationMapper::getFullColumnName('web_page_id'),
             CategoryTranslationMapper::getFullColumnName('lang_id'),
             CategoryTranslationMapper::getFullColumnName('name'),

@@ -129,6 +129,7 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
 
         if ($all === true) {
             $entity->setTitle($category['title'], VirtualEntity::FILTER_HTML)
+                   ->setSeo(isset($category['seo']) ? $category['seo'] : null, VirtualEntity::FILTER_BOOL)
                    ->setDescription($category['description'], VirtualEntity::FILTER_SAFE_TAGS)
                    ->setKeywords($category['keywords'], VirtualEntity::FILTER_HTML)
                    ->setMetaDescription($category['meta_description'], VirtualEntity::FILTER_HTML);
