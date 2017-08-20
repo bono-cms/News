@@ -33,7 +33,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public static function getTranslationTable()
     {
-        return self::getWithPrefix('bono_module_news_posts_translations');
+        return PostTranslationMapper::getTableName();
     }
 
     /**
@@ -56,24 +56,24 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         $columns = array(
             self::getFullColumnName('id'),
             self::getFullColumnName('category_id'),
-            self::getFullColumnName('web_page_id', self::getTranslationTable()),
-            self::getFullColumnName('lang_id', self::getTranslationTable()),
-            self::getFullColumnName('name', self::getTranslationTable()),
             self::getFullColumnName('timestamp'),
             self::getFullColumnName('published'),
-            self::getFullColumnName('intro', self::getTranslationTable()),
             self::getFullColumnName('cover'),
             self::getFullColumnName('seo'),
+            PostTranslationMapper::getFullColumnName('web_page_id'),
+            PostTranslationMapper::getFullColumnName('lang_id'),
+            PostTranslationMapper::getFullColumnName('name'),
+            PostTranslationMapper::getFullColumnName('intro'),
             WebPageMapper::getFullColumnName('slug'),
-            CategoryMapper::getFullColumnName('name', CategoryMapper::getTranslationTable()) => 'category_name'
+            CategoryTranslationMapper::getFullColumnName('name') => 'category_name'
         );
 
         if ($all) {
             $columns = array_merge($columns, array(
-                self::getFullColumnName('title', self::getTranslationTable()),
-                self::getFullColumnName('full', self::getTranslationTable()),
-                self::getFullColumnName('keywords', self::getTranslationTable()),
-                self::getFullColumnName('meta_description', self::getTranslationTable()),
+                PostTranslationMapper::getFullColumnName('title'),
+                PostTranslationMapper::getFullColumnName('full'),
+                PostTranslationMapper::getFullColumnName('keywords'),
+                PostTranslationMapper::getFullColumnName('meta_description'),
                 self::getFullColumnName('views')
             ));
         }
@@ -96,41 +96,41 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         $db = $this->db->select($this->getSharedColumns(false))
                        ->from(self::getTableName())
                        // Translation relation
-                       ->innerJoin(self::getTranslationTable())
+                       ->innerJoin(PostTranslationMapper::getTableName())
                        ->on()
                        ->equals(
-                            self::getFullColumnName('id', self::getTranslationTable()),
+                            PostTranslationMapper::getFullColumnName('id'),
                             new RawSqlFragment(self::getFullColumnName('id'))
                         )
                         // Category translation
-                        ->innerJoin(CategoryMapper::getTranslationTable())
+                        ->innerJoin(CategoryTranslationMapper::getTableName())
                         ->on()
                         ->equals(
                             self::getFullColumnName('category_id'),
-                            new RawSqlFragment(CategoryMapper::getFullColumnName('id', CategoryMapper::getTranslationTable()))
+                            new RawSqlFragment(CategoryTranslationMapper::getFullColumnName('id'))
                         )
                         ->rawAnd()
                         ->equals(
-                            CategoryMapper::getFullColumnName('lang_id', CategoryMapper::getTranslationTable()),
-                            new RawSqlFragment(PostMapper::getFullColumnName('lang_id', PostMapper::getTranslationTable()))
+                            CategoryTranslationMapper::getFullColumnName('lang_id'),
+                            new RawSqlFragment(PostTranslationMapper::getFullColumnName('lang_id'))
                         )
                         // Category relation
                         ->innerJoin(CategoryMapper::getTableName())
                         ->on()
                         ->equals(
                             CategoryMapper::getFullColumnName('id'),
-                            new RawSqlFragment(CategoryMapper::getFullColumnName('id', CategoryMapper::getTranslationTable()))
+                            new RawSqlFragment(CategoryTranslationMapper::getFullColumnName('id'))
                         )
                         // Web page relation
                         ->innerJoin(WebPageMapper::getTableName())
                         ->on()
                         ->equals(
                             WebPageMapper::getFullColumnName('id'),
-                            new RawSqlFragment(self::getFullColumnName('web_page_id', self::getTranslationTable()))
+                            new RawSqlFragment(PostTranslationMapper::getFullColumnName('web_page_id'))
                         )
                         // Filtering condition
                         ->whereEquals(
-                            self::getFullColumnName('lang_id', self::getTranslationTable()), 
+                            PostTranslationMapper::getFullColumnName('lang_id'), 
                             $this->getLangId()
                         );
 
@@ -301,18 +301,18 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                         new RawSqlFragment(self::getFullColumnName('category_id'))
                     )
                    // Category translating relation
-                   ->innerJoin(CategoryMapper::getTranslationTable())
+                   ->innerJoin(CategoryTranslationMapper::getTableName())
                    ->on()
                    ->equals(
-                        CategoryMapper::getFullColumnName('id', CategoryMapper::getTranslationTable()), 
+                        CategoryTranslationMapper::getFullColumnName('id'), 
                         new RawSqlFragment(self::getFullColumnName('category_id'))
                     );
 
         if ($withTranslations === false) {
             $db->rawAnd()
                ->equals(
-                  CategoryMapper::getFullColumnName('lang_id', CategoryMapper::getTranslationTable()), 
-                  new RawSqlFragment(PostMapper::getFullColumnName('lang_id', PostMapper::getTranslationTable()))
+                  CategoryTranslationMapper::getFullColumnName('lang_id'), 
+                  new RawSqlFragment(PostTranslationMapper::getFullColumnName('lang_id'))
                 );
         }
 
@@ -320,7 +320,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
 
         if ($withTranslations === false) {
 			$db->andWhereEquals(
-				PostMapper::getFullColumnName('lang_id', PostMapper::getTranslationTable()), 
+				PostTranslationMapper::getFullColumnName('lang_id'), 
 				$this->getLangId()
 			);
 		}
