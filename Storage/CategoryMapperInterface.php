@@ -58,20 +58,4 @@ interface CategoryMapperInterface
      * @return array
      */
     public function fetchById($id, $withTranslations);
-
-    /**
-     * Inserts a category
-     * 
-     * @param array $data Category data
-     * @return boolean
-     */
-    public function insert(array $data);
-
-    /**
-     * Updates a category
-     * 
-     * @param array $data Category data
-     * @return boolean
-     */
-    public function update(array $data);
 }

@@ -81,21 +81,21 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->on()
                         ->equals(
                             PostMapper::getFullColumnName('category_id'), 
-                            new RawSqlFragment(self::getFullColumnName('id'))
+                            self::getRawColumn('id')
                         )
                         // Post translation relation
                         ->innerJoin(PostTranslationMapper::getTableName())
                         ->on()
                         ->equals(
                             PostMapper::getFullColumnName('id'), 
-                            new RawSqlFragment(PostTranslationMapper::getFullColumnName('id'))
+                            PostTranslationMapper::getRawColumn('id')
                         )
                         // Category translation relation
                         ->innerJoin(CategoryTranslationMapper::getTableName())
                         ->on()
                         ->equals(
                             self::getFullColumnName('id'), 
-                            new RawSqlFragment(CategoryTranslationMapper::getFullColumnName('id'))
+                            CategoryTranslationMapper::getRawColumn('id')
                         )
                         // Filtering condition
                         ->whereEquals(
@@ -123,7 +123,7 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->on()
                         ->equals(
                             self::getFullColumnName('id'),
-                            new RawSqlFragment(CategoryTranslationMapper::getFullColumnName('id'))
+                            CategoryTranslationMapper::getRawColumn('id')
                         )
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
@@ -169,14 +169,14 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->on()
                         ->equals(
                             self::getFullColumnName('id'), 
-                            new RawSqlFragment(PostMapper::getFullColumnName('category_id'))
+                            PostMapper::getRawColumn('category_id')
                         )
                         // Translation relation
                         ->innerJoin(CategoryTranslationMapper::getTableName())
                         ->on()
                         ->equals(
                             CategoryTranslationMapper::getFullColumnName('id'),
-                            new RawSqlFragment(self::getFullColumnName('id'))
+                            self::getRawColumn('id')
                         )
                         ->rawAnd()
                         ->equals(
@@ -188,12 +188,12 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->on()
                         ->equals(
                             WebPageMapper::getFullColumnName('id'),
-                            new RawSqlFragment(CategoryTranslationMapper::getFullColumnName('web_page_id'))
+                            CategoryTranslationMapper::getRawColumn('web_page_id')
                         )
                         ->rawAnd()
                         ->equals(
                             WebPageMapper::getFullColumnName('lang_id'),
-                            new RawSqlFragment(CategoryTranslationMapper::getFullColumnName('lang_id'))
+                            CategoryTranslationMapper::getRawColumn('lang_id')
                         );
 
         if ($countOnlyPublished == true) {
@@ -215,27 +215,5 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     public function fetchById($id, $withTranslations)
     {
         return $this->findWebPage($this->getSharedColumns(true), $id, $withTranslations);
-    }
-
-    /**
-     * Inserts a category
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function insert(array $input)
-    {
-        return $this->persist($this->getWithLang($input));
-    }
-
-    /**
-     * Updates a category
-     * 
-     * @param array $input Raw input data
-     * @return boolean
-     */
-    public function update(array $input)
-    {
-        return $this->persist($input);
     }
 }
