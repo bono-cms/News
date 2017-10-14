@@ -13,6 +13,7 @@ namespace News\Storage\MySQL;
 
 use Krystal\Db\Sql\RawSqlFragment;
 use Krystal\Stdlib\ArrayUtils;
+use Krystal\Db\Sql\QueryBuilder;
 use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use News\Storage\PostMapperInterface;
@@ -155,6 +156,65 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         if ($page === null && $itemsPerPage !== null) {
             $db->limit($itemsPerPage);
         }
+
+        return $db->queryAll();
+    }
+
+    /**
+     * Find sequential (i.e previous and next) posts between provided ID
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function findSequential($id)
+    {
+        // Safe casting
+        $id = intval($id);
+
+        // Reference to PK column
+        $pk = self::getFullColumnName('id');
+
+        // Columns to be selected
+        $columns = array(
+            self::getFullColumnName('id'),
+            PostTranslationMapper::getFullColumnName('name'),
+            WebPageMapper::getFullColumnName('slug')
+        );
+
+        // Inner comparison generator
+        $inner = function($func, $operator) use ($id, $pk){
+            $qb = new QueryBuilder();
+            $qb->select()
+               ->func($func, $pk)
+               ->from(self::getTableName())
+               ->where($pk, $operator, $id);
+
+            return sprintf('IFNULL((%s), 0)', $qb->getQueryString());
+        };
+
+        // Build query
+        $db = $this->db->select($columns)
+                       ->from(PostTranslationMapper::getTableName())
+                       // Translation relation
+                       ->innerJoin(self::getTableName())
+                       ->on()
+                       ->equals(PostTranslationMapper::getFullColumnName('id'), self::getRawColumn('id'))
+                       // Web page relation
+                       ->innerJoin(WebPageMapper::getTableName())
+                       ->on()
+                       ->equals(WebPageMapper::getFullColumnName('id'), PostTranslationMapper::getRawColumn('web_page_id'))
+                       ->rawAnd()
+                       ->equals(WebPageMapper::getFullColumnName('lang_id'), PostTranslationMapper::getRawColumn('lang_id'))
+                       // Language ID constraint
+                       ->whereEquals(PostTranslationMapper::getFullColumnName('lang_id'), $this->getLangId())
+                       ->rawAnd()
+                       // Start
+                       ->openBracket()
+                       ->equals($pk, new RawSqlFragment($inner('min', '>')))
+                       ->rawOr()
+                       ->equals($pk, new RawSqlFragment($inner('max', '<')))
+                       // End
+                       ->closeBracket();
 
         return $db->queryAll();
     }

@@ -16,6 +16,14 @@ interface PostMapperInterface
     const PARAM_COLUMN_ATTACHED = 'attached';
 
     /**
+     * Find sequential (i.e previous and next) posts between provided ID
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function findSequential($id);
+
+    /**
      * Find a collection of post IDs attached to category ID
      * 
      * @param string $categoryId
