@@ -177,6 +177,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         // Columns to be selected
         $columns = array(
             self::getFullColumnName('id'),
+            PostTranslationMapper::getFullColumnName('lang_id'),
             PostTranslationMapper::getFullColumnName('name'),
             WebPageMapper::getFullColumnName('slug')
         );
