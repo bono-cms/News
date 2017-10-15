@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Added `getSequential()` in `SiteService` that can return previous and next post starting from provided post ID
  * Support complete internalization
  * Removed menu widget
  * Ability to attach related posts
