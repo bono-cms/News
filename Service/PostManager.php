@@ -100,14 +100,23 @@ final class PostManager extends AbstractManager implements PostManagerInterface
      */
     public function findSequential($id)
     {
+        $output = array();
         $rows = $this->postMapper->findSequential($id);
 
-        // Append URL key
         foreach ($rows as $index => $row) {
-            $rows[$index]['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
+            // Append URL key
+            $row['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
+
+            if ($row['id'] > $id) {
+                $output['next'] = $row;
+            }
+
+            if ($row['id'] < $id) {
+                $output['previous'] = $row;
+            }
         }
 
-        return $rows;
+        return $output;
     }
 
     /**
