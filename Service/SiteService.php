@@ -52,6 +52,17 @@ final class SiteService implements SiteServiceInterface
     }
 
     /**
+     * Find sequential (i.e previous and next) posts between provided ID
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function getSequential($id)
+    {
+        return $this->postManager->findSequential($id);
+    }
+
+    /**
      * Returns a collection of category entities
      * 
      * @return array

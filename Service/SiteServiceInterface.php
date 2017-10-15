@@ -14,6 +14,14 @@ namespace News\Service;
 interface SiteServiceInterface
 {
     /**
+     * Find sequential (i.e previous and next) posts between provided ID
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function getSequential($id);
+
+    /**
      * Returns a collection of category entities
      * 
      * @return array
