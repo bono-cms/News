@@ -17,6 +17,14 @@ namespace News\Service;
 interface PostManagerInterface
 {
     /**
+     * Find sequential (i.e previous and next) posts between provided ID
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function findSequential($id);
+
+    /**
      * Returns a collection of switching URLs
      * 
      * @param string $id Post ID

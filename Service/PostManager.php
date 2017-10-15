@@ -93,6 +93,24 @@ final class PostManager extends AbstractManager implements PostManagerInterface
     }
 
     /**
+     * Find sequential (i.e previous and next) posts between provided ID
+     * 
+     * @param string $id Post ID
+     * @return array
+     */
+    public function findSequential($id)
+    {
+        $rows = $this->postMapper->findSequential($id);
+
+        // Append URL key
+        foreach ($rows as $index => $row) {
+            $rows[$index]['url'] = $this->webPageManager->surround($row['slug'], $row['lang_id']);
+        }
+
+        return $rows;
+    }
+
+    /**
      * Returns a collection of switching URLs
      * 
      * @param string $id Post ID
