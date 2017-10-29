@@ -35,8 +35,7 @@ final class Category extends AbstractAdminController
                                        ->addOne($title);
 
         return $this->view->render('category.form', array(
-            'category' => $category,
-            'new' => is_object($category)
+            'category' => $category
         ));
     }
 
