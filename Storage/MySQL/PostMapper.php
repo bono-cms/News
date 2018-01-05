@@ -477,17 +477,20 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage)
     {
-        return $this->findRecords($categoryId, $published, $page, $itemsPerPage, function($db) use ($published){
-            // If needed to fetch by published, then sort by time
-            if ($published) {
-                $db->orderBy(array(
-                    self::getFullColumnName('timestamp') => 'DESC', 
-                    self::getFullColumnName('id') => 'DESC'
-                ));
-            } else {
-                $db->orderBy(self::getFullColumnName('id'))
-                   ->desc();
-            }
+        // Configure sorting way depending on published state
+        if ($published) {
+            $sortings = array(
+                self::getFullColumnName('timestamp') => 'DESC', 
+                self::getFullColumnName('id') => 'DESC'
+            );
+        } else {
+            $sortings = array(
+                self::getFullColumnName('id') => 'DESC'
+            );
+        }
+
+        return $this->findRecords($categoryId, $published, $page, $itemsPerPage, function($db) use ($sortings){
+            $db->orderBy($sortings);
         });
     }
 
