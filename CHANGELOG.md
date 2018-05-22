@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Posts that have a future date won't be displayed since now. They will be displayed when their date comes
  * Ability to mark posts as front. That means they are visible in their categories, but not on home page
  * Added `getSequential()` in `SiteService` that can return previous and next post starting from provided post ID
  * Support complete internalization

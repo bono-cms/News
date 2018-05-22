@@ -496,7 +496,16 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             );
         }
 
-        return $this->findRecords($categoryId, $published, $front, $page, $itemsPerPage, function($db) use ($sortings){
+        // Purely for older PHP versions. Old versions don't let static methods to be called in Closures
+        $timestampColumn = self::getFullColumnName('timestamp');
+
+        return $this->findRecords($categoryId, $published, $front, $page, $itemsPerPage, function($db) use ($sortings, $published, $timestampColumn){
+            // Don't let future posts to be returned
+            if ($published === true) {
+                // Avoid returning future posts
+                $db->andWhere($timestampColumn, '<=', time());
+            }
+
             $db->orderBy($sortings);
         });
     }
