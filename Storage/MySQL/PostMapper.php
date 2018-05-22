@@ -88,12 +88,13 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      * 
      * @param string $categoryId Category ID
      * @param boolean $published Whether to fetch only published records
+     * @param boolean $front Whether to fetch only front records
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
      * @param \Closure $orderCallback Callback to generate ORDER BY condition
      * @return array
      */
-    private function findRecords($categoryId, $published, $page, $itemsPerPage, Closure $orderCallback)
+    private function findRecords($categoryId, $published, $front, $page, $itemsPerPage, Closure $orderCallback)
     {
         $db = $this->db->select($this->getSharedColumns(false))
                        ->from(self::getTableName())
@@ -143,6 +144,10 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
 
         if ($published) {
             $db->andWhereEquals(self::getFullColumnName('published'), '1');
+        }
+
+        if ($front === true) {
+            $db->andWhereEquals(self::getFullColumnName('front'), '1');
         }
 
         // Apply order callback
@@ -424,7 +429,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchMostlyViewed($limit)
     {
-        return $this->findRecords(null, true, null, $limit, function($db){
+        return $this->findRecords(null, true, false, null, $limit, function($db){
             $db->orderBy('views')
                ->desc();
         });
@@ -449,7 +454,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchRandomPublished($limit, $categoryId = null)
     {
-        return $this->findRecords($categoryId, true, null, $limit, function($db){
+        return $this->findRecords($categoryId, true, false, null, $limit, function($db){
             $db->orderBy()
                ->rand();
         });
@@ -472,11 +477,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      * 
      * @param string $categoryId Category ID
      * @param boolean $published Whether to fetch only published records
+     * @param boolean $front Whether to fetch only front records
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
      * @return array
      */
-    public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage)
+    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage)
     {
         // Configure sorting way depending on published state
         if ($published) {
@@ -490,7 +496,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             );
         }
 
-        return $this->findRecords($categoryId, $published, $page, $itemsPerPage, function($db) use ($sortings){
+        return $this->findRecords($categoryId, $published, $front, $page, $itemsPerPage, function($db) use ($sortings){
             $db->orderBy($sortings);
         });
     }
