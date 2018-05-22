@@ -296,6 +296,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface
         $post = new PostEntity();
         $post->setPublished(true)
              ->setSeo(true)
+             ->setFront(true)
              ->setTimeBag($timeBag);
 
         return $post;

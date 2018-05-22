@@ -113,6 +113,13 @@ defined('KRYSTAL') or die;
                 <?php endif; ?>
 
                 <div class="form-group">
+                    <label class="col-lg-2 control-label"><?php $this->show('Front'); ?></label>
+                    <div class="col-lg-10">
+                        <?php echo Element::checkbox('post[front]', $entity->getFront(), array('class' => 'form-control')); ?>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="col-lg-2 control-label"><?php $this->show('Published'); ?></label>
                     <div class="col-lg-10">
                         <?php echo Element::checkbox('post[published]', $entity->getPublished(), array('class' => 'form-control')); ?>

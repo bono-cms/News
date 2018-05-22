@@ -280,7 +280,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function updateSettings(array $settings)
     {
-        return $this->updateColumns($settings, array('seo', 'published'));
+        return $this->updateColumns($settings, array('seo', 'published', 'front'));
     }
 
     /**

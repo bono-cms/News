@@ -49,10 +49,11 @@ use Krystal\Form\HtmlHelper;
                             <th class="text-center"><?php $this->show('Category'); ?></th>
                             <th class="text-center"><?php $this->show('Published'); ?></th>
                             <th class="text-center"><?php $this->show('SEO'); ?></th>
+                            <th class="text-center"><?php $this->show('Front'); ?></th>
                             <th class="text-center"><?php $this->show('Actions'); ?></th>
                         </tr>
                     </thead>
-                    
+
                     <?php if (!empty($posts)): ?>
                     <tbody>
                         <?php foreach ($posts as $post): ?>
@@ -69,6 +70,9 @@ use Krystal\Form\HtmlHelper;
                             </td>
                             <td class="text-center">
                                 <?php echo Element::checkbox(sprintf('seo[%s]', $post->getId()), $post->getSeo()); ?>
+                            </td>
+                            <td class="text-center">
+                                <?php echo Element::checkbox(sprintf('front[%s]', $post->getId()), $post->getFront()); ?>
                             </td>
                             <td class="text-center">
                                 <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this post'); ?>" data-button="view" target="_blank" href="<?php echo $post->getUrl(); ?>"><i class="glyphicon glyphicon-search"></i></a>
