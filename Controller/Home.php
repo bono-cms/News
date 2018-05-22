@@ -30,7 +30,7 @@ final class Home extends AbstractController
                    ->clear();
 
         $postManager = $this->getModuleService('postManager');
-        $posts = $postManager->fetchAllByPage(true, $pageNumber, $this->getModuleService('configManager')->getEntity()->getPerPageCount());
+        $posts = $postManager->fetchAllByPage(null, true, $pageNumber, $this->getModuleService('configManager')->getEntity()->getPerPageCount());
 
         // Tweak pagination
         $paginator = $postManager->getPaginator();
