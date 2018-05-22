@@ -125,11 +125,12 @@ interface PostManagerInterface
      * 
      * @param string $categoryId Filtering category ID
      * @param boolean $published Whether to filter by 'publihsed' attribute
+     * @param boolean $front Whether to filter by 'front' attribute
      * @param integer $page Current page number
      * @param integer $itemsPerPage Items per page count
      * @return array
      */
-    public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage);
+    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage);
 
     /**
      * Fetch recent news post entities

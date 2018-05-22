@@ -116,11 +116,12 @@ interface PostMapperInterface
      * 
      * @param string $categoryId Category ID
      * @param boolean $published Whether to fetch only published records
+     * @param boolean $front Whether to fetch only front records
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
      * @return array
      */
-    public function fetchAllByPage($categoryId, $published, $page, $itemsPerPage);
+    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage);
 
     /**
      * Fetch recent news post
