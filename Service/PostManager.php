@@ -276,6 +276,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface
                ->setTimeBag($timeBag)
                ->setPublished($post['published'], PostEntity::FILTER_BOOL)
                ->setSeo($post['seo'], PostEntity::FILTER_BOOL)
+               ->setFront($post['front'], PostEntity::FILTER_BOOL)
                ->setCover($post['cover'], PostEntity::FILTER_HTML)
                ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS);
 

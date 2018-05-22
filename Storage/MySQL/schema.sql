@@ -31,7 +31,8 @@ CREATE TABLE `bono_module_news_posts` (
 	`seo` varchar(1) NOT NULL,
 	`timestamp` INT(10) NOT NULL,
 	`cover` varchar(255) NOT NULL,
-	`views` INT NOT NULL
+	`views` INT NOT NULL,
+    `front` BOOLEAN NOT NULL COMMENT 'Whether this post must be front'
 
 ) DEFAULT CHARSET = UTF8;
 

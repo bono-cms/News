@@ -61,6 +61,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             self::getFullColumnName('published'),
             self::getFullColumnName('cover'),
             self::getFullColumnName('seo'),
+            self::getFullColumnName('front'),
             PostTranslationMapper::getFullColumnName('web_page_id'),
             PostTranslationMapper::getFullColumnName('lang_id'),
             PostTranslationMapper::getFullColumnName('name'),
