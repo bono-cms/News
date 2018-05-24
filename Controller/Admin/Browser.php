@@ -18,6 +18,7 @@ final class Browser extends AbstractAdminController
      * 
      * @param array $posts
      * @param string $url
+     * @param int $categoryId
      * @return string
      */
     private function createGrid(array $posts, $url, $categoryId)
@@ -31,23 +32,37 @@ final class Browser extends AbstractAdminController
                    ->addOne('News');
 
         return $this->view->render('browser', array(
+            'query' => $this->request->getQuery(),
+            'route' => $this->createUrl('News:Admin:Browser@indexAction', array(null)),
             'categoryId' => $categoryId,
             'paginator' => $paginator,
             'posts' => $posts,
-            'categories' => $this->getCategoryManager()->fetchAll()
+            'categories' => $this->getCategoryManager()->fetchAll(),
+            'categoryList' => $this->getCategoryManager()->fetchList()
         ));
+    }
+
+    /**
+     * Returns current page number
+     * 
+     * @return integer
+     */
+    private function getPageNumber()
+    {
+        return $this->request->hasQuery('page') ? $this->request->getQuery('page') : 1;
     }
 
     /**
      * Renders a grid
      * 
-     * @param integer $page Current page
      * @return string
      */
-    public function indexAction($page = 1)
+    public function indexAction()
     {
-        $posts = $this->getPostManager()->fetchAllByPage(null, false, false, $page, $this->getSharedPerPageCount());
-        $url = $this->createUrl('News:Admin:Browser@indexAction', array(), 1);
+        $page = $this->getPageNumber();
+        $url = $this->createUrl('News:Admin:Browser@indexAction', array(null), 0);
+
+        $posts = $this->getFilter($this->getModuleService('postManager'), $url);
 
         return $this->createGrid($posts, $url, null);
     }

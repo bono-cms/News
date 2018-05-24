@@ -1,8 +1,10 @@
-<?php defined('KRYSTAL') or die; ?>
 <?php
 
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
+use Krystal\Grid\Grid;
+
+defined('KRYSTAL') or die;
 
 ?>
 
@@ -32,66 +34,107 @@ use Krystal\Form\HtmlHelper;
 
 <div class="row">
     <div class="col-lg-8">
-        <?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
-        <form>
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th class="text-center">
-                                <?php if (!empty($posts)): ?>
-                                <input type="checkbox" />
-                                <?php endif; ?>
-                            </th>
-                            <th class="text-center"><?php $this->show('#'); ?></th>
-                            <th class="text-center"><?php $this->show('Name'); ?></th>
-                            <th class="text-center"><?php $this->show('Date'); ?></th>
-                            <th class="text-center"><?php $this->show('Category'); ?></th>
-                            <th class="text-center"><?php $this->show('Published'); ?></th>
-                            <th class="text-center"><?php $this->show('SEO'); ?></th>
-                            <th class="text-center"><?php $this->show('Front'); ?></th>
-                            <th class="text-center"><?php $this->show('Actions'); ?></th>
-                        </tr>
-                    </thead>
+        <form action="<?= $route; ?>">
+            <button type="submit" class="btn btn-primary"><? $this->show('Filter'); ?></button>
 
-                    <?php if (!empty($posts)): ?>
-                    <tbody>
-                        <?php foreach ($posts as $post): ?>
-                        <tr>
-                            <td class="text-center">
-                                <input type="checkbox" name="toDelete[<?php echo $post->getId(); ?>]" />
-                            </td>
-                            <td class="text-center text-muted"><?php echo $post->getId(); ?></td>
-                            <td><?php echo $post->getName(); ?></td>
-                            <td class="text-center"><?php echo $post->getTimeBag()->getPanelFormat(); ?></td>
-                            <td class="text-center"><?php echo $post->getCategoryName(); ?></td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('published[%s]', $post->getId()), $post->getPublished()); ?>
-                            </td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('seo[%s]', $post->getId()), $post->getSeo()); ?>
-                            </td>
-                            <td class="text-center">
-                                <?php echo Element::checkbox(sprintf('front[%s]', $post->getId()), $post->getFront()); ?>
-                            </td>
-                            <td class="text-center">
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('View this post'); ?>" data-button="view" target="_blank" href="<?php echo $post->getUrl(); ?>"><i class="glyphicon glyphicon-search"></i></a>
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Edit this post'); ?>" data-button="edit" href="<?php echo $this->url('News:Admin:Post@editAction', $post->getId()); ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-                                <a data-toggle="tooltip" data-placement="left" data-original-title="<?php $this->show('Remove this post'); ?>" data-button="delete" href="#" data-url="<?php echo $this->url('News:Admin:Post@deleteAction', $post->getId()); ?>"><i class="glyphicon glyphicon-remove"></i></a>
-                            </td>
-                        </tr>
-                        
-                        <?php endforeach; ?>
-                    </tbody>
-                    <?php endif; ?>
-                </table>
-                
-                <?php if (empty($posts)): ?>
-                <div class="center-block">
-                    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No news'); ?></h2>
-                </div>
-                <?php endif; ?>
+            <?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
+
+            <?= Grid::render($posts, array(
+                // A column to be considered as a primary key
+                'pk' => 'id',
+                'batch' => true,
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'name',
+                        'type' => 'text',
+                        'filter' => true
+                    ),
+
+                    array(
+                        'column' => 'date',
+                        'type' => 'text',
+                        'filter' => false,
+                        'value' => function($row){
+                            return $row['timebag']->getPanelFormat();
+                        }
+                    ),
+
+                    array(
+                        'column' => 'categoryname',
+                        'label' => 'Category',
+                        'type' => 'select',
+                        'filter' => $categoryList
+                    ),
+
+                    array(
+                        'column' => 'published',
+                        'type' => 'select',
+                        'filter' => true,
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('published[%s]', $row['id']), $row['published']);
+                        },
+                        'filter' => $this->translateArray([
+                            '0' => 'No',
+                            '1' => 'Yes',
+                        ])
+                    ),
+
+                    array(
+                        'column' => 'seo',
+                        'label' => 'SEO',
+                        'translateable' => true,
+                        'filter' => true,
+                        'type' => 'select',
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('seo[%s]', $row['id']), $row['seo']);
+                        },
+                        'filter' => $this->translateArray([
+                            '0' => 'No',
+                            '1' => 'Yes'
+                        ])
+                    ),
+
+                    array(
+                        'column' => 'front',
+                        'translateable' => true,
+                        'type' => 'select',
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('front[%s]', $row['id']), $row['published']);
+                        },
+                        'filter' => $this->translateArray([
+                            '0' => 'No',
+                            '1' => 'Yes'
+                        ])
+                    )
+                ),
+
+                'actions' => array(
+                    'view' => function($row){
+                        return Element::link('<i class="glyphicon glyphicon-search"></i>', $row['url'], array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('View this post'), 'data-button' => 'view', 'target' => '_blank'));
+                    },
+
+                    'edit' => function($row){
+                        return Element::link('<i class="glyphicon glyphicon-pencil"></i>', $this->url('News:Admin:Post@editAction', $row['id']), array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Edit this post'), 'data-button' => 'edit'));
+                    },
+
+                    'remove' => function($row){
+                        return Element::link('<i class="glyphicon glyphicon-remove"></i>', '#', array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Remove this post'), 'data-button' => 'delete', 'data-url' => $this->url('News:Admin:Post@deleteAction', $row['id'])));
+                    }
+                )
+
+            ), $this->translator, $route, $query); ?>
+
+            <?php if (empty($posts)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No news'); ?></h2>
             </div>
+            <?php endif; ?>
         </form>
 
         <?php $this->loadPartial('paginator'); ?>
@@ -100,7 +143,7 @@ use Krystal\Form\HtmlHelper;
     <div class="col-lg-4">
         <div class="table-responsive">
             <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
-            
+
             <div class="table-responsive">
                 <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead>

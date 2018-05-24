@@ -31,7 +31,7 @@ final class Post extends AbstractAdminController
                    ->load(array($this->getWysiwygPluginName(), 'datepicker', 'chosen'));
 
         // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Browser@indexAction')
+        $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', [null]))
                                        ->addOne($title);
 
         return $this->view->render('post.form', array(
@@ -84,8 +84,8 @@ final class Post extends AbstractAdminController
         $service = $this->getModuleService('postManager');
 
         // Batch removal
-        if ($this->request->hasPost('toDelete')) {
-            $ids = array_keys($this->request->getPost('toDelete'));
+        if ($this->request->hasPost('batch')) {
+            $ids = array_keys($this->request->getPost('batch'));
 
             $service->deleteByIds($ids);
             $this->flashBag->set('success', 'Selected elements have been removed successfully');

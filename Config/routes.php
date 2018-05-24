@@ -19,10 +19,10 @@ return array(
         'controller' => 'Post@indexAction'
     ),
 
-    '/%s/module/news' => array(
+    '/%s/module/news/index/(:var)' => array(
         'controller' => 'Admin:Browser@indexAction',
     ),
-    
+
     '/%s/module/news/config' => array(
         'controller' => 'Admin:Config@indexAction',
     ),
