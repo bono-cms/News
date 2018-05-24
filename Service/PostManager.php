@@ -14,6 +14,7 @@ namespace News\Service;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Security\Filter;
 use Krystal\Stdlib\ArrayUtils;
+use Krystal\Db\Filter\FilterableServiceInterface;
 use News\Storage\PostMapperInterface;
 use News\Storage\CategoryMapperInterface;
 use News\Service\TimeBagInterface;
@@ -21,7 +22,7 @@ use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
 use Cms\Service\HistoryManagerInterface;
 
-final class PostManager extends AbstractManager implements PostManagerInterface
+final class PostManager extends AbstractManager implements PostManagerInterface, FilterableServiceInterface
 {
     /**
      * Any-compliant post mapper
@@ -509,6 +510,22 @@ final class PostManager extends AbstractManager implements PostManagerInterface
     public function fetchRecent($limit, $categoryId = null)
     {
         return $this->prepareResults($this->postMapper->fetchRecent($limit, $categoryId), false);
+    }
+
+    /**
+     * Filters the raw input
+     * 
+     * @param array|\ArrayAccess $input Raw input data
+     * @param integer $page Current page number
+     * @param integer $itemsPerPage Items per page to be displayed
+     * @param string $sortingColumn Column name to be sorted
+     * @param string $desc Whether to sort in DESC order
+     * @param array $parameters
+     * @return array
+     */
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = array())
+    {
+        return $this->prepareResults($this->postMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc, $parameters), false);
     }
 
     /**

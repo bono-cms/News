@@ -12,8 +12,9 @@
 namespace News\Storage\MySQL;
 
 use Krystal\Db\Sql\RawSqlFragment;
-use Krystal\Stdlib\ArrayUtils;
 use Krystal\Db\Sql\QueryBuilder;
+use Krystal\Db\Filter\InputDecorator;
+use Krystal\Stdlib\ArrayUtils;
 use Cms\Storage\MySQL\WebPageMapper;
 use Cms\Storage\MySQL\AbstractMapper;
 use News\Storage\PostMapperInterface;
@@ -86,16 +87,18 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     /**
      * Fetches all posts filtered by pagination
      * 
-     * @param string $categoryId Category ID
-     * @param boolean $published Whether to fetch only published records
-     * @param boolean $front Whether to fetch only front records
+     * @param array $filter
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
      * @param \Closure $orderCallback Callback to generate ORDER BY condition
      * @return array
      */
-    private function findRecords($categoryId, $published, $front, $page, $itemsPerPage, Closure $orderCallback)
+    private function findRecords($filter, $page, $itemsPerPage, Closure $orderCallback)
     {
+        if (!($filter instanceof InputDecorator)) {
+            $filter = new InputDecorator($filter);
+        }
+
         $db = $this->db->select($this->getSharedColumns(false))
                        ->from(self::getTableName())
                        // Translation relation
@@ -137,33 +140,63 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                             $this->getLangId()
                         );
 
-        // Append category ID if provided
-        if ($categoryId !== null) {
-            $db->andWhereEquals(self::getFullColumnName('category_id'), $categoryId);
-        }
-
-        if ($published) {
-            $db->andWhereEquals(self::getFullColumnName('published'), '1');
-        }
-
-        if ($front === true) {
-            $db->andWhereEquals(self::getFullColumnName('front'), '1');
-        }
+        // Filter by attributes on demand
+        $db->andWhereEquals(self::getFullColumnName('category_id'), $filter['categoryname'], true)
+           ->andWhereEquals(self::getFullColumnName('published'), $filter['published'], true)
+           ->andWhereEquals(self::getFullColumnName('front'), $filter['front'], true)
+           ->andWhereEquals(self::getFullColumnName('seo'), $filter['seo'], true)
+           ->andWhereEquals(PostTranslationMapper::getFullColumnName('name'), $filter['name'], true);
 
         // Apply order callback
         $orderCallback($db);
 
         // If page number and per page count provided, apply pagination
-        if ($page !== null && $itemsPerPage !== null) {
+        if ($page != null && $itemsPerPage != null) {
             $db->paginate($page, $itemsPerPage);
         }
 
         // If only per page count provided, apply limit only
-        if ($page === null && $itemsPerPage !== null) {
+        if ($page == null && $itemsPerPage != null) {
             $db->limit($itemsPerPage);
         }
 
+        //d($filter);
+        //echo $db;exit;
+
         return $db->queryAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc)
+    {
+        if (!$sortingColumn) {
+            $sortingColumn = 'id';
+        }
+
+        // Support columns
+        $columns = array(
+            'id' => self::getFullColumnName('id'),
+            'name' => PostTranslationMapper::getFullColumnName('name'),
+            'categoryname' => self::getFullColumnName('category_id'),
+            'published' => self::getFullColumnName('published'),
+            'seo' => self::getFullColumnName('seo'),
+            'front' => self::getFullColumnName('front')
+        );
+
+        // Check if valid column provided
+        if (isset($columns[$sortingColumn])) {
+            $sortingColumn = $columns[$sortingColumn];
+        }
+
+        return $this->findRecords($input, $page, $itemsPerPage, function($db) use ($desc, $sortingColumn){
+            $db->orderBy($sortingColumn);
+
+            if ($desc == true) {
+                $db->desc();
+            }
+        });
     }
 
     /**
@@ -429,7 +462,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchMostlyViewed($limit)
     {
-        return $this->findRecords(null, true, false, null, $limit, function($db){
+        return $this->findRecords(array('published' => true), null, $limit, function($db){
             $db->orderBy('views')
                ->desc();
         });
@@ -454,7 +487,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchRandomPublished($limit, $categoryId = null)
     {
-        return $this->findRecords($categoryId, true, false, null, $limit, function($db){
+        $filter = array(
+            'categoryname' => $categoryId, 
+            'published' => true
+        );
+
+        return $this->findRecords($filter, null, $limit, function($db){
             $db->orderBy()
                ->rand();
         });
@@ -499,9 +537,15 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         // Purely for older PHP versions. Old versions don't let static methods to be called in Closures
         $timestampColumn = self::getFullColumnName('timestamp');
 
-        return $this->findRecords($categoryId, $published, $front, $page, $itemsPerPage, function($db) use ($sortings, $published, $timestampColumn){
+        $filter = array(
+            'categoryname' => $categoryId,
+            'published' => $published,
+            'front' => $front
+        );
+
+        return $this->findRecords($filter, $page, $itemsPerPage, function($db) use ($sortings, $filter, $timestampColumn){
             // Don't let future posts to be returned
-            if ($published === true) {
+            if ($filter['published'] == true) {
                 // Avoid returning future posts
                 $db->andWhere($timestampColumn, '<=', time());
             }
