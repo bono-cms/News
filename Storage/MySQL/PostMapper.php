@@ -160,9 +160,6 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             $db->limit($itemsPerPage);
         }
 
-        //d($filter);
-        //echo $db;exit;
-
         return $db->queryAll();
     }
 
