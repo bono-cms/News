@@ -95,7 +95,6 @@ defined('KRYSTAL') or die;
                         array(
                             'column' => 'seo',
                             'label' => 'SEO',
-                            'translateable' => true,
                             'filter' => true,
                             'type' => 'select',
                             'value' => function($row){
@@ -109,10 +108,9 @@ defined('KRYSTAL') or die;
 
                         array(
                             'column' => 'front',
-                            'translateable' => true,
                             'type' => 'select',
                             'value' => function($row){
-                                return Element::checkbox(sprintf('front[%s]', $row['id']), $row['published']);
+                                return Element::checkbox(sprintf('front[%s]', $row['id']), $row['front']);
                             },
                             'filter' => $this->translateArray([
                                 '0' => 'No',
@@ -122,6 +120,25 @@ defined('KRYSTAL') or die;
                     ),
 
                     'actions' => array(
+                        'polls' => function($row) use ($loadedModules){
+                            // If polls module is loaded, then show its link
+                            if (in_array('Polls', $loadedModules)) {
+                                // Create dynamic URL
+                                $url = $this->createQueryUrl('Polls:Admin:WebPage@indexAction', array(
+                                    'web_page_id' => $row['webpageid'], 
+                                    'title' => rawurlencode($row['name']),
+                                    'module' => 'News',
+                                    'back_url' => rawurlencode($this->url('News:Admin:Browser@indexAction', null))
+                                ));
+
+                                return Element::link('<i class="glyphicon glyphicon-star"></i>', $url, array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('Polls of this page')));
+                                
+                            } else {
+                                // Polls module is not loaded, so just skip creating this link
+                                return null;
+                            }
+                        },
+
                         'view' => function($row){
                             return Element::link('<i class="glyphicon glyphicon-search"></i>', $row['url'], array('data-toggle' => 'tooltip', 'data-placement' => 'left', 'data-original-title' => $this->translate('View this post'), 'data-button' => 'view', 'target' => '_blank'));
                         },
