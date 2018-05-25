@@ -78,26 +78,17 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ))
                         ->from(PostMapper::getTableName())
                         // Category relation
-                        ->innerJoin(self::getTableName())
-                        ->on()
-                        ->equals(
-                            PostMapper::column('category_id'), 
-                            self::getRawColumn('id')
-                        )
+                        ->innerJoin(self::getTableName(), array(
+                            PostMapper::column('category_id') => self::getRawColumn('id')
+                        ))
                         // Post translation relation
-                        ->innerJoin(PostTranslationMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            PostMapper::column('id'), 
-                            PostTranslationMapper::getRawColumn('id')
-                        )
+                        ->innerJoin(PostTranslationMapper::getTableName(), array(
+                            PostMapper::column('id') => PostTranslationMapper::getRawColumn('id')
+                        ))
                         // Category translation relation
-                        ->innerJoin(CategoryTranslationMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            self::column('id'), 
-                            CategoryTranslationMapper::getRawColumn('id')
-                        )
+                        ->innerJoin(CategoryTranslationMapper::getTableName(), array(
+                            self::column('id') => CategoryTranslationMapper::getRawColumn('id')
+                        ))
                         // Filtering condition
                         ->whereEquals(
                             CategoryTranslationMapper::column('lang_id'), 
@@ -120,12 +111,10 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
 
         return $this->db->select($columns)
                         ->from(self::getTableName())
-                        ->innerJoin(CategoryTranslationMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            self::column('id'),
-                            CategoryTranslationMapper::getRawColumn('id')
-                        )
+                        // Translation relation
+                        ->innerJoin(CategoryTranslationMapper::getTableName(), array(
+                            self::column('id') => CategoryTranslationMapper::getRawColumn('id')
+                        ))
                         ->whereEquals('lang_id', $this->getLangId())
                         ->queryAll();
     }
@@ -166,36 +155,19 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->from(self::getTableName())
 
                         // Category relation
-                        ->leftJoin(PostMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            self::column('id'), 
-                            PostMapper::getRawColumn('category_id')
-                        )
+                        ->leftJoin(PostMapper::getTableName(), array(
+                            self::column('id') => PostMapper::getRawColumn('category_id')
+                        ))
                         // Translation relation
-                        ->innerJoin(CategoryTranslationMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            CategoryTranslationMapper::column('id'),
-                            self::getRawColumn('id')
-                        )
-                        ->rawAnd()
-                        ->equals(
-                            CategoryTranslationMapper::column('lang_id'),
-                            $this->getLangId()
-                        )
+                        ->innerJoin(CategoryTranslationMapper::getTableName(), array(
+                            CategoryTranslationMapper::column('id') => self::getRawColumn('id'),
+                            CategoryTranslationMapper::column('lang_id') => $this->getLangId()
+                        ))
                         // Web page relation
-                        ->innerJoin(WebPageMapper::getTableName())
-                        ->on()
-                        ->equals(
-                            WebPageMapper::column('id'),
-                            CategoryTranslationMapper::getRawColumn('web_page_id')
-                        )
-                        ->rawAnd()
-                        ->equals(
-                            WebPageMapper::column('lang_id'),
-                            CategoryTranslationMapper::getRawColumn('lang_id')
-                        );
+                        ->innerJoin(WebPageMapper::getTableName(), array(
+                            WebPageMapper::column('id') => CategoryTranslationMapper::getRawColumn('web_page_id'),
+                            WebPageMapper::column('lang_id') => CategoryTranslationMapper::getRawColumn('lang_id')
+                        ));
 
         if ($countOnlyPublished == true) {
             $db->whereEquals(PostMapper::column('published'), '1');
