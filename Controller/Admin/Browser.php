@@ -59,9 +59,10 @@ final class Browser extends AbstractAdminController
      */
     public function indexAction()
     {
-        $page = $this->getPageNumber();
-        $url = $this->createUrl('News:Admin:Browser@indexAction', array(null), 0);
+        // Current URL params
+        $params = array_merge($this->request->getQuery(), array('page' => '(:var)'));
 
+        $url = $this->urlBuilder->createQueryUrl('News:Admin:Browser@indexAction', $params, 0);
         $posts = $this->getFilter($this->getModuleService('postManager'), $url);
 
         return $this->createGrid($posts, $url, null);
