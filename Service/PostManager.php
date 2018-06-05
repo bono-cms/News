@@ -475,14 +475,17 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
-     * Fetches mostly viewed entities
+     * Fetches posts ordering by view count
      * 
-     * @param integer $limit
+     * @param integer $limit Limit of records to be fetched
+     * @param int $categoryId Optional category ID filter
+     * @param int $views Minimal view count in order to be considered as mostly viewed
+     * @param bool $rand Whether to order in random order
      * @return array
      */
-    public function fetchMostlyViewed($limit)
+    public function fetchMostlyViewed($limit, $categoryId = null, $rand = false, $views = 50)
     {
-        return $this->prepareResults($this->postMapper->fetchMostlyViewed($limit), false);
+        return $this->prepareResults($this->postMapper->fetchMostlyViewed($limit, $categoryId, $rand, $views), false);
     }
 
     /**
