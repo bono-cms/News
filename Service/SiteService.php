@@ -103,12 +103,15 @@ final class SiteService implements SiteServiceInterface
     /**
      * Returns a collection of mostly viewed article entities
      * 
-     * @param integer $limit
+     * @param integer $limit Limit of records to be fetched
+     * @param int $categoryId Optional category ID filter
+     * @param int $views Minimal view count in order to be considered as mostly viewed
+     * @param bool $rand Whether to order in random order
      * @return array
      */
-    public function getMostlyViewed($limit)
+    public function getMostlyViewed($limit, $categoryId = null, $rand = false, $views = 50)
     {
-        return $this->postManager->fetchMostlyViewed($limit);
+        return $this->postManager->fetchMostlyViewed($limit, $categoryId, $rand, $views);
     }
 
     /**
