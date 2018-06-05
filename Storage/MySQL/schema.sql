@@ -39,7 +39,7 @@ CREATE TABLE `bono_module_news_posts` (
 DROP TABLE IF EXISTS `bono_module_news_posts_translations`;
 CREATE TABLE `bono_module_news_posts_translations` (
 
-	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `id` INT NOT NULL,
 	`lang_id` INT NOT NULL,
 	`web_page_id` INT NOT NULL,
 	`name` varchar(255) NOT NULL,
