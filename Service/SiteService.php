@@ -105,13 +105,14 @@ final class SiteService implements SiteServiceInterface
      * 
      * @param integer $limit Limit of records to be fetched
      * @param int $categoryId Optional category ID filter
-     * @param int $views Minimal view count in order to be considered as mostly viewed
      * @param bool $rand Whether to order in random order
+     * @param bool $front Whether to fetch only front ones
+     * @param int $views Minimal view count in order to be considered as mostly viewed
      * @return array
      */
-    public function getMostlyViewed($limit, $categoryId = null, $rand = false, $views = 50)
+    public function getMostlyViewed($limit, $categoryId = null, $rand = false, $front = false, $views = 50)
     {
-        return $this->postManager->fetchMostlyViewed($limit, $categoryId, $rand, $views);
+        return $this->postManager->fetchMostlyViewed($limit, $categoryId, $rand, $front, $views);
     }
 
     /**
