@@ -433,11 +433,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      * 
      * @param integer $limit Limit of records to be fetched
      * @param int $categoryId Optional category ID filter
-     * @param int $views Minimal view count in order to be considered as mostly viewed
      * @param bool $rand Whether to order in random order
+     * @param bool $front Whether to fetch only front ones
+     * @param int $views Minimal view count in order to be considered as mostly viewed
      * @return array
      */
-    public function fetchMostlyViewed($limit, $categoryId = null, $rand = false, $views = 50)
+    public function fetchMostlyViewed($limit, $categoryId, $rand, $front, $views)
     {
         // Default filter
         $filter = array('published' => true);
@@ -447,8 +448,13 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             $filter['categoryname'] = $categoryId;
         }
 
-        return $this->findRecords($filter, null, $limit, function($db) use ($views, $rand){
+        return $this->findRecords($filter, null, $limit, function($db) use ($views, $rand, $front){
             $db->andWhereGreaterThan('views', $views);
+
+            // Whether to fetch front only posts
+            if ($front === true) {
+                $db->andWhereEquals('front', (string) $front);
+            }
 
             // Rand filter
             if ($rand == true) {

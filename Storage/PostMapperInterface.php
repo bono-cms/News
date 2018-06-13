@@ -92,11 +92,12 @@ interface PostMapperInterface
      * 
      * @param integer $limit Limit of records to be fetched
      * @param int $categoryId Optional category ID filter
-     * @param int $views Minimal view count in order to be considered as mostly viewed
      * @param bool $rand Whether to order in random order
+     * @param bool $front Whether to fetch only front ones
+     * @param int $views Minimal view count in order to be considered as mostly viewed
      * @return array
      */
-    public function fetchMostlyViewed($limit, $categoryId = null, $rand = false, $views = 50);
+    public function fetchMostlyViewed($limit, $categoryId, $rand, $front, $views);
 
     /**
      * Fetches all posts
