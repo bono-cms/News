@@ -43,7 +43,8 @@ final class Home extends AbstractController
         return $this->view->render('news-category', array(
             'paginator' => $paginator,
             'page' => $page,
-            'posts' => $posts
+            'posts' => $posts,
+            'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
         ));
     }
 }
