@@ -497,11 +497,12 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      * @param boolean $front Whether to filter by 'front' attribute
      * @param integer $page Current page number
      * @param integer $itemsPerPage Items per page count
+     * @param mixed $sort
      * @return array
      */
-    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage)
+    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage, $sort = null)
     {
-        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage), false);
+        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage, $sort), false);
     }
 
     /**

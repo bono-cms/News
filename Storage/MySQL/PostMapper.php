@@ -517,21 +517,42 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      * @param boolean $front Whether to fetch only front records
      * @param integer $page Current page
      * @param integer $itemsPerPage Per page count
+     * @param mixed $sort Optional sorting option
      * @return array
      */
-    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage)
+    public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage, $sort = null)
     {
-        // Configure sorting way depending on published state
-        if ($published) {
-            $sortings = array(
-                self::column('timestamp') => 'DESC', 
-                self::column('id') => 'DESC'
-            );
+        // If sorting option provided, then use it
+        if ($sort !== null && in_array($sort, array('all', 'latest'))) {
+            switch ($sort) {
+                case 'all':
+                    $sortings = array(
+                        self::column('id') => 'ASC'
+                    );
+                break;
+
+                case 'latest':
+                    $sortings = array(
+                        self::column('id') => 'DESC'
+                    );
+                break;
+            }
+
         } else {
-            $sortings = array(
-                self::column('id') => 'DESC'
-            );
+            // Otherwise use defaults
+            // Configure sorting way depending on published state
+            if ($published) {
+                $sortings = array(
+                    self::column('timestamp') => 'DESC', 
+                    self::column('id') => 'DESC'
+                );
+            } else {
+                $sortings = array(
+                    self::column('id') => 'DESC'
+                );
+            }
         }
+        
 
         // Purely for older PHP versions. Old versions don't let static methods to be called in Closures
         $timestampColumn = self::column('timestamp');
