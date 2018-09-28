@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Ability to perform sorting in Home controller
  * Updated `getMostlyViewed()` in `SiteService`. Since now it can filter by category IDs, return entities in random order, and define minival view count to be taken in account
  * Posts that have a future date won't be displayed since now. They will be displayed when their date comes
  * Ability to mark posts as front. That means they are visible in their categories, but not on home page
