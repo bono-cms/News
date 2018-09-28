@@ -43,16 +43,6 @@ final class Browser extends AbstractAdminController
     }
 
     /**
-     * Returns current page number
-     * 
-     * @return integer
-     */
-    private function getPageNumber()
-    {
-        return $this->request->hasQuery('page') ? $this->request->getQuery('page') : 1;
-    }
-
-    /**
      * Renders a grid
      * 
      * @return string
