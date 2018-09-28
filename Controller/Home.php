@@ -18,11 +18,16 @@ final class Home extends AbstractController
     /**
      * Shows all recent posts
      * 
-     * @param integer $pageNumber Current page number
      * @return string
      */
-    public function indexAction($pageNumber = 1)
+    public function indexAction()
     {
+        // Current page number
+        $pageNumber = $this->request->getQuery('page', 1);
+
+        // Sorting method
+        $sort = $this->request->getQuery('sort', null);
+
         $this->loadSitePlugins();
 
         // No breadcrumbs on home
@@ -30,13 +35,13 @@ final class Home extends AbstractController
                    ->clear();
 
         $postManager = $this->getModuleService('postManager');
-        $posts = $postManager->fetchAllByPage(null, true, true, $pageNumber, $this->getModuleService('configManager')->getEntity()->getPerPageCount());
+        $posts = $postManager->fetchAllByPage(null, true, true, $pageNumber, $this->getModuleService('configManager')->getEntity()->getPerPageCount(), $sort);
 
         // Tweak pagination
         $paginator = $postManager->getPaginator();
 
         // The pattern /(:var)/page/(:var) is reserved, so another one should be used instead
-        $paginator->setUrl($this->createUrl('News:Home@indexAction', array(), 0));
+        $paginator->setUrl($this->createUrl('News:Home@indexAction', array('page' => '(:var)'), 0));
 
         $page = $this->getService('Pages', 'pageManager')->fetchDefault();
 
