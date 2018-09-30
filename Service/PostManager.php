@@ -542,7 +542,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchAllPublishedByCategoryId($categoryId, $limit)
     {
-        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, true, null, $limit), false);
+        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, true, true, null, $limit), false);
     }
 
     /**
