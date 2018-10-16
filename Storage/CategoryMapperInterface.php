@@ -14,11 +14,12 @@ namespace News\Storage;
 interface CategoryMapperInterface
 {
     /**
-     * Fetch all categories with their attached post names
+     * Fetch all categories with their attached post IDs and names
      * 
+     * @param int $excludedId Excluded post IDs
      * @return array
      */
-    public function fetchAllWithPosts();
+    public function fetchAllWithPosts($excludedId = null);
 
     /**
      * Fetches as a list

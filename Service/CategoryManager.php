@@ -94,13 +94,14 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     }
 
     /**
-     * Fetch all categories with their associated posts
+     * Fetch all categories with their attached post IDs and names
      * 
+     * @param int $excludedId Excluded post IDs
      * @return array
      */
-    public function fetchAllWithPosts()
+    public function fetchAllWithPosts($excludedId = null)
     {
-        return ArrayUtils::arrayDropdown($this->categoryMapper->fetchAllWithPosts(), 'category', 'id', 'post');
+        return ArrayUtils::arrayDropdown($this->categoryMapper->fetchAllWithPosts($excludedId), 'category', 'id', 'post');
     }
 
     /**

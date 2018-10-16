@@ -65,13 +65,14 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
     }
 
     /**
-     * Fetch all categories with their attached post names
+     * Fetch all categories with their attached post IDs and names
      * 
+     * @param int $excludedId Excluded post IDs
      * @return array
      */
-    public function fetchAllWithPosts()
+    public function fetchAllWithPosts($excludedId = null)
     {
-        return $this->db->select(array(
+        $db = $this->db->select(array(
                             PostMapper::column('id'),
                             PostTranslationMapper::column('name') => 'post',
                             CategoryTranslationMapper::column('name') => 'category'
@@ -93,8 +94,14 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->whereEquals(
                             CategoryTranslationMapper::column('lang_id'), 
                             $this->getLangId()
-                        )
-                        ->queryAll();
+                        );
+
+        // If excluded post ID provided explicitly, then append it on condition
+        if ($excludedId !== null && is_numeric($excludedId)) {
+            $db->andWhereNotEquals(PostMapper::column('id'), $excludedId);
+        }
+
+        return $db->queryAll();
     }
 
     /**
