@@ -314,36 +314,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     }
 
     /**
-     * Prepares raw input, before sending to the mapper
-     * 
-     * @param array $input Raw input data
-     * @return array
-     */
-    private function prepareInput(array $input)
-    {
-        $data =& $input['data']['post'];
-        $data['timestamp'] = strtotime($data['date']);
-
-        // Take a slug from a name if empty
-        if (empty($data['slug'])) {
-            $data['slug'] = $data['name'];
-        }
-
-        // Take empty name from title
-        if (empty($data['title'])) {
-            $data['title'] = $data['name'];
-        }
-
-        $data['slug'] = $this->webPageManager->sluggify($data['slug']);
-
-        // Safe type casting
-        $data['web_page_id'] = (int) $data['web_page_id'];
-        $data['category_id'] = (int) $data['category_id'];
-
-        return $input;
-    }
-
-    /**
      * Saves a page
      * 
      * @param array $input
@@ -416,7 +386,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function update(array $input)
     {
-        //$form = $this->prepareInput($input);
         $post =& $input['data']['post'];
 
         // Allow to remove a cover, only it case it exists and checkbox was checked
