@@ -125,11 +125,11 @@ final class Post extends AbstractAdminController
      */
     public function saveAction()
     {
-        $input = $this->request->getPost('post');
+        $post = $this->request->getPost('post');
 
         $formValidator = $this->createValidator(array(
             'input' => array(
-                'source' => $input,
+                'source' => $post,
                 'definition' => array(
                     'name' => new Pattern\Name(),
                     'intro' => new Pattern\IntroText(),
@@ -151,7 +151,7 @@ final class Post extends AbstractAdminController
         if (1) {
             $service = $this->getModuleService('postManager');
 
-            if (!empty($input['id'])) {
+            if (!empty($post['id'])) {
                 if ($service->update($this->request->getAll())) {
                     $this->flashBag->set('success', 'The element has been updated successfully');
                     return '1';
