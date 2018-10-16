@@ -25,6 +25,14 @@ final class Post extends AbstractAdminController
      */
     private function createForm($post, $title)
     {
+        // If coming from edit form, then grab ID to be excluded
+        if (is_array($post) && isset($post[0]['id'])) {
+            $id = $post[0]['id'];
+        } else {
+            // Coming from add form, no ID to be excluded
+            $id = null;
+        }
+
         // Load view plugins
         $this->view->getPluginBag()
                    ->appendScript('@News/admin/post.form.js')
@@ -36,8 +44,8 @@ final class Post extends AbstractAdminController
 
         return $this->view->render('post.form', array(
             'categories' => $this->getCategoryManager()->fetchList(),
-            // If you don't ability to attach similar posts, you can comment 'posts' key to reduce DB queries
-            'posts' => $this->getCategoryManager()->fetchAllWithPosts(),
+            // If you don't require option to attach similar posts, you can comment 'posts' key to reduce DB queries
+            'posts' => $this->getCategoryManager()->fetchAllWithPosts($id),
             'post' => $post
         ));
     }
