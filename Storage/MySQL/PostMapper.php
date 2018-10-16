@@ -302,40 +302,38 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     }
 
     /**
-     * Adds a post
+     * Attach relational IDs if provided
      * 
-     * @param array $input Raw input data
+     * @param int $id Current post ID
+     * @param array $attachedIds Attached post IDs to current one
      * @return boolean
      */
-    public function insert(array $input)
+    public function insertAttached($id, array $attachedIds)
     {
-        $this->persist($this->getWithLang(ArrayUtils::arrayWithout($input, array(self::PARAM_COLUMN_ATTACHED))));
-        $id = $this->getLastId();
-
         // Insert relational posts if provided
-        if (isset($input[self::PARAM_COLUMN_ATTACHED])) {
-            $this->insertIntoJunction(self::getJunctionTableName(), $id, $input[self::PARAM_COLUMN_ATTACHED]);
+        if (!empty($attachedIds)) {
+            return $this->insertIntoJunction(self::getJunctionTableName(), $id, $attachedIds);
         }
 
-        return true;
+        return false;
     }
 
     /**
-     * Updates a post
+     * Updates attached relation
      * 
-     * @param array $input Raw input data
+     * @param int $id Current post ID
+     * @param array $attachedIds Raw input data
      * @return boolean
      */
-    public function update(array $input)
+    public function updateAttached($id, array $attachedIds)
     {
         // Synchronize relations if provided
-        if (isset($input[self::PARAM_COLUMN_ATTACHED])) {
-            $this->syncWithJunction(self::getJunctionTableName(), $input[$this->getPk()], $input[self::PARAM_COLUMN_ATTACHED]);
+        if (!empty($attachedIds)) {
+            return $this->syncWithJunction(self::getJunctionTableName(), $id, $attachedIds);
         } else {
-            $this->removeFromJunction(self::getJunctionTableName(), $input[$this->getPk()]);
+            // They have been unchecked, so it's time to remove them from relational table as well
+            return $this->removeFromJunction(self::getJunctionTableName(), $id);
         }
-
-        return $this->persist(ArrayUtils::arrayWithout($input, array(self::PARAM_COLUMN_ATTACHED)));
     }
 
     /**

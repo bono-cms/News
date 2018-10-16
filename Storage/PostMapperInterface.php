@@ -56,20 +56,22 @@ interface PostMapperInterface
     public function incrementViewCount($id);
 
     /**
-     * Inserts a post
+     * Attach relational IDs if provided
      * 
-     * @param array $data Post data
-     * @return boolean Depending on success
-     */
-    public function insert(array $data);
-
-    /**
-     * Updates a post
-     * 
-     * @param array $data Post data
+     * @param int $id Current post ID
+     * @param array $attachedIds Attached post IDs to current one
      * @return boolean
      */
-    public function update(array $data);
+    public function insertAttached($id, array $attachedIds);
+
+    /**
+     * Updates attached relation
+     * 
+     * @param int $id Current post ID
+     * @param array $attachedIds Raw input data
+     * @return boolean
+     */
+    public function updateAttached($id, array $attachedIds);
 
     /**
      * Deletes a post by its associated id
