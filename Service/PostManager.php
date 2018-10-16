@@ -352,16 +352,16 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     private function savePage(array $input)
     {
         // Grab a reference
-        $data =& $input['data']['post'];
+        $post =& $input['data']['post'];
 
         // Prepare timestamp
-        $data['timestamp'] = (int) strtotime($data['date']);
+        $post['timestamp'] = (int) strtotime($post['date']);
 
         // Safe type casting
-        $data['category_id'] = (int) $data['category_id'];
+        $post['category_id'] = (int) $post['category_id'];
 
         // Remove extra keys if present
-        $data = ArrayUtils::arrayWithout($data, array('date', 'slug', 'remove_cover', 'attached'));
+        $data = ArrayUtils::arrayWithout($post, array('date', 'slug', 'remove_cover', 'attached'));
 
         return $this->postMapper->savePage('News (Posts)', 'News:Post@indexAction', $data, $input['data']['translation']);
     }
@@ -392,11 +392,17 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         // Save the page
         $this->savePage($input);
 
+        // Grab last ID, after saving
+        $id = $this->getLastId();
+
         // Now upload a cover if present
         if (!empty($input['files'])) {
             $file =& $input['files']['file'];
-            $this->imageManager->upload($this->getLastId(), $file);
+            $this->imageManager->upload($id, $file);
         }
+
+        // Insert attached ones, if provided
+        $this->postMapper->insertAttached($id, $data['attached']);
 
         #$this->track('New post "%s" has been created', $data['name']);
         return true;
@@ -438,8 +444,12 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             }
         }
 
+        // Update the post
         $this->savePage($input);
-        
+
+        // Update attached IDs
+        $this->postMapper->updateAttached($post['id'], isset($post['attached']) ? $post['attached'] : array());
+
         // And finally now just track it
         #$this->track('Post "%s" has been updated', $post['name']);
         return true;
