@@ -327,13 +327,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function updateAttached($id, array $attachedIds)
     {
-        // Synchronize relations if provided
-        if (!empty($attachedIds)) {
-            return $this->syncWithJunction(self::getJunctionTableName(), $id, $attachedIds);
-        } else {
-            // They have been unchecked, so it's time to remove them from relational table as well
-            return $this->removeFromJunction(self::getJunctionTableName(), $id);
-        }
+        return $this->syncWithJunction(self::getJunctionTableName(), $id, $attachedIds);
     }
 
     /**
