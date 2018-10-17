@@ -310,12 +310,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function insertAttached($id, array $attachedIds)
     {
-        // Insert relational posts if provided
-        if (!empty($attachedIds)) {
-            return $this->insertIntoJunction(self::getJunctionTableName(), $id, $attachedIds);
-        }
-
-        return false;
+        return $this->insertIntoJunction(self::getJunctionTableName(), $id, $attachedIds);
     }
 
     /**
