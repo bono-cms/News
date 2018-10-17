@@ -372,7 +372,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         }
 
         // Insert attached ones, if provided
-        $this->postMapper->insertAttached($id, $data['attached']);
+        $this->postMapper->insertAttached($id, isset($data['attached']) ? $data['attached'] : array());
 
         #$this->track('New post "%s" has been created', $data['name']);
         return true;
