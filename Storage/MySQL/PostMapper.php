@@ -125,7 +125,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                         );
 
         // Filter by attributes on demand
-        $db->andWhereEquals(self::column('category_id'), (string) $filter['categoryname'], true)
+        $db->andWhereEquals(self::column('category_id'), (string) $filter['category_id'], true)
            ->andWhereEquals(self::column('published'), (string) $filter['published'], true)
            ->andWhereEquals(self::column('front'), (string) $filter['front'], true)
            ->andWhereEquals(self::column('seo'), (string) $filter['seo'], true)
@@ -160,7 +160,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         $columns = array(
             'id' => self::column('id'),
             'name' => PostTranslationMapper::column('name'),
-            'categoryname' => self::column('category_id'),
+            'category_id' => self::column('category_id'),
             'published' => self::column('published'),
             'seo' => self::column('seo'),
             'front' => self::column('front')
@@ -432,7 +432,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
 
         // Append category name
         if ($categoryId !== null) {
-            $filter['categoryname'] = $categoryId;
+            $filter['category_id'] = $categoryId;
         }
 
         return $this->findRecords($filter, null, $limit, function($db) use ($views, $rand, $front){
@@ -474,7 +474,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     public function fetchRandomPublished($limit, $categoryId = null)
     {
         $filter = array(
-            'categoryname' => $categoryId, 
+            'category_id' => $categoryId, 
             'published' => true
         );
 
@@ -539,13 +539,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                 );
             }
         }
-        
 
         // Purely for older PHP versions. Old versions don't let static methods to be called in Closures
         $timestampColumn = self::column('timestamp');
 
         $filter = array(
-            'categoryname' => $categoryId,
+            'category_id' => $categoryId,
             'published' => $published,
             'front' => $front
         );
