@@ -125,10 +125,10 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                         );
 
         // Filter by attributes on demand
-        $db->andWhereEquals(self::column('category_id'), (string) $filter['category_id'], true)
-           ->andWhereEquals(self::column('published'), (string) $filter['published'], true)
-           ->andWhereEquals(self::column('front'), (string) $filter['front'], true)
-           ->andWhereEquals(self::column('seo'), (string) $filter['seo'], true)
+        $db->andWhereEquals(self::column('category_id'), $filter['category_id'], true)
+           ->andWhereEquals(self::column('published'), $filter['published'], true)
+           ->andWhereEquals(self::column('front'), $filter['front'], true)
+           ->andWhereEquals(self::column('seo'), $filter['seo'], true)
            ->andWhereLike(PostTranslationMapper::column('name'), '%'.$filter['name'].'%', true);
 
         // Apply order callback
