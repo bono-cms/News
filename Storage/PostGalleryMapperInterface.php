@@ -13,5 +13,11 @@ namespace News\Storage;
 
 interface PostGalleryMapperInterface
 {
-    
+    /**
+     * Fetches post image by its ID
+     * 
+     * @param int $id Image ID
+     * @return array
+     */
+    public function fetchById($id);
 }
