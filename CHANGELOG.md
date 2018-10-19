@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * View counter since now works in mode "greater or equals" rather that "greater only" in `SiteService::getMostlyViewed()`
  * The second argument of `SiteService::getMostlyViewed()` since now accepts an array of category IDs and returns partitioned result
  * When editing a post, its current option gets excluded in relational posts
  * Ability to perform sorting in Home controller

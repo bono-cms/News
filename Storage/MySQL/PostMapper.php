@@ -442,7 +442,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         }
 
         return $this->findRecords($filter, null, $limit, function($db) use ($views, $rand, $front){
-            $db->andWhereGreaterThan('views', $views);
+            $db->andWhere('views', '>=', $views);
 
             // Whether to fetch front only posts
             if ($front === true) {
