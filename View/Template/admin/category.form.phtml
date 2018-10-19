@@ -1,6 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
+use Krystal\Security\Filter;
 use Cms\Service\LanguageManager;
 
 defined('KRYSTAL') or die;
@@ -33,7 +34,7 @@ defined('KRYSTAL') or die;
                             <label class="col-lg-2 control-label"><?php $this->show('Name'); ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
-                                    <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), $entity->getName(), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
+                                    <?php echo Element::text(sprintf('translation[%s][name]', $language->getId()), Filter::charsDecode($entity->getName()), array('class' => 'form-control', 'placeholder' => $this->translate('Category name'))); ?>
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                 </div>
                             </div>
@@ -63,7 +64,7 @@ defined('KRYSTAL') or die;
                                 <label class="col-lg-2 control-label"><?php $this->show('Title'); ?></label>
                                 <div class="col-lg-10">
                                     <div class="input-group">
-                                        <?php echo Element::text(sprintf('translation[%s][title]', $language->getId()), $entity->getTitle(), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Category title"))); ?>
+                                        <?php echo Element::text(sprintf('translation[%s][title]', $language->getId()), Filter::charsDecode($entity->getTitle()), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Category title"))); ?>
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                     </div>
                                 </div>
