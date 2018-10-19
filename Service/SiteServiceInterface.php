@@ -50,7 +50,7 @@ interface SiteServiceInterface
      * Returns a collection of mostly viewed article entities
      * 
      * @param integer $limit Limit of records to be fetched
-     * @param int $categoryId Optional category ID filter
+     * @param int|array $categoryId Optional category ID (or collection) constraint
      * @param bool $rand Whether to order in random order
      * @param bool $front Whether to fetch only front ones
      * @param int $views Minimal view count in order to be considered as mostly viewed

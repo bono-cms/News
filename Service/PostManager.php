@@ -251,8 +251,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                  ->setCover($post['cover']);
 
         if ($full === true) {
-            $entity->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
-                   ->setTitle($post['title'], PostEntity::FILTER_HTML)
+            $entity->setTitle($post['title'], PostEntity::FILTER_HTML)
                    ->setFull($post['full'], PostEntity::FILTER_SAFE_TAGS)
                    ->setPermanentUrl('/module/news/post/'.$entity->getId())
                    ->setKeywords($post['keywords'], PostEntity::FILTER_HTML)
@@ -267,6 +266,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
 
         $entity->setImageBag($imageBag)
                ->setId($post['id'], PostEntity::FILTER_INT)
+               ->setCategoryId($post['category_id'], PostEntity::FILTER_INT)
                ->setLangId($post['lang_id'], PostEntity::FILTER_INT)
                ->setWebPageId($post['web_page_id'], PostEntity::FILTER_INT)
                ->setCategoryName($post['category_name'], PostEntity::FILTER_HTML)
@@ -457,7 +457,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      * Fetches posts ordering by view count
      * 
      * @param integer $limit Limit of records to be fetched
-     * @param int $categoryId Optional category ID filter
+     * @param int|array $categoryId Optional category ID (or collection) constraint
      * @param bool $rand Whether to order in random order
      * @param bool $front Whether to fetch only front ones
      * @param int $views Minimal view count in order to be considered as mostly viewed
@@ -465,7 +465,21 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function fetchMostlyViewed($limit, $categoryId = null, $rand = false, $front = false, $views = 50)
     {
-        return $this->prepareResults($this->postMapper->fetchMostlyViewed($limit, $categoryId, $rand, $front, $views), false);
+        $rows = $this->postMapper->fetchMostlyViewed($limit, $categoryId, $rand, $front, $views);
+
+        // If category collection of IDs provided, then drop rows by them
+        if (is_array($categoryId)) {
+            $rows = ArrayUtils::arrayPartition($rows, 'category_id');
+
+            // Apply hydrator on each row
+            foreach ($rows as $id => $row) {
+                $rows[$id] = $this->prepareResults($row, false);
+            }
+
+            return $rows;
+        }
+
+        return $this->prepareResults($rows, false);
     }
 
     /**

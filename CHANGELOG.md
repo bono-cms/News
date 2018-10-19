@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * The second argument of `SiteService::getMostlyViewed()` since now accepts an array of category IDs and returns partitioned result
  * When editing a post, its current option gets excluded in relational posts
  * Ability to perform sorting in Home controller
  * Updated `getMostlyViewed()` in `SiteService`. Since now it can filter by category IDs, return entities in random order, and define minival view count to be taken in account

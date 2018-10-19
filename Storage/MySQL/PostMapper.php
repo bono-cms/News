@@ -124,9 +124,15 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                             $this->getLangId()
                         );
 
-        // Filter by attributes on demand
-        $db->andWhereEquals(self::column('category_id'), $filter['category_id'], true)
-           ->andWhereEquals(self::column('published'), $filter['published'], true)
+        // There might be a collection of category IDs
+        if (is_array($filter['category_id'])) {
+            $db->andWhereIn(self::column('category_id'), $filter['category_id'], true);
+        } else {
+            $db->andWhereEquals(self::column('category_id'), $filter['category_id'], true);
+        }
+
+        // The rest - filter by attributes on demand
+        $db->andWhereEquals(self::column('published'), $filter['published'], true)
            ->andWhereEquals(self::column('front'), $filter['front'], true)
            ->andWhereEquals(self::column('seo'), $filter['seo'], true)
            ->andWhereLike(PostTranslationMapper::column('name'), '%'.$filter['name'].'%', true);
