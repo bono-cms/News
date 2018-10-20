@@ -19,6 +19,7 @@ use News\Service\PostManager;
 use News\Service\PostImageManagerFactory;
 use News\Service\TimeBag;
 use News\Service\SiteService;
+use News\Service\PostGalleryManager;
 
 final class Module extends AbstractCmsModule
 {
@@ -29,6 +30,7 @@ final class Module extends AbstractCmsModule
     {
         $categoryMapper = $this->getMapper('/News/Storage/MySQL/CategoryMapper');
         $postMapper = $this->getMapper('/News/Storage/MySQL/PostMapper');
+        $postGalleryMapper = $this->getMapper('/News/Storage/MySQL/PostGalleryMapper');
 
         $webPageManager = $this->getWebPageManager();
         $historyManager = $this->getHistoryManager();
@@ -44,7 +46,8 @@ final class Module extends AbstractCmsModule
             'siteService' => new SiteService($postManager, $categoryManager, $config),
             'configManager' => $configManager,
             'categoryManager' => $categoryManager,
-            'postManager' => $postManager
+            'postManager' => $postManager,
+            'postGalleryManager' => new PostGalleryManager($postGalleryMapper)
         );
     }
 
