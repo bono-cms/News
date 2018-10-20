@@ -50,6 +50,17 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
     }
 
     /**
+     * Deletes an image by its associated ID
+     * 
+     * @param int $id Image ID
+     * @return boolean
+     */
+    public function deleteById($id)
+    {
+        return $this->postGalleryMapper->deleteByPk($id);
+    }
+
+    /**
      * Returns last ID
      * 
      * @return integer

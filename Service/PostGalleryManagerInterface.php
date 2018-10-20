@@ -14,6 +14,14 @@ namespace News\Service;
 interface PostGalleryManagerInterface
 {
     /**
+     * Deletes an image by its associated ID
+     * 
+     * @param int $id Image ID
+     * @return boolean
+     */
+    public function deleteById($id);
+
+    /**
      * Returns last ID
      * 
      * @return integer
