@@ -12,6 +12,7 @@
 namespace News\Service;
 
 use Krystal\Stdlib\VirtualEntity;
+use Krystal\Image\Tool\ImageManager;
 use Cms\Service\AbstractManager;
 use News\Storage\PostGalleryMapperInterface;
 
@@ -25,14 +26,23 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
     private $postGalleryMapper;
 
     /**
+     * Image manager for posts
+     * 
+     * @var \Krystal\Image\Tool\ImageManager
+     */
+    private $imageManager;
+
+    /**
      * State initialization
      * 
      * @param \News\Storage\PostGalleryMapperInterface $postGalleryMapper
+     * @param \Krystal\Image\Tool\ImageManager $imageManager
      * @return void
      */
-    public function __construct(PostGalleryMapperInterface $postGalleryMapper)
+    public function __construct(PostGalleryMapperInterface $postGalleryMapper, ImageManager $imageManager)
     {
         $this->postGalleryMapper = $postGalleryMapper;
+        $this->imageManager = $imageManager;
     }
 
     /**
@@ -40,11 +50,17 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
      */
     protected function toEntity(array $row)
     {
-        $entity = new VirtualEntity();
+        // Configure image bag
+        $imageBag = clone $this->imageManager->getImageBag();
+        $imageBag->setId((int) $row['id'])
+                 ->setCover($row['image']);
+
+        $entity = new ImageEntity();
         $entity->setId($row['id'])
                ->setPostId($row['post_id'])
                ->setOrder($row['order'])
-               ->setImage($row['image']);
+               ->setImage($row['image'])
+               ->setImageBag($imageBag);
 
         return $entity;
     }
@@ -57,7 +73,7 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
      */
     public function deleteById($id)
     {
-        return $this->postGalleryMapper->deleteByPk($id);
+        return $this->postGalleryMapper->deleteByPk($id) && $this->imageManager->delete($id);
     }
 
     /**
@@ -100,7 +116,22 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
      */
     public function add(array $input)
     {
-        return $this->postGalleryMapper->persist($input);
+        $image = $input['data']['image'];
+        $file = $input['files']['file'];
+
+        // Filter files input
+        $this->filterFileInput($file);
+
+        // Define image attribute
+        $image['image'] = $file[0]->getName();
+
+        // Save image first, because we need to get its ID for image uploading
+        $this->postGalleryMapper->persist($image);
+
+        // And now upload image
+        $this->imageManager->upload($this->getLastId(), $file);
+
+        return true;
     }
 
     /**
@@ -111,6 +142,24 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
      */
     public function update(array $input)
     {
-        return $this->postGalleryMapper->persist($input);
+        // Grab a reference to image data
+        $image = $input['data']['image'];
+
+        // If file new provided, than start handling
+        if (!empty($input['files'])) {
+            // If we have a previous cover, then we gotta remove it
+            $this->imageManager->delete($image['id'], $image['image']);
+
+            $file = $input['files']['file'];
+
+            // Before we start uploading a file, we need to filter its base name
+            $this->filterFileInput($file);
+            $this->imageManager->upload($image['id'], $file);
+
+            // Now override cover's value with file's base name we currently have from user's input
+            $image['image'] = $file[0]->getName();
+        }
+
+        return $this->postGalleryMapper->persist($image);
     }
 }

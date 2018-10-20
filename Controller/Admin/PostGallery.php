@@ -23,6 +23,9 @@ final class PostGallery extends AbstractAdminController
      */
     private function createForm($image)
     {
+        // Load view plugins
+        $this->view->getPluginBag()->load('preview');
+
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', array(null)))
                                        ->addOne('Edit the post', $this->createUrl('News:Admin:Post@editAction', array($image->getPostId())))
@@ -89,12 +92,12 @@ final class PostGallery extends AbstractAdminController
         $service = $this->getModuleService('postGalleryManager');
 
         if (!empty($input['id'])) {
-            $service->update($input);
+            $service->update($this->request->getAll());
             $this->flashBag->set('success', 'The element has been updated successfully');
 
             return 1;
         } else {
-            $service->add($input);
+            $service->add($this->request->getAll());
             $this->flashBag->set('success', 'The element has been created successfully');
 
             return $service->getLastId();

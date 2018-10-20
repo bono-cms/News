@@ -8,12 +8,18 @@ defined('KRYSTAL') or die;
 <form data-group="image">
     <div class="well">
         <?php echo Element::hidden('image[id]', $image->getId()); ?>
+        <?php echo Element::hidden('image[image]', $image->getImage()); ?>
         <?php echo Element::hidden('image[post_id]', $image->getPostId()); ?>
 
         <div class="form-group">
             <label class="col-lg-2 control-label"><?php $this->show('Image'); ?></label>
             <div class="col-lg-10">
-                <?php echo Element::text('image[image]', $image->getImage(), array('class' => 'form-control')); ?>
+                <p>
+                    <img data-image="<?php echo $image->getId() ? null : 'preview'; ?>" src="<?php echo $image->getImageUrl('400x400'); ?>" />
+                </p>
+
+                <a class="btn btn-primary" data-button="upload" data-target="[name='file']" href="#"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Upload a file'); ?></a>
+                <?php echo Element::file('file', 'image/x-png, image/gif, image/jpeg', array('class' => 'hidden', 'data-plugin' => 'preview')); ?>
             </div>
         </div>
 

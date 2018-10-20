@@ -47,10 +47,40 @@ final class Module extends AbstractCmsModule
             'configManager' => $configManager,
             'categoryManager' => $categoryManager,
             'postManager' => $postManager,
-            'postGalleryManager' => new PostGalleryManager($postGalleryMapper)
+            'postGalleryManager' => new PostGalleryManager($postGalleryMapper, $this->createGalleryImageManager($config))
         );
     }
 
+    /**
+     * Builds gallery image manager service
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
+     * @return \Krystal\Image\Tool\ImageManager
+     */
+    private function createGalleryImageManager(VirtualEntity $config)
+    {
+        $plugins = array(
+            'thumb' => array(
+                'quality' => $config->getCoverQuality(),
+                'dimensions' => array(
+                    // For administration panel
+                    array(400, 400),
+
+                    // Dimensions for the site
+                    array($config->getCoverWidth(), $config->getCoverHeight()),
+                    array($config->getThumbWidth(), $config->getThumbHeight()),
+                )
+            )
+        );
+
+        return new ImageManager(
+            '/data/uploads/module/news/gallery/',
+            $this->appConfig->getRootDir(),
+            $this->appConfig->getRootUrl(),
+            $plugins
+        );
+    }
+    
     /**
      * Returns prepared and configured image manager service
      * 
