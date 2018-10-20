@@ -13,7 +13,7 @@ namespace News\Service;
 
 use Krystal\Stdlib\VirtualEntity;
 
-final class PostEntity extends VirtualEntity
+class PostEntity extends VirtualEntity
 {
     /**
      * Returns image URL
