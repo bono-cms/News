@@ -1,0 +1,42 @@
+<?php
+
+use Krystal\Form\Element;
+defined('KRYSTAL') or die;
+
+?>
+
+<form data-group="image">
+    <div class="well">
+        <?php echo Element::hidden('image[id]', $image->getId()); ?>
+        <?php echo Element::hidden('image[post_id]', $image->getPostId()); ?>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?php $this->show('Image'); ?></label>
+            <div class="col-lg-10">
+                <?php echo Element::text('image[image]', $image->getImage(), array('class' => 'form-control')); ?>
+            </div>
+        </div>
+
+		<div class="form-group">
+			<label class="col-lg-2 control-label"><?php $this->show('Order'); ?></label>
+			<div class="col-lg-10">
+				<div class="input-group">
+                    <?php echo Element::text('image[order]', $image->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+					<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <?php if ($image->getId()):?>
+
+    <button data-button="save" data-url="<?php echo $this->url('News:Admin:PostGallery@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
+    <button data-button="save-create" data-back-url="<?php echo $this->url('News:Admin:PostGallery@addAction'); ?>" data-url="<?php echo $this->url('News:Admin:PostGallery@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save & Create new'); ?></button>
+    <?php else: ?>
+
+    <button data-button="add" data-back-url="<?php echo $this->url('News:Admin:PostGallery@editAction', null); ?>" data-url="<?php echo $this->url('News:Admin:PostGallery@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php echo $this->translate('Add'); ?></button>
+    <button data-button="add-create" data-url="<?php echo $this->url('News:Admin:PostGallery@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php echo $this->translate('Add & Create new'); ?></button>
+    <?php endif; ?>
+
+    <button data-button="cancel" data-url="<?php echo $this->url('News:Admin:Browser@indexAction', null); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+</form>
