@@ -25,6 +25,23 @@ final class PostGalleryMapper extends AbstractMapper implements PostGalleryMappe
     }
 
     /**
+     * Fetch images by attached post ID
+     * 
+     * @param int $postId
+     * @return array
+     */
+    public function fetchAllByPostId($postId)
+    {
+        $db = $this->db->select('*')
+                       ->from(self::getTableName())
+                       ->whereEquals('post_id', $postId)
+                       ->orderBy('id')
+                       ->desc();
+
+        return $db->queryAll();
+    }
+
+    /**
      * Fetches post image by its ID
      * 
      * @param int $id Image ID

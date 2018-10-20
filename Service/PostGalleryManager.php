@@ -71,6 +71,17 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
     }
 
     /**
+     * Fetch images by attached post ID
+     * 
+     * @param int $postId
+     * @return array
+     */
+    public function fetchAllByPostId($postId)
+    {
+        return $this->postGalleryMapper->fetchAllByPostId($postId);
+    }
+
+    /**
      * Finds image by its associated id
      * 
      * @param int $id Image ID

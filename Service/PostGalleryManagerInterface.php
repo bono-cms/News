@@ -29,6 +29,14 @@ interface PostGalleryManagerInterface
     public function getLastId();
 
     /**
+     * Fetch images by attached post ID
+     * 
+     * @param int $postId
+     * @return array
+     */
+    public function fetchAllByPostId($postId);
+
+    /**
      * Finds image by its associated id
      * 
      * @param int $id Image ID
