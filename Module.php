@@ -38,7 +38,7 @@ final class Module extends AbstractCmsModule
         $configManager = $this->createConfigService();
         $config = $configManager->getEntity();
 
-        $imageManager = $this->getImageManager($config);
+        $imageManager = $this->createPostImageManager($config);
         $postManager = new PostManager($postMapper, $categoryMapper, TimeBag::factory($config), $webPageManager, $imageManager, $historyManager);
         $categoryManager = new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager);
 
@@ -87,7 +87,7 @@ final class Module extends AbstractCmsModule
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Image\Tool\ImageManager
      */
-    private function getImageManager(VirtualEntity $config)
+    private function createPostImageManager(VirtualEntity $config)
     {
         $plugins = array(
             'thumb' => array(
