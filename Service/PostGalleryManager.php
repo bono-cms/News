@@ -94,7 +94,7 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
      */
     public function fetchAllByPostId($postId)
     {
-        return $this->postGalleryMapper->fetchAllByPostId($postId);
+        return $this->prepareResults($this->postGalleryMapper->fetchAllByPostId($postId));
     }
 
     /**

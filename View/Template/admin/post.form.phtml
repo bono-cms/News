@@ -192,19 +192,22 @@ defined('KRYSTAL') or die;
                             'column' => 'id'
                         ),
                         array(
-                            'column' => 'image'
+                            'column' => 'image',
+                            'value' => function($entity){
+                                return Element::image($entity->getImageUrl('400x400'), array('class' => 'img-responsive center-block'));
+                            }
                         ),
                         array(
                             'column' => 'order'
                         )
                     ),
                     'actions' => array(
-                        'edit' => function(array $row){
-                            return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:PostGallery@editAction', $row['id']));
+                        'edit' => function($entity){
+                            return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:PostGallery@editAction', $entity['id']));
                         },
-                        'delete' => function(array $row){
+                        'delete' => function($entity){
                             // Generate URL
-                            $url = $this->url('News:Admin:PostGallery@deleteAction', $row['id']);
+                            $url = $this->url('News:Admin:PostGallery@deleteAction', $entity['id']);
                             return Element::icon('glyphicon glyphicon-remove', '#', array('data-button' => 'delete', 'data-url' => $url));
                         }
                     )
