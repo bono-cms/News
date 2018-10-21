@@ -57,3 +57,14 @@ CREATE TABLE `bono_module_news_posts_attached` (
     `master_id` INT NOT NULL COMMENT 'Post ID',
     `slave_id` INT NOT NULL COMMENT 'Attached post ID'
 ) DEFAULT CHARSET = UTF8;
+
+
+DROP TABLE IF EXISTS `bono_module_news_posts_gallery`;
+CREATE TABLE `bono_module_news_posts_gallery` (
+    `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `post_id` INT NOT NULL COMMENT 'Attached post ID',
+    `order` INT NOT NULL COMMENT 'Sorting order',
+    `image` varchar(255) NOT NULL COMMENT 'Image file',
+
+    FOREIGN KEY (post_id) REFERENCES bono_module_news_posts(id) ON DELETE CASCADE
+);

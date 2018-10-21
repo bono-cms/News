@@ -67,13 +67,13 @@ defined('KRYSTAL') or die;
                             'column' => 'date',
                             'type' => 'text',
                             'filter' => false,
-                            'value' => function($row){
-                                return $row['timebag']->getPanelFormat();
+                            'value' => function($entity){
+                                return $entity->getTimeBag()->getPanelFormat();
                             }
                         ),
 
                         array(
-                            'column' => 'categoryname',
+                            'column' => 'category_name',
                             'name' => 'category_id', // Set explicit name
                             'label' => 'Category',
                             'type' => 'select',

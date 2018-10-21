@@ -49,6 +49,24 @@ return array(
         'controller' => 'Admin:Browser@categoryAction'
     ),
     
+    // Post gallery
+    '/%s/module/news/post/gallery/add/(:var)' => array(
+        'controller' => 'Admin:PostGallery@addAction'
+    ),
+
+    '/%s/module/news/post/gallery/edit/(:var)' => array(
+        'controller' => 'Admin:PostGallery@editAction'
+    ),
+
+    '/%s/module/news/post/gallery/delete/(:var)' => array(
+        'controller' => 'Admin:PostGallery@deleteAction'
+    ),
+
+    '/%s/module/news/post/gallery/save' => array(
+        'controller' => 'Admin:PostGallery@saveAction'
+    ),
+
+    // Post
     '/%s/module/news/post/add' => array(
         'controller' => 'Admin:Post@addAction'
     ),

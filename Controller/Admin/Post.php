@@ -46,7 +46,8 @@ final class Post extends AbstractAdminController
             'categories' => $this->getCategoryManager()->fetchList(),
             // If you don't require option to attach similar posts, you can comment 'posts' key to reduce DB queries
             'posts' => $this->getCategoryManager()->fetchAllWithPosts($id),
-            'post' => $post
+            'post' => $post,
+            'images' => $id !== null ? $this->getModuleService('postGalleryManager')->fetchAllByPostId($id) : array()
         ));
     }
 

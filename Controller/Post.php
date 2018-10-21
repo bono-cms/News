@@ -27,6 +27,9 @@ final class Post extends AbstractController
         $post = $postManager->fetchById($id, true, false);
 
         if ($post !== false) {
+            // Set image gallery
+            $post->setGallery($this->getModuleService('postGalleryManager')->fetchAllByPostId($id));
+
             $this->loadSitePlugins();
             $this->view->getBreadcrumbBag()
                        ->add($postManager->getBreadcrumbs($post));
@@ -38,6 +41,7 @@ final class Post extends AbstractController
                 'languages' => $postManager->getSwitchUrls($id)
             ));
 
+            
             $postManager->incrementViewCount($id);
             return $response;
 

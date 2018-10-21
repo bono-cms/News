@@ -1,5 +1,6 @@
 <?php
 
+use Krystal\Grid\Grid;
 use Krystal\Form\Element;
 use Krystal\Security\Filter;
 use Cms\Service\LanguageManager;
@@ -14,6 +15,9 @@ defined('KRYSTAL') or die;
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#data" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Data'); ?></a></li>
         <li role="presentation"><a href="#configuration" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Configuration'); ?></a></li>
+        <?php if (!is_object($post)): ?>
+        <li role="presentation"><a href="#gallery" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Gallery'); ?></a></li>
+        <?php endif; ?>
     </ul>
 
     <div class="tab-content">
@@ -173,6 +177,42 @@ defined('KRYSTAL') or die;
                 <!--/Cover-->
             </div>
         </div>
+
+        <?php if (!is_object($post)): ?>
+        <div role="tabpanel" class="tab-pane" id="gallery">
+            <div class="well">
+                <p>
+                    <a class="btn btn-primary" href="<?php echo $this->url('News:Admin:PostGallery@addAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Add new image'); ?></a>
+                </p>
+
+                <?php echo Grid::render($images, array(
+                    'pk' => 'id',
+                    'columns' => array(
+                        array(
+                            'column' => 'image',
+                            'value' => function($entity){
+                                return Element::image($entity->getImageUrl('400x400'), array('class' => 'img-responsive center-block'));
+                            }
+                        ),
+                        array(
+                            'column' => 'order'
+                        )
+                    ),
+                    'actions' => array(
+                        'edit' => function($entity){
+                            return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:PostGallery@editAction', $entity['id']));
+                        },
+                        'delete' => function($entity){
+                            // Generate URL
+                            $url = $this->url('News:Admin:PostGallery@deleteAction', $entity['id']);
+                            return Element::icon('glyphicon glyphicon-remove', '#', array('data-button' => 'delete', 'data-url' => $url));
+                        }
+                    )
+                ), $this->translator); ?>
+
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 
     <?php if ($entity->getId()): ?>

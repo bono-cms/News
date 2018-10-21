@@ -19,6 +19,7 @@ use News\Service\PostManager;
 use News\Service\PostImageManagerFactory;
 use News\Service\TimeBag;
 use News\Service\SiteService;
+use News\Service\PostGalleryManager;
 
 final class Module extends AbstractCmsModule
 {
@@ -29,6 +30,7 @@ final class Module extends AbstractCmsModule
     {
         $categoryMapper = $this->getMapper('/News/Storage/MySQL/CategoryMapper');
         $postMapper = $this->getMapper('/News/Storage/MySQL/PostMapper');
+        $postGalleryMapper = $this->getMapper('/News/Storage/MySQL/PostGalleryMapper');
 
         $webPageManager = $this->getWebPageManager();
         $historyManager = $this->getHistoryManager();
@@ -36,7 +38,7 @@ final class Module extends AbstractCmsModule
         $configManager = $this->createConfigService();
         $config = $configManager->getEntity();
 
-        $imageManager = $this->getImageManager($config);
+        $imageManager = $this->createPostImageManager($config);
         $postManager = new PostManager($postMapper, $categoryMapper, TimeBag::factory($config), $webPageManager, $imageManager, $historyManager);
         $categoryManager = new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager);
 
@@ -44,17 +46,48 @@ final class Module extends AbstractCmsModule
             'siteService' => new SiteService($postManager, $categoryManager, $config),
             'configManager' => $configManager,
             'categoryManager' => $categoryManager,
-            'postManager' => $postManager
+            'postManager' => $postManager,
+            'postGalleryManager' => new PostGalleryManager($postGalleryMapper, $this->createGalleryImageManager($config))
         );
     }
 
+    /**
+     * Builds gallery image manager service
+     * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
+     * @return \Krystal\Image\Tool\ImageManager
+     */
+    private function createGalleryImageManager(VirtualEntity $config)
+    {
+        $plugins = array(
+            'thumb' => array(
+                'quality' => $config->getCoverQuality(),
+                'dimensions' => array(
+                    // For administration panel
+                    array(400, 400),
+
+                    // Dimensions for the site
+                    array($config->getCoverWidth(), $config->getCoverHeight()),
+                    array($config->getThumbWidth(), $config->getThumbHeight()),
+                )
+            )
+        );
+
+        return new ImageManager(
+            '/data/uploads/module/news/gallery/',
+            $this->appConfig->getRootDir(),
+            $this->appConfig->getRootUrl(),
+            $plugins
+        );
+    }
+    
     /**
      * Returns prepared and configured image manager service
      * 
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Image\Tool\ImageManager
      */
-    private function getImageManager(VirtualEntity $config)
+    private function createPostImageManager(VirtualEntity $config)
     {
         $plugins = array(
             'thumb' => array(
