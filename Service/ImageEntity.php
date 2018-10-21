@@ -11,6 +11,18 @@
 
 namespace News\Service;
 
-final class ImageEntity extends PostEntity
+use Krystal\Stdlib\VirtualEntity;
+
+final class ImageEntity extends VirtualEntity
 {
+    /**
+     * Returns image URL
+     * 
+     * @param string $size
+     * @return string
+     */
+    public function getImageUrl($size)
+    {
+        return $this->getImageBag()->getUrl($size);
+    }
 }

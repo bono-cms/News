@@ -13,7 +13,7 @@ namespace News\Service;
 
 use Krystal\Stdlib\VirtualEntity;
 
-class PostEntity extends VirtualEntity
+final class PostEntity extends VirtualEntity
 {
     /**
      * Checks whether current post has image gallery (i.e at least one attached image)
