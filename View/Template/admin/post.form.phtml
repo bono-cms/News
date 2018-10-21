@@ -189,9 +189,6 @@ defined('KRYSTAL') or die;
                     'pk' => 'id',
                     'columns' => array(
                         array(
-                            'column' => 'id'
-                        ),
-                        array(
                             'column' => 'image',
                             'value' => function($entity){
                                 return Element::image($entity->getImageUrl('400x400'), array('class' => 'img-responsive center-block'));
@@ -211,7 +208,7 @@ defined('KRYSTAL') or die;
                             return Element::icon('glyphicon glyphicon-remove', '#', array('data-button' => 'delete', 'data-url' => $url));
                         }
                     )
-                )); ?>
+                ), $this->translator); ?>
 
             </div>
         </div>
