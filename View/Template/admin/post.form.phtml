@@ -182,7 +182,7 @@ defined('KRYSTAL') or die;
         <div role="tabpanel" class="tab-pane" id="gallery">
             <div class="well">
                 <p>
-                    <a class="btn btn-default" href="<?php echo $this->url('News:Admin:PostGallery@addAction', $entity->getId()); ?>"><?php $this->show('Add new image'); ?></a>
+                    <a class="btn btn-primary" href="<?php echo $this->url('News:Admin:PostGallery@addAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Add new image'); ?></a>
                 </p>
 
                 <?php echo Grid::render($images, array(
