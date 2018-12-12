@@ -345,19 +345,11 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     public function add(array $input)
     {
         $data =& $input['data']['post'];
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
 
         // By default there are 0 views
         $data['views'] = 0;
-
-        // Handle cover
-        if (!empty($input['files']['file'])) {
-            $file =& $input['files']['file'];
-            $this->filterFileInput($file);
-
-            $data['cover'] = $file[0]->getName();
-        } else {
-            $data['cover'] = '';
-        }
+        $data['cover'] = $file ? $file->getUniqueName() : '';
 
         // Save the page
         $this->savePage($input);
@@ -366,8 +358,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $id = $this->getLastId();
 
         // Now upload a cover if present
-        if (!empty($input['files'])) {
-            $file =& $input['files']['file'];
+        if ($file) {
             $this->imageManager->upload($id, $file);
         }
 
@@ -387,6 +378,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     public function update(array $input)
     {
         $post =& $input['data']['post'];
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
 
         // Allow to remove a cover, only it case it exists and checkbox was checked
         if (isset($post['remove_cover']) && !empty($post['cover'])) {
@@ -395,21 +387,17 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             $post['cover'] = '';
         } else {
             // Do the check only in case cover doesn't need to be removed
-            if (!empty($input['files'])) {
+            if ($file) {
                 // If we have a previous cover, then we gotta remove it
                 if (!empty($post['cover'])) {
                     // Remove previous one
                     $this->imageManager->delete($post['id'], $post['cover']);
                 }
 
-                $file = $input['files']['file'];
-
-                // Before we start uploading a file, we need to filter its base name
-                $this->filterFileInput($file);
                 $this->imageManager->upload($post['id'], $file);
 
                 // Now override cover's value with file's base name we currently have from user's input
-                $post['cover'] = $file[0]->getName();
+                $post['cover'] = $file->getUniqueName();
             }
         }
 

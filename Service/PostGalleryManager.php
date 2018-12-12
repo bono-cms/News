@@ -117,13 +117,10 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
     public function add(array $input)
     {
         $image = $input['data']['image'];
-        $file = $input['files']['file'];
-
-        // Filter files input
-        $this->filterFileInput($file);
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
 
         // Define image attribute
-        $image['image'] = $file[0]->getName();
+        $image['image'] = $file->getUniqueName();
 
         // Save image first, because we need to get its ID for image uploading
         $this->postGalleryMapper->persist($image);
@@ -144,20 +141,16 @@ final class PostGalleryManager extends AbstractManager implements PostGalleryMan
     {
         // Grab a reference to image data
         $image = $input['data']['image'];
+        $file = isset($input['files']['file']) ? $input['files']['file'] : false;
 
         // If file new provided, than start handling
-        if (!empty($input['files'])) {
+        if ($file) {
             // If we have a previous cover, then we gotta remove it
             $this->imageManager->delete($image['id'], $image['image']);
-
-            $file = $input['files']['file'];
-
-            // Before we start uploading a file, we need to filter its base name
-            $this->filterFileInput($file);
             $this->imageManager->upload($image['id'], $file);
 
             // Now override cover's value with file's base name we currently have from user's input
-            $image['image'] = $file[0]->getName();
+            $image['image'] = $file->getUniqueName();
         }
 
         return $this->postGalleryMapper->persist($image);
