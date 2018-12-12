@@ -41,7 +41,6 @@ final class Post extends AbstractController
                 'languages' => $postManager->getSwitchUrls($id)
             ));
 
-            
             $postManager->incrementViewCount($id);
             return $response;
 

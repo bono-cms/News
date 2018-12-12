@@ -80,7 +80,7 @@ final class Module extends AbstractCmsModule
             $plugins
         );
     }
-    
+
     /**
      * Returns prepared and configured image manager service
      * 
