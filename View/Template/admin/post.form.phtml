@@ -101,6 +101,16 @@ defined('KRYSTAL') or die;
                     <?php endforeach; ?>
                 </div>
             </div>
+            
+            <?php $this->loadPartial('actions', array(
+                'new' => !$entity->getId(),
+                'add' => 'News:Admin:Post@addAction',
+                'edit' => 'News:Admin:Post@editAction',
+                'save' => 'News:Admin:Post@saveAction',
+                'cancel' => 'News:Admin:Browser@indexAction',
+                'options' => true
+            )); ?>
+
         </div>
 
         <div role="tabpanel" class="tab-pane" id="configuration">
@@ -214,20 +224,6 @@ defined('KRYSTAL') or die;
         </div>
         <?php endif; ?>
     </div>
-
-    <?php if ($entity->getId()): ?>
-    <button data-button="save" data-url="<?php echo $this->url('News:Admin:Post@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-    <button data-button="save-create" data-back-url="<?php echo $this->url('News:Admin:Post@addAction'); ?>" data-url="<?php echo $this->url('News:Admin:Post@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Save & Create new'); ?></button>
-
-    <?php else: ?>
-
-    <button data-button="add" data-back-url="<?php echo $this->url('News:Admin:Post@editAction', null); ?>" data-url="<?php echo $this->url('News:Admin:Post@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Add'); ?></button>
-    <button data-button="add-create" data-url="<?php echo $this->url('News:Admin:Post@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-open"></i> <?php $this->show('Add & Create new'); ?></button>
-
-    <?php endif; ?>
-    <button data-button="options" class="btn btn-primary"><i class="glyphicon glyphicon-open"></i> <?php $this->show('More options'); ?></button>
-    <button data-button="cancel" data-url="<?php echo $this->url('News:Admin:Browser@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
-
 </form>
 
 <?php else: ?>
