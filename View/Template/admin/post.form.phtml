@@ -190,37 +190,37 @@ defined('KRYSTAL') or die;
 
         <?php if (!is_object($post)): ?>
         <div role="tabpanel" class="tab-pane" id="gallery">
-            <div class="well">
-                <p>
-                    <a class="btn btn-primary" href="<?php echo $this->url('News:Admin:PostGallery@addAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Add new image'); ?></a>
-                </p>
+            <h2 class="page-header"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Gallery'); ?> <small>(<?= count($images); ?>)</small></h2>
 
-                <?php echo Grid::render($images, array(
-                    'pk' => 'id',
-                    'columns' => array(
-                        array(
-                            'column' => 'image',
-                            'value' => function($entity){
-                                return Element::image($entity->getImageUrl('400x400'), array('class' => 'img-responsive center-block'));
-                            }
-                        ),
-                        array(
-                            'column' => 'order'
-                        )
-                    ),
-                    'actions' => array(
-                        'edit' => function($entity){
-                            return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:PostGallery@editAction', $entity['id']));
-                        },
-                        'delete' => function($entity){
-                            // Generate URL
-                            $url = $this->url('News:Admin:PostGallery@deleteAction', $entity['id']);
-                            return Element::icon('glyphicon glyphicon-remove', '#', array('data-button' => 'delete', 'data-url' => $url));
+            <p>
+                <a class="btn btn-primary" href="<?php echo $this->url('News:Admin:PostGallery@addAction', $entity->getId()); ?>"><i class="glyphicon glyphicon-picture"></i> <?php $this->show('Add new image'); ?></a>
+            </p>
+
+            <?= Grid::render($images, array(
+                'pk' => 'id',
+                'columns' => array(
+                    array(
+                        'column' => 'image',
+                        'value' => function($entity){
+                            return Element::image($entity->getImageUrl('400x400'), array('class' => 'img-responsive center-block'));
                         }
+                    ),
+                    array(
+                        'column' => 'order'
                     )
-                ), $this->translator); ?>
+                ),
+                'actions' => array(
+                    'edit' => function($entity){
+                        return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:PostGallery@editAction', $entity['id']));
+                    },
+                    'delete' => function($entity){
+                        // Generate URL
+                        $url = $this->url('News:Admin:PostGallery@deleteAction', $entity['id']);
+                        return Element::icon('glyphicon glyphicon-remove', '#', array('data-button' => 'delete', 'data-url' => $url));
+                    }
+                )
+            ), $this->translator); ?>
 
-            </div>
         </div>
         <?php endif; ?>
     </div>
