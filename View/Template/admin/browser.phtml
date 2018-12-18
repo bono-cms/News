@@ -3,6 +3,7 @@
 use Krystal\Form\Element;
 use Krystal\Form\HtmlHelper;
 use Krystal\Grid\Grid;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -132,12 +133,7 @@ defined('KRYSTAL') or die;
                                     'back_url' => rawurlencode($this->url('News:Admin:Browser@indexAction', null))
                                 ));
 
-                                return Element::icon('glyphicon glyphicon-star', $url, array(
-                                    'data-toggle' => 'tooltip',
-                                    'data-placement' => 'left',
-                                    'data-original-title' => $this->translate('Polls of this page')
-                                ));
-
+                                return Icon::polls($url, $this->translate('Polls of this page'));
                             } else {
                                 // Polls module is not loaded, so just skip creating this link
                                 return null;
@@ -145,32 +141,21 @@ defined('KRYSTAL') or die;
                         },
 
                         'view' => function($row){
-                            return Element::icon('glyphicon glyphicon-search', $row['url'], array(
-                                'data-toggle' => 'tooltip',
-                                'data-placement' => 'left',
-                                'data-original-title' => $this->translate('View this post'),
-                                'data-button' => 'view',
-                                'target' => '_blank'
-                            ));
+                            return Icon::view($row['url'], $this->translate('View this post'));
                         },
 
                         'edit' => function($row){
-                            return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:Post@editAction', $row['id']), array(
-                                'data-toggle' => 'tooltip',
-                                'data-placement' => 'left',
-                                'data-original-title' => $this->translate('Edit this post'),
-                                'data-button' => 'edit'
-                            ));
+                            return Icon::edit(
+                                $this->url('News:Admin:Post@editAction', $row['id']),
+                                $this->translate('Edit this post')
+                            );
                         },
 
                         'remove' => function($row){
-                            return Element::icon('glyphicon glyphicon-remove', '#', array(
-                                'data-toggle' => 'tooltip',
-                                'data-placement' => 'left',
-                                'data-original-title' => $this->translate('Remove this post'),
-                                'data-button' => 'delete',
-                                'data-url' => $this->url('News:Admin:Post@deleteAction', $row['id'])
-                            ));
+                            return Icon::remove(
+                                $this->url('News:Admin:Post@deleteAction', $row['id']), 
+                                $this->translate('Remove this post')
+                            );
                         }
                     )
 
@@ -215,32 +200,21 @@ defined('KRYSTAL') or die;
 
                     'actions' => array(
                         'view' => function($row){
-                            return Element::icon('glyphicon glyphicon-search', $row['url'], array(
-                                'data-toggle' => 'tooltip', 
-                                'data-placement' => 'left', 
-                                'data-original-title' => $this->translate('View this category on site'), 
-                                'data-button' => 'view', 
-                                'target' => '_blank'
-                            ));
+                            return Icon::view($row['url'], $this->translate('View this category on site'));
                         },
 
                         'edit' => function($row){
-                            return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:Category@editAction', $row['id']), array(
-                                'data-toggle' => 'tooltip', 
-                                'data-placement' => 'left', 
-                                'data-original-title' => $this->translate('Edit this category'), 
-                                'data-button' => 'edit'
-                            ));
+                            return Icon::edit(
+                                $this->url('News:Admin:Category@editAction', $row['id']),
+                                $this->translate('Edit this category')
+                            );
                         },
 
                         'remove' => function($row){
-                            return Element::icon('glyphicon glyphicon-remove', '#', array(
-                                'data-toggle' => 'tooltip',
-                                'data-placement' => 'left',
-                                'data-original-title' => $this->translate('Remove this category'),
-                                'data-button' => 'delete',
-                                'data-url' => $this->url('News:Admin:Category@deleteAction', $row['id'])
-                            ));
+                            return Icon::remove(
+                                $this->url('News:Admin:Category@deleteAction', $row['id']),
+                                $this->translate('Remove this category')
+                            );
                         }
                     )
 
