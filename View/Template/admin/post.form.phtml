@@ -4,6 +4,7 @@ use Krystal\Grid\Grid;
 use Krystal\Form\Element;
 use Krystal\Security\Filter;
 use Cms\Service\LanguageManager;
+use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
 
@@ -197,7 +198,7 @@ defined('KRYSTAL') or die;
             </p>
 
             <?= Grid::render($images, array(
-                'pk' => 'id',
+                'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                 'columns' => array(
                     array(
                         'column' => 'image',
@@ -209,16 +210,23 @@ defined('KRYSTAL') or die;
                         'column' => 'order'
                     )
                 ),
+
                 'actions' => array(
                     'edit' => function($entity){
-                        return Element::icon('glyphicon glyphicon-pencil', $this->url('News:Admin:PostGallery@editAction', $entity['id']));
+                        return Icon::edit(
+                            $this->url('News:Admin:PostGallery@editAction', $entity['id']),
+                            $this->translate('Edit this image')
+                        );
                     },
+
                     'delete' => function($entity){
-                        // Generate URL
-                        $url = $this->url('News:Admin:PostGallery@deleteAction', $entity['id']);
-                        return Element::icon('glyphicon glyphicon-remove', '#', array('data-button' => 'delete', 'data-url' => $url));
+                        return Icon::remove(
+                            $this->url('News:Admin:PostGallery@deleteAction', $entity['id']),
+                            $this->translate('Remove this image')
+                        );
                     }
                 )
+
             ), $this->translator); ?>
 
         </div>
