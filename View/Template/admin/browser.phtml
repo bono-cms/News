@@ -127,7 +127,7 @@ defined('KRYSTAL') or die;
                             if (in_array('Polls', $loadedModules)) {
                                 // Create dynamic URL
                                 $url = $this->createQueryUrl('Polls:Admin:WebPage@indexAction', array(
-                                    'web_page_id' => $row['webpageid'], 
+                                    'web_page_id' => $row['web_page_id'], 
                                     'title' => rawurlencode($row['name']),
                                     'module' => 'News',
                                     'back_url' => rawurlencode($this->url('News:Admin:Browser@indexAction', null))
