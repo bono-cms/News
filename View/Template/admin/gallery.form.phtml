@@ -5,7 +5,7 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<form data-group="image">
+<form data-group="image" autocomplete="off">
     <div class="well">
         <?php echo Element::hidden('image[id]', $image->getId()); ?>
         <?php echo Element::hidden('image[image]', $image->getImage()); ?>
