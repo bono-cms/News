@@ -1,8 +1,7 @@
 <?php
 
 use Krystal\Form\Element;
-use Krystal\Form\HtmlHelper;
-use Krystal\Grid\Grid;
+use Krystal\Widget\GridWidget;
 use Cms\View\Icon;
 
 defined('KRYSTAL') or die;
@@ -47,7 +46,7 @@ defined('KRYSTAL') or die;
         <div class="col-lg-8">
                 <?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
 
-                <?= Grid::render($posts, array(
+                <?= $this->widget(new GridWidget($posts, array(
                     // A column to be considered as a primary key
                     'pk' => 'id',
                     'batch' => true,
@@ -159,7 +158,7 @@ defined('KRYSTAL') or die;
                         }
                     )
 
-                ), $this->translator, $route, $query); ?>
+                ), $route)); ?>
 
                 <?php if (empty($posts)): ?>
                 <div class="center-block">
@@ -174,7 +173,7 @@ defined('KRYSTAL') or die;
             <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
 
             <div class="table-responsive">
-                <?= Grid::render($categories, array(
+                <?= $this->widget(new GridWidget($categories, array(
                     'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
                     'rowAttributes' => array(
                         'class' => function($row) use ($categoryId){
@@ -217,8 +216,7 @@ defined('KRYSTAL') or die;
                             );
                         }
                     )
-
-                ), $this->translator); ?>
+                ))); ?>
 
                 <?php if (empty($categories)): ?>
                 <div class="center-block">
