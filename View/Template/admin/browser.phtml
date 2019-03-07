@@ -12,27 +12,25 @@ defined('KRYSTAL') or die;
     <div class="row">
         <div class="col-lg-1">
             <div class="btn-toolbar">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <div class="dropdown">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                     <i class="glyphicon glyphicon-list"></i> <?php $this->show('Menu'); ?> <span class="caret"></span>
                   </button>
 
-                  <ul class="dropdown-menu">
-                     <li><a href="<?php echo $this->url('News:Admin:Post@addAction'); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new post'); ?></a></li>
-                     <li><a href="<?php echo $this->url('News:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add new category'); ?></a></li>
-                     <li><a href="<?php echo $this->url('News:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Configuration'); ?></a></li>
-                     <li class="divider"></li>
-                     <li class="dropdown-header"><?php $this->show('Actions'); ?></li>
-                     
+                  <div class="dropdown-menu">
+                     <a class="dropdown-item" href="<?php echo $this->url('News:Admin:Post@addAction'); ?>"><i class="glyphicon glyphicon-file"></i> <?php $this->show('Add new post'); ?></a>
+                     <a class="dropdown-item" href="<?php echo $this->url('News:Admin:Category@addAction'); ?>"><i class="glyphicon glyphicon-folder-open"></i> <?php $this->show('Add new category'); ?></a>
+                     <a class="dropdown-item" href="<?php echo $this->url('News:Admin:Config@indexAction'); ?>"><i class="glyphicon glyphicon-tasks"></i> <?php $this->show('Configuration'); ?></a>
+                     <div class="dropdown-divider"></div>
+                     <div class="dropdown-header"><?php $this->show('Actions'); ?></div>
                      <?php if (!empty($posts)): ?>
-                     <li><a href="#" data-button="save-changes" data-url="<?php echo $this->url('News:Admin:Post@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-                     <li><a href="#" data-button="remove-selected" data-url="<?php echo $this->url('News:Admin:Post@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
-                     
+                     <a class="dropdown-item" href="#" data-button="save-changes" data-url="<?php echo $this->url('News:Admin:Post@tweakAction'); ?>"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
+                     <a class="dropdown-item" href="#" data-button="remove-selected" data-url="<?php echo $this->url('News:Admin:Post@deleteAction', null); ?>"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
                      <?php else: ?>
-                     <li class="disabled"><a><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a></li>
-                     <li class="disabled"><a><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a></li>
+                     <a class="dropdown-item disabled"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save changes'); ?></a>
+                     <a class="dropdown-item disabled"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('Remove selected'); ?></a>
                      <?php endif; ?>
-                  </ul>
+                  </div>
                 </div>
             </div>
         </div>
@@ -41,189 +39,186 @@ defined('KRYSTAL') or die;
             <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <? $this->show('Filter'); ?></button>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-lg-8">
-                <?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
 
-                <?= $this->widget(new GridViewWidget($posts, array(
-                    // A column to be considered as a primary key
-                    'pk' => 'id',
-                    'batch' => true,
-                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                    'columns' => array(
-                        array(
-                            'column' => 'id',
-                            'label' => '#'
-                        ),
+    <div class="card">
+            <?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
 
-                        array(
-                            'column' => 'name',
-                            'type' => 'text',
-                            'filter' => true
-                        ),
-
-                        array(
-                            'column' => 'date',
-                            'type' => 'text',
-                            'filter' => false,
-                            'value' => function($entity){
-                                return $entity->getTimeBag()->getPanelFormat();
-                            }
-                        ),
-
-                        array(
-                            'column' => 'category_name',
-                            'name' => 'category_id', // Set explicit name
-                            'label' => 'Category',
-                            'type' => 'select',
-                            'filter' => $categoryList
-                        ),
-
-                        array(
-                            'column' => 'published',
-                            'type' => 'select',
-                            'filter' => true,
-                            'value' => function($row){
-                                return Element::checkbox(sprintf('published[%s]', $row['id']), $row['published']);
-                            },
-                            'filter' => $this->translateArray([
-                                '0' => 'No',
-                                '1' => 'Yes',
-                            ])
-                        ),
-
-                        array(
-                            'column' => 'seo',
-                            'label' => 'SEO',
-                            'filter' => true,
-                            'type' => 'select',
-                            'value' => function($row){
-                                return Element::checkbox(sprintf('seo[%s]', $row['id']), $row['seo']);
-                            },
-                            'filter' => $this->translateArray([
-                                '0' => 'No',
-                                '1' => 'Yes'
-                            ])
-                        ),
-
-                        array(
-                            'column' => 'front',
-                            'type' => 'select',
-                            'value' => function($row){
-                                return Element::checkbox(sprintf('front[%s]', $row['id']), $row['front']);
-                            },
-                            'filter' => $this->translateArray([
-                                '0' => 'No',
-                                '1' => 'Yes'
-                            ])
-                        )
+            <?= $this->widget(new GridViewWidget($posts, array(
+                'pk' => 'id',
+                'batch' => true,
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
                     ),
 
-                    'actions' => array(
-                        'polls' => function($row) use ($loadedModules){
-                            // If polls module is loaded, then show its link
-                            if (in_array('Polls', $loadedModules)) {
-                                // Create dynamic URL
-                                $url = $this->createQueryUrl('Polls:Admin:WebPage@indexAction', array(
-                                    'web_page_id' => $row['web_page_id'], 
-                                    'title' => rawurlencode($row['name']),
-                                    'module' => 'News',
-                                    'back_url' => rawurlencode($this->url('News:Admin:Browser@indexAction', null))
-                                ));
+                    array(
+                        'column' => 'name',
+                        'type' => 'text',
+                        'filter' => true
+                    ),
 
-                                return Icon::polls($url, $this->translate('Polls of this page'));
-                            } else {
-                                // Polls module is not loaded, so just skip creating this link
-                                return null;
-                            }
-                        },
-
-                        'view' => function($row){
-                            return Icon::view($row['url'], $this->translate('View this post'));
-                        },
-
-                        'edit' => function($row){
-                            return Icon::edit(
-                                $this->url('News:Admin:Post@editAction', $row['id']),
-                                $this->translate('Edit this post')
-                            );
-                        },
-
-                        'remove' => function($row){
-                            return Icon::remove(
-                                $this->url('News:Admin:Post@deleteAction', $row['id']), 
-                                $this->translate('Remove this post')
-                            );
+                    array(
+                        'column' => 'date',
+                        'type' => 'text',
+                        'filter' => false,
+                        'value' => function($entity){
+                            return $entity->getTimeBag()->getPanelFormat();
                         }
+                    ),
+
+                    array(
+                        'column' => 'category_name',
+                        'name' => 'category_id', // Set explicit name
+                        'label' => 'Category',
+                        'type' => 'select',
+                        'filter' => $categoryList
+                    ),
+
+                    array(
+                        'column' => 'published',
+                        'type' => 'select',
+                        'filter' => true,
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('published[%s]', $row['id']), $row['published']);
+                        },
+                        'filter' => $this->translateArray([
+                            '0' => 'No',
+                            '1' => 'Yes',
+                        ])
+                    ),
+
+                    array(
+                        'column' => 'seo',
+                        'label' => 'SEO',
+                        'filter' => true,
+                        'type' => 'select',
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('seo[%s]', $row['id']), $row['seo']);
+                        },
+                        'filter' => $this->translateArray([
+                            '0' => 'No',
+                            '1' => 'Yes'
+                        ])
+                    ),
+
+                    array(
+                        'column' => 'front',
+                        'type' => 'select',
+                        'value' => function($row){
+                            return Element::checkbox(sprintf('front[%s]', $row['id']), $row['front']);
+                        },
+                        'filter' => $this->translateArray([
+                            '0' => 'No',
+                            '1' => 'Yes'
+                        ])
                     )
+                ),
 
-                ), $route)); ?>
+                'actions' => array(
+                    'polls' => function($row) use ($loadedModules){
+                        // If polls module is loaded, then show its link
+                        if (in_array('Polls', $loadedModules)) {
+                            // Create dynamic URL
+                            $url = $this->createQueryUrl('Polls:Admin:WebPage@indexAction', array(
+                                'web_page_id' => $row['web_page_id'], 
+                                'title' => rawurlencode($row['name']),
+                                'module' => 'News',
+                                'back_url' => rawurlencode($this->url('News:Admin:Browser@indexAction', null))
+                            ));
 
-                <?php if (empty($posts)): ?>
-                <div class="center-block">
-                    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No news'); ?></h2>
-                </div>
-                <?php endif; ?>
-
-                <?php $this->loadPartial('paginator'); ?>
-        </div>
-
-        <div class="col-lg-4">
-            <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
-
-            <div class="table-responsive">
-                <?= $this->widget(new GridViewWidget($categories, array(
-                    'tableClass' => 'table table-hover table-bordered table-striped table-condensed',
-                    'rowAttributes' => array(
-                        'class' => function($row) use ($categoryId){
-                            return $row['id'] == $categoryId ? 'info' : null;
+                            return Icon::polls($url, $this->translate('Polls of this page'));
+                        } else {
+                            // Polls module is not loaded, so just skip creating this link
+                            return null;
                         }
-                    ),
+                    },
 
-                    'columns' => array(
-                        array(
-                            'column' => 'id',
-                            'label' => '#'
-                        ),
+                    'view' => function($row){
+                        return Icon::view($row['url'], $this->translate('View this post'));
+                    },
 
-                        array(
-                            'column' => 'name',
-                        ),
+                    'edit' => function($row){
+                        return Icon::edit(
+                            $this->url('News:Admin:Post@editAction', $row['id']),
+                            $this->translate('Edit this post')
+                        );
+                    },
 
-                        array(
-                            'column' => 'post_count',
-                            'label' => 'Amount of news'
-                        )
-                    ),
+                    'remove' => function($row){
+                        return Icon::remove(
+                            $this->url('News:Admin:Post@deleteAction', $row['id']), 
+                            $this->translate('Remove this post')
+                        );
+                    }
+                )
 
-                    'actions' => array(
-                        'view' => function($row){
-                            return Icon::view($row['url'], $this->translate('View this category on site'));
-                        },
+            ), $route)); ?>
 
-                        'edit' => function($row){
-                            return Icon::edit(
-                                $this->url('News:Admin:Category@editAction', $row['id']),
-                                $this->translate('Edit this category')
-                            );
-                        },
-
-                        'remove' => function($row){
-                            return Icon::remove(
-                                $this->url('News:Admin:Category@deleteAction', $row['id']),
-                                $this->translate('Remove this category')
-                            );
-                        }
-                    )
-                ))); ?>
-
-                <?php if (empty($categories)): ?>
-                <div class="center-block">
-                    <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
-                </div>
-                <?php endif; ?>
+            <?php if (empty($posts)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No news'); ?></h2>
             </div>
+            <?php endif; ?>
+
+            <?php $this->loadPartial('paginator'); ?>
+    </div>
+
+    <div class="card">
+        <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+
+        <div class="table-responsive">
+            <?= $this->widget(new GridViewWidget($categories, array(
+                'tableClass' => 'table table-hover table-bordered table-striped',
+                'rowAttributes' => array(
+                    'class' => function($row) use ($categoryId){
+                        return $row['id'] == $categoryId ? 'table-info' : null;
+                    }
+                ),
+
+                'columns' => array(
+                    array(
+                        'column' => 'id',
+                        'label' => '#'
+                    ),
+
+                    array(
+                        'column' => 'name',
+                    ),
+
+                    array(
+                        'column' => 'post_count',
+                        'label' => 'Amount of news'
+                    )
+                ),
+
+                'actions' => array(
+                    'view' => function($row){
+                        return Icon::view($row['url'], $this->translate('View this category on site'));
+                    },
+
+                    'edit' => function($row){
+                        return Icon::edit(
+                            $this->url('News:Admin:Category@editAction', $row['id']),
+                            $this->translate('Edit this category')
+                        );
+                    },
+
+                    'remove' => function($row){
+                        return Icon::remove(
+                            $this->url('News:Admin:Category@deleteAction', $row['id']),
+                            $this->translate('Remove this category')
+                        );
+                    }
+                )
+            ))); ?>
+
+            <?php if (empty($categories)): ?>
+            <div class="center-block">
+                <h2 class="text-center text-muted"><i class="glyphicon glyphicon-remove"></i> <?php $this->show('No categories'); ?></h2>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </form>
