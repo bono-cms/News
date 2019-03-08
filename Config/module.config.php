@@ -13,7 +13,7 @@ return array(
         array(
             'name' => 'Add new post',
             'controller' => 'News:Admin:Post@addAction',
-            'icon' => 'fa fa-newspaper-o'
+            'icon' => 'fas fa-newspaper'
         )
     ),
     'menu' => array(
