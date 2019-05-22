@@ -499,7 +499,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchRecent($limit, $categoryId = null)
     {
-        return $this->fetchAllByPage($categoryId, true, null, $limit, null, null);
+        return $this->fetchAllByPage($categoryId, true, null, null, $limit, null);
     }
 
     /**
