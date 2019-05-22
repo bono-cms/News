@@ -31,7 +31,7 @@ final class Browser extends AbstractAdminController
         $this->view->getBreadcrumbBag()
                    ->addOne('News');
 
-        return $this->view->render('browser', array(
+        return $this->view->render('index', array(
             'query' => $this->request->getQuery(),
             'route' => $this->createUrl('News:Admin:Browser@indexAction', array(null)),
             'categoryId' => $categoryId,
