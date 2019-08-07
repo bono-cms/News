@@ -19,21 +19,33 @@ final class PostGallery extends AbstractAdminController
      * Renders gallery form
      * 
      * @param mixed $image
-     * @return string
+     * @return mixed
      */
     private function createForm($image)
     {
-        // Load view plugins
-        $this->view->getPluginBag()->load('preview');
+        // Find a post using current active language
+        $post = $this->getModuleService('postManager')->fetchById($image->getPostId(), false, false);
 
-        // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', array(null)))
-                                       ->addOne('Edit the post', $this->createUrl('News:Admin:Post@editAction', array($image->getPostId())))
-                                       ->addOne($image->getId() ? 'Update image' : 'Add new image');
+        // Make sure right post ID supplied
+        if ($post !== false) {
+            // Load view plugins
+            $this->view->getPluginBag()->load('preview');
 
-        return $this->view->render('gallery.form', array(
-            'image' => $image
-        ));
+            // Generate a title for breadcrumbs
+            $title = $this->translator->translate('Edit the post "%s"', $post->getName());
+            
+            // Append breadcrumbs
+            $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', array(null)))
+                                           ->addOne($title, $this->createUrl('News:Admin:Post@editAction', array($image->getPostId())))
+                                           ->addOne($image->getId() ? 'Update image' : 'Add new image');
+
+            return $this->view->render('gallery.form', array(
+                'image' => $image
+            ));
+            
+        } else {
+            return false;
+        }
     }
 
     /**
