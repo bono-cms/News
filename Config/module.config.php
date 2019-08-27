@@ -6,7 +6,7 @@
 
 return array(
     'name' => 'News',
-    'route' => array('News:Admin:Browser@indexAction', null),
+    'route' => array('News:Admin:Post@indexAction', null),
     'description' => 'News module allows you to manage news on your site',
     // Bookmarks of this module
     'bookmarks' => array(
@@ -21,7 +21,7 @@ return array(
         'icon' => 'fas fa-newspaper',
         'items' => array(
             array(
-                'route' => 'News:Admin:Browser@indexAction',
+                'route' => 'News:Admin:Post@indexAction',
                 'name' => 'View all news'
             ),
             array(
