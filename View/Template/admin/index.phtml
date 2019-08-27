@@ -8,7 +8,7 @@ defined('KRYSTAL') or die;
 
 ?>
 
-<form action="<?= $route; ?>" autocomplete="off">
+<form autocomplete="off">
     <div class="btn-toolbar">
         <div class="btn-group mr-2">
             <?php $this->loadPartial('menu', array(
@@ -145,7 +145,7 @@ defined('KRYSTAL') or die;
                 }
             )
 
-        ), $route)); ?>
+        ))); ?>
 
         <?php if (empty($posts)): ?>
         <div class="center-block">
@@ -162,12 +162,6 @@ defined('KRYSTAL') or die;
         <div class="table-responsive">
             <?= $this->widget(new GridViewWidget($categories, array(
                 'tableClass' => 'table table-hover table-bordered table-striped',
-                'rowAttributes' => array(
-                    'class' => function($row) use ($categoryId){
-                        return $row['id'] == $categoryId ? 'table-info' : null;
-                    }
-                ),
-
                 'columns' => array(
                     array(
                         'column' => 'id',

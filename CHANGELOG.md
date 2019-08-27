@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Drop additional "browsing by category" functionality. This is no longer required because of available filter that does the same
  * Since now posts support image gallery
  * View counter since now works in mode "greater or equals" rather that "greater only" in `SiteService::getMostlyViewed()`
  * The second argument of `SiteService::getMostlyViewed()` since now accepts an array of category IDs and returns partitioned result

@@ -19,7 +19,7 @@ return array(
         'controller' => 'Post@indexAction'
     ),
 
-    '/%s/module/news/index/(:var)' => array(
+    '/%s/module/news' => array(
         'controller' => 'Admin:Browser@indexAction',
     ),
 
@@ -39,14 +39,6 @@ return array(
     
     '/%s/module/news/browse/(:var)' => array(
         'controller' => 'Admin:Browser@indexAction',
-    ),
-    
-    '/%s/module/news/browse/category/(:var)' => array(
-        'controller' => 'Admin:Browser@categoryAction'
-    ),
-    
-    '/%s/module/news/browse/category/(:var)/page/(:var)' => array(
-        'controller' => 'Admin:Browser@categoryAction'
     ),
     
     // Post gallery
