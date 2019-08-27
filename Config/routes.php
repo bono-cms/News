@@ -20,7 +20,7 @@ return array(
     ),
 
     '/%s/module/news' => array(
-        'controller' => 'Admin:Browser@indexAction',
+        'controller' => 'Admin:Post@indexAction',
     ),
 
     '/%s/module/news/config' => array(
@@ -35,10 +35,6 @@ return array(
     '/%s/module/news/tweak' => array(
         'controller' => 'Admin:Post@tweakAction',
         'disallow' => array('guest')
-    ),
-    
-    '/%s/module/news/browse/(:var)' => array(
-        'controller' => 'Admin:Browser@indexAction',
     ),
     
     // Post gallery

@@ -31,7 +31,7 @@ final class Category extends AbstractAdminController
                     ->load($this->getWysiwygPluginName());
 
         // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', array(null)))
+        $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Post@indexAction')
                                        ->addOne($title);
 
         return $this->view->render('category.form', array(

@@ -17,6 +17,29 @@ use Krystal\Stdlib\VirtualEntity;
 final class Post extends AbstractAdminController
 {
     /**
+     * Renders a grid
+     * 
+     * @return string
+     */
+    public function indexAction()
+    {
+        $postManager = $this->getModuleService('postManager');
+
+        $posts = $this->getFilter($postManager);
+
+        // Append a breadcrumb
+        $this->view->getBreadcrumbBag()
+                   ->addOne('News');
+
+        return $this->view->render('index', array(
+            'paginator' => $postManager->getPaginator(),
+            'posts' => $posts,
+            'categories' => $this->getCategoryManager()->fetchAll(),
+            'categoryList' => $this->getCategoryManager()->fetchList()
+        ));
+    }
+
+    /**
      * Creates a form
      * 
      * @param \Krystal\Stdlib\VirtualEntity|array $post
@@ -39,7 +62,7 @@ final class Post extends AbstractAdminController
                    ->load(array($this->getWysiwygPluginName(), 'datepicker', 'chosen'));
 
         // Append breadcrumbs
-        $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', [null]))
+        $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Post@indexAction')
                                        ->addOne($title);
 
         return $this->view->render('post.form', array(

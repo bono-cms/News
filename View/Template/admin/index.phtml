@@ -116,7 +116,7 @@ defined('KRYSTAL') or die;
                             'web_page_id' => $row['web_page_id'], 
                             'title' => rawurlencode($row['name']),
                             'module' => 'News',
-                            'back_url' => rawurlencode($this->url('News:Admin:Browser@indexAction', null))
+                            'back_url' => rawurlencode($this->url('News:Admin:Post@indexAction'))
                         ));
 
                         return Icon::polls($url, $this->translate('Polls of this page'));

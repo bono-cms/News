@@ -35,7 +35,7 @@ final class PostGallery extends AbstractAdminController
             $title = $this->translator->translate('Edit the post "%s"', $post->getName());
             
             // Append breadcrumbs
-            $this->view->getBreadcrumbBag()->addOne('News', $this->createUrl('News:Admin:Browser@indexAction', array(null)))
+            $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Post@indexAction')
                                            ->addOne($title, $this->createUrl('News:Admin:Post@editAction', array($image->getPostId())))
                                            ->addOne($image->getId() ? 'Update image' : 'Add new image');
 
