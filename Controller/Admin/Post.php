@@ -84,7 +84,10 @@ final class Post extends AbstractAdminController
         $this->view->getPluginBag()
                    ->load('preview');
 
-        $entity = $this->getPostManager()->fetchDummy();
+        // CMS configuration object
+        $config = $this->getService('Cms', 'configManager')->getEntity();
+        $entity = $this->getPostManager()->fetchDummy($config);
+
         return $this->createForm($entity, 'Add a post');
     }
 

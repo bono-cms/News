@@ -68,6 +68,8 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             PostTranslationMapper::column('name'),
             PostTranslationMapper::column('intro'),
             WebPageMapper::column('slug'),
+            WebPageMapper::column('changefreq'),
+            WebPageMapper::column('priority'),
             CategoryTranslationMapper::column('name') => 'category_name'
         );
 

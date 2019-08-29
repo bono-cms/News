@@ -49,7 +49,9 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
             CategoryTranslationMapper::column('web_page_id'),
             CategoryTranslationMapper::column('lang_id'),
             CategoryTranslationMapper::column('name'),
-            WebPageMapper::column('slug')
+            WebPageMapper::column('slug'),
+            WebPageMapper::column('changefreq'),
+            WebPageMapper::column('priority')
         );
 
         if ($all) {

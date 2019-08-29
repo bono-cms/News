@@ -46,8 +46,13 @@ final class Category extends AbstractAdminController
      */
     public function addAction()
     {
+        // CMS configuration object
+        $config = $this->getService('Cms', 'configManager')->getEntity();
+
         $category = new VirtualEntity();
-        $category->setSeo(true);
+        $category->setSeo(true)
+                 ->setChangeFreq($config->getSitemapFrequency())
+                 ->setPriority($config->getSitemapPriority());
 
         return $this->createForm($category, 'Add a category');
     }

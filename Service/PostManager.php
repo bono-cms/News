@@ -272,6 +272,8 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
                ->setCategoryName($post['category_name'], PostEntity::FILTER_HTML)
                ->setSlug($post['slug'], PostEntity::FILTER_HTML)
                ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
+               ->setChangeFreq($post['changefreq'])
+               ->setPriority($post['priority'])
                ->setName($post['name'], PostEntity::FILTER_HTML)
                ->setTimestamp($post['timestamp'], PostEntity::FILTER_INT)
                ->setTimeBag($timeBag)
@@ -287,9 +289,10 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     /**
      * Fetches dummy post entity
      * 
+     * @param \Krystal\Stdlib\VirtualEntity $config
      * @return \Krystal\Stdlib\VirtualEntity
      */
-    public function fetchDummy()
+    public function fetchDummy($config)
     {
         $timeBag = clone $this->timeBag;
         $timeBag->setTimestamp(time());
@@ -298,7 +301,9 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $post->setPublished(true)
              ->setSeo(true)
              ->setFront(true)
-             ->setTimeBag($timeBag);
+             ->setTimeBag($timeBag)
+             ->setChangeFreq($config->getSitemapFrequency())
+             ->setPriority($config->getSitemapPriority());
 
         return $post;
     }

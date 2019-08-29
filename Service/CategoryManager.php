@@ -126,7 +126,9 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
                ->setName($category['name'], VirtualEntity::FILTER_HTML)
                ->setSlug($category['slug'], VirtualEntity::FILTER_HTML)
                ->setPostCount(isset($category['post_count']) ? $category['post_count'] : 0, VirtualEntity::FILTER_INT)
-               ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()));
+               ->setUrl($this->webPageManager->surround($entity->getSlug(), $entity->getLangId()))
+               ->setChangeFreq($category['changefreq'])
+               ->setPriority($category['priority']);
 
         if ($all === true) {
             $entity->setTitle($category['title'], VirtualEntity::FILTER_HTML)
