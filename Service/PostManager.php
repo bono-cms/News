@@ -12,7 +12,6 @@
 namespace News\Service;
 
 use Krystal\Image\Tool\ImageManagerInterface;
-use Krystal\Security\Filter;
 use Krystal\Stdlib\ArrayUtils;
 use Krystal\Db\Filter\FilterableServiceInterface;
 use News\Storage\PostMapperInterface;
@@ -20,7 +19,6 @@ use News\Storage\CategoryMapperInterface;
 use News\Service\TimeBagInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
-use Cms\Service\HistoryManagerInterface;
 
 final class PostManager extends AbstractManager implements PostManagerInterface, FilterableServiceInterface
 {
@@ -53,13 +51,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     private $webPageManager;
 
     /**
-     * History Manager to keep track
-     * 
-     * @var \Cms\Service\HistoryManagerInterface
-     */
-    private $historyManager;
-
-    /**
      * Time bag to represent a timestamp in different formats
      * 
      * @var \News\Service\TimeBagInterface
@@ -74,7 +65,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      * @param \News\Service\TimeBagInterface $timeBag Time bag to represent timestamp in different formats
      * @param \News\Service\WebPageManagerInterface $webPageManager Web page manager to handle web pages
      * @param \Krystal\Image\Tool\ImageManager $imageManager Image manager to handle post's cover and its paths
-     * @param \Cms\Service\HistoryManagerInterface $historyManager History manager to keep track of latest actions
      * @return void
      */
     public function __construct(
@@ -82,15 +72,13 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         CategoryMapperInterface $categoryMapper, 
         TimeBagInterface $timeBag,
         WebPageManagerInterface $webPageManager, 
-        ImageManagerInterface $imageManager,
-        HistoryManagerInterface $historyManager
+        ImageManagerInterface $imageManager
     ){
         $this->postMapper = $postMapper;
         $this->categoryMapper = $categoryMapper;
         $this->timeBag = $timeBag;
         $this->webPageManager = $webPageManager;
         $this->imageManager = $imageManager;
-        $this->historyManager = $historyManager;
     }
 
     /**
@@ -190,7 +178,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
             }
         }
 
-        #$this->track('%s posts have been removed', count($ids));
         return true;
     }
 
@@ -202,15 +189,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      */
     public function deleteById($id)
     {
-        // Grab post's title before we remove it
-        #$title = Filter::escape($this->postMapper->fetchNameById($id));
-
-        if ($this->removeAllById($id)) {
-            #$this->track('Post "%s" has been removed', $title);
-            return true;
-        } else {
-            return false;
-        }
+        return $this->removeAllById($id);
     }
 
     /**
@@ -336,7 +315,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         $post['category_id'] = (int) $post['category_id'];
 
         // Remove extra keys if present
-        $data = ArrayUtils::arrayWithout($post, array('date', 'slug', 'remove_cover', 'attached'));
+        $data = ArrayUtils::arrayWithout($post, array('date', 'remove_cover', 'attached'));
 
         return $this->postMapper->savePage('News (Posts)', 'News:Post@indexAction', $data, $input['data']['translation']);
     }
@@ -370,7 +349,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         // Insert attached ones, if provided
         $this->postMapper->insertAttached($id, isset($data['attached']) ? $data['attached'] : array());
 
-        #$this->track('New post "%s" has been created', $data['name']);
         return true;
     }
 
@@ -412,8 +390,6 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
         // Update attached IDs
         $this->postMapper->updateAttached($post['id'], isset($post['attached']) ? $post['attached'] : array());
 
-        // And finally now just track it
-        #$this->track('Post "%s" has been updated', $post['name']);
         return true;
     }
 
@@ -551,17 +527,5 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     public function fetchAll()
     {
         return $this->postMapper->fetchAll();
-    }
-
-    /**
-     * Tracks activity
-     * 
-     * @param string $message
-     * @param string $placeholder
-     * @return boolean
-     */
-    private function track($message, $placeholder)
-    {
-        return $this->historyManager->write('News', $message, $placeholder);
     }
 }

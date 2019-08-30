@@ -39,8 +39,8 @@ final class Module extends AbstractCmsModule
         $config = $configManager->getEntity();
 
         $imageManager = $this->createPostImageManager($config);
-        $postManager = new PostManager($postMapper, $categoryMapper, TimeBag::factory($config), $webPageManager, $imageManager, $historyManager);
-        $categoryManager = new CategoryManager($categoryMapper, $postMapper, $webPageManager, $historyManager, $imageManager);
+        $postManager = new PostManager($postMapper, $categoryMapper, TimeBag::factory($config), $webPageManager, $imageManager);
+        $categoryManager = new CategoryManager($categoryMapper, $postMapper, $webPageManager, $imageManager);
 
         return array(
             'siteService' => new SiteService($postManager, $categoryManager, $config),

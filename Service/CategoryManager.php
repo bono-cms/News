@@ -13,11 +13,9 @@ namespace News\Service;
 
 use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
-use Cms\Service\HistoryManagerInterface;
 use News\Storage\CategoryMapperInterface;
 use News\Storage\PostMapperInterface;
 use Krystal\Stdlib\VirtualEntity;
-use Krystal\Security\Filter;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Stdlib\ArrayUtils;
 
@@ -45,13 +43,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     private $webPageManager;
 
     /**
-     * History manager to track activity
-     * 
-     * @var \Cms\Service\HistoryManagerInterface
-     */
-    private $historyManager;
-
-    /**
      * Image manager to remove post images when removing a category
      * 
      * @var \Krystal\Image\Tool\ImageManagerInterface
@@ -64,7 +55,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * @param \News\Storage\CategoryMapperInterface $categoryMapper
      * @param \News\Storage\PostMapperInterface $postMapper
      * @param \Cms\Service\WebPageManagerInterface $webPageManager
-     * @param \Cms\Service\HistoryManagerInterface $historyManager
      * @param \Krystal\Image\Tool\ImageManager $imageManager
      * @return void
      */
@@ -72,13 +62,11 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
         CategoryMapperInterface $categoryMapper, 
         PostMapperInterface $postMapper, 
         WebPageManagerInterface $webPageManager,
-        HistoryManagerInterface $historyManager,
         ImageManagerInterface $imageManager
     ){
         $this->categoryMapper = $categoryMapper;
         $this->postMapper = $postMapper;
         $this->webPageManager = $webPageManager;
-        $this->historyManager = $historyManager;
         $this->imageManager = $imageManager;
     }
 
@@ -181,7 +169,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function add(array $input)
     {
-        #$this->track('Category "%s" has been created', $category['name']);
         return $this->savePage($input);
     }
 
@@ -193,7 +180,6 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      */
     public function update(array $input)
     {
-        #$this->track('Category "%s" has been updated', $category['name']);
         return $this->savePage($input);
     }
 
@@ -216,69 +202,17 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
     /**
      * Deletes a category by its associated id
      * 
-     * @param string $id Category's id
+     * @param string $id Category id
      * @return boolean Depending on success
      */
     public function deleteById($id)
     {
-        // Grab category's title before we remove it
-        #$title = Filter::escape($this->categoryMapper->fetchNameById($id));
-
-        if ($this->removeAllById($id)) {
-            #$this->track('Category "%s" has been removed', $title);
-            return true;
-
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Removes a category by it associated id
-     * 
-     * @param string $id Category's id
-     * @return boolean
-     */
-    private function removeAllById($id)
-    {
         // The order of execution is important
         $this->categoryMapper->deletePage($id);
-        $this->removeAllPostImagesByCategoryId($id);
+        $this->imageManager->deleteMany($this->postMapper->fetchAllIdsWithImagesByCategoryId($id));
 
         // Post IDs to be deleted
         $ids = $this->postMapper->findPostIdsByCategoryId($id);
         return $this->postMapper->deletePage($ids);
-    }
-
-    /**
-     * Removes all post images associated with category id
-     * 
-     * @param string $id Category's id
-     * @return boolean
-     */
-    private function removeAllPostImagesByCategoryId($id)
-    {
-        $ids = $this->postMapper->fetchAllIdsWithImagesByCategoryId($id);
-
-        // Do the work, in case there's at least one id
-        if (!empty($ids)) {
-            foreach ($ids as $id) {
-                $this->imageManager->delete($id);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Tracks activity
-     * 
-     * @param string $message
-     * @param string $placeholder
-     * @return boolean
-     */
-    private function track($message, $placeholder)
-    {
-        return $this->historyManager->write('News', $message, $placeholder);
     }
 }

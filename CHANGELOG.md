@@ -4,6 +4,7 @@ CHANGELOG
 1.2
 ---
 
+ * Moved history tracker of out main service into the main controller
  * Drop additional "browsing by category" functionality. This is no longer required because of available filter that does the same
  * Since now posts support image gallery
  * View counter since now works in mode "greater or equals" rather that "greater only" in `SiteService::getMostlyViewed()`
