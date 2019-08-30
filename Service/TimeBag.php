@@ -13,7 +13,7 @@ namespace News\Service;
 
 use Krystal\Stdlib\VirtualEntity;
 
-final class TimeBag implements TimeBagInterface
+final class TimeBag
 {
     /**
      * Current timestamp

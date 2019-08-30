@@ -16,7 +16,7 @@ use Krystal\Image\Tool\ImageManager;
 use Cms\Service\AbstractManager;
 use News\Storage\PostGalleryMapperInterface;
 
-final class PostGalleryManager extends AbstractManager implements PostGalleryManagerInterface
+final class PostGalleryManager extends AbstractManager
 {
     /**
      * Any compliant post gallery mapper

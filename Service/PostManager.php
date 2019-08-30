@@ -20,7 +20,7 @@ use News\Service\TimeBagInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
 
-final class PostManager extends AbstractManager implements PostManagerInterface, FilterableServiceInterface
+final class PostManager extends AbstractManager implements FilterableServiceInterface
 {
     /**
      * Any-compliant post mapper
@@ -53,7 +53,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     /**
      * Time bag to represent a timestamp in different formats
      * 
-     * @var \News\Service\TimeBagInterface
+     * @var \News\Service\TimeBag
      */
     private $timeBag;
 
@@ -62,7 +62,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
      * 
      * @param \News\Service\PostMapperInterface $postMapper Any compliant post mapper
      * @param \News\Service\CategoryMapperInterface $categoryMapper Any compliant category mapper
-     * @param \News\Service\TimeBagInterface $timeBag Time bag to represent timestamp in different formats
+     * @param \News\Service\TimeBag $timeBag Time bag to represent timestamp in different formats
      * @param \News\Service\WebPageManagerInterface $webPageManager Web page manager to handle web pages
      * @param \Krystal\Image\Tool\ImageManager $imageManager Image manager to handle post's cover and its paths
      * @return void
@@ -70,7 +70,7 @@ final class PostManager extends AbstractManager implements PostManagerInterface,
     public function __construct(
         PostMapperInterface $postMapper, 
         CategoryMapperInterface $categoryMapper, 
-        TimeBagInterface $timeBag,
+        TimeBag $timeBag,
         WebPageManagerInterface $webPageManager, 
         ImageManagerInterface $imageManager
     ){

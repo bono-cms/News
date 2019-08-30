@@ -19,7 +19,7 @@ use Krystal\Stdlib\VirtualEntity;
 use Krystal\Image\Tool\ImageManagerInterface;
 use Krystal\Stdlib\ArrayUtils;
 
-final class CategoryManager extends AbstractManager implements CategoryManagerInterface
+final class CategoryManager extends AbstractManager
 {
     /**
      * Any compliant category mapper
@@ -155,32 +155,10 @@ final class CategoryManager extends AbstractManager implements CategoryManagerIn
      * @param array $input
      * @return boolen
      */
-    private function savePage(array $input)
+    public function save(array $input)
     {
         $input['category'] = ArrayUtils::arrayWithout($input['category'], array('slug'));
         return $this->categoryMapper->savePage('News (Categories)', 'News:Category@indexAction', $input['category'], $input['translation']);
-    }
-
-    /**
-     * Adds a category
-     * 
-     * @param array $input Raw input data
-     * @return boolean Depending on success
-     */
-    public function add(array $input)
-    {
-        return $this->savePage($input);
-    }
-
-    /**
-     * Updates a category
-     * 
-     * @param array $input Raw input data
-     * @return boolean Depending on success
-     */
-    public function update(array $input)
-    {
-        return $this->savePage($input);
     }
 
     /**

@@ -122,22 +122,19 @@ final class Category extends AbstractAdminController
             $historyService = $this->getService('Cms', 'historyManager');
 
             $name = $this->getCurrentProperty($this->request->getPost('translation'), 'name');
+            $service->save($this->request->getPost());
 
             if (!empty($input['id'])) {
-                if ($service->update($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The element has been updated successfully');
+                $this->flashBag->set('success', 'The element has been updated successfully');
 
-                    $historyService->write('News', 'Category "%s" has been updated', $name);
-                    return '1';
-                }
+                $historyService->write('News', 'Category "%s" has been updated', $name);
+                return '1';
 
             } else {
-                if ($service->add($this->request->getPost())) {
-                    $this->flashBag->set('success', 'The element has been created successfully');
+                $this->flashBag->set('success', 'The element has been created successfully');
 
-                    $historyService->write('News', 'Category "%s" has been created', $name);
-                    return $service->getLastId();
-                }
+                $historyService->write('News', 'Category "%s" has been created', $name);
+                return $service->getLastId();
             }
 
         } else {

@@ -13,19 +13,19 @@ namespace News\Service;
 
 use Krystal\Stdlib\VirtualEntity;
 
-final class SiteService implements SiteServiceInterface
+final class SiteService
 {
     /**
      * Post service
      * 
-     * @var \News\Service\PostManagerInterface
+     * @var \News\Service\PostManager
      */
     private $postManager;
 
     /**
      * Category service
      * 
-     * @var \News\Service\CategoryManagerInterface
+     * @var \News\Service\CategoryManager
      */
     private $categoryManager;
 
@@ -39,12 +39,12 @@ final class SiteService implements SiteServiceInterface
     /**
      * State initialization
      * 
-     * @param \News\Service\PostManagerInterface $postManager
-     * @param \News\Service\CategoryManagerInterface $categoryManager
+     * @param \News\Service\PostManager $postManager
+     * @param \News\Service\CategoryManager $categoryManager
      * @param \Krystal\Stdlib\VirtualEntity $config
      * @return void
      */
-    public function __construct(PostManagerInterface $postManager, CategoryManagerInterface $categoryManager, VirtualEntity $config)
+    public function __construct(PostManager $postManager, CategoryManager $categoryManager, VirtualEntity $config)
     {
         $this->postManager = $postManager;
         $this->categoryManager = $categoryManager;
