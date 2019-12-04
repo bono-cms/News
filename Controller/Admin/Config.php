@@ -19,6 +19,11 @@ final class Config extends AbstractConfigController
     /**
      * {@inheritDoc}
      */
+    protected $parent = 'News:Admin:Post@indexAction';
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getValidationRules()
     {
         return array(
