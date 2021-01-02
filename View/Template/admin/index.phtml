@@ -11,19 +11,19 @@ defined('KRYSTAL') or die;
 <form autocomplete="off">
     <div class="btn-toolbar">
         <div class="btn-group mr-2">
-            <?php $this->loadPartial('menu', array(
-                'items' => array(
+            <?php $this->loadPartial('menu', [
+                'items' => [
                     'News:Admin:Post@addAction' => 'Add new post',
                     'News:Admin:Category@addAction' => 'Add new category',
                     'News:Admin:Config@indexAction' => 'Configuration'
-                ),
+                ],
 
-                'actions' => array(
+                'actions' => [
                     'data' => $posts,
                     'save' => 'News:Admin:Post@tweakAction',
                     'delete' => 'News:Admin:Post@deleteAction'
-                )
-            )); ?>
+                ]
+            ]); ?>
         </div>
 
         <div class="btn-group mr-2">
@@ -32,42 +32,45 @@ defined('KRYSTAL') or die;
     </div>
 
     <div class="card">
-        <?php $this->loadPartial('items-per-page', array('caption' => 'News')); ?>
+        <?php $this->loadPartial('items-per-page', ['caption' => 'News']); ?>
 
-        <?= $this->widget(new GridViewWidget($posts, array(
+        <?= $this->widget(new GridViewWidget($posts, [
             'pk' => 'id',
             'batch' => true,
             'tableClass' => 'table table-hover table-bordered table-striped',
-            'columns' => array(
-                array(
+            'columns' => [
+                [
                     'column' => 'id',
                     'label' => '#'
-                ),
+                ],
 
-                array(
+                [
                     'column' => 'name',
                     'type' => 'text',
-                    'filter' => true
-                ),
+                    'filter' => true,
+                    'attributes' => [
+                        'class' => null
+                    ]
+                ],
 
-                array(
+                [
                     'column' => 'date',
                     'type' => 'text',
                     'filter' => false,
                     'value' => function($entity){
                         return $entity->getTimeBag()->getPanelFormat();
                     }
-                ),
+                ],
 
-                array(
+                [
                     'column' => 'category_name',
                     'name' => 'category_id', // Set explicit name
                     'label' => 'Category',
                     'type' => 'select',
                     'filter' => $categoryList
-                ),
+                ],
 
-                array(
+                [
                     'column' => 'published',
                     'type' => 'select',
                     'filter' => true,
@@ -78,9 +81,9 @@ defined('KRYSTAL') or die;
                         '0' => 'No',
                         '1' => 'Yes',
                     ])
-                ),
+                ],
 
-                array(
+                [
                     'column' => 'seo',
                     'label' => 'SEO',
                     'filter' => true,
@@ -92,9 +95,9 @@ defined('KRYSTAL') or die;
                         '0' => 'No',
                         '1' => 'Yes'
                     ])
-                ),
+                ],
 
-                array(
+                [
                     'column' => 'front',
                     'type' => 'select',
                     'value' => function($row){
@@ -104,20 +107,20 @@ defined('KRYSTAL') or die;
                         '0' => 'No',
                         '1' => 'Yes'
                     ])
-                )
-            ),
+                ]
+            ],
 
-            'actions' => array(
+            'actions' => [
                 'polls' => function($row) use ($loadedModules){
                     // If polls module is loaded, then show its link
                     if (in_array('Polls', $loadedModules)) {
                         // Create dynamic URL
-                        $url = $this->createQueryUrl('Polls:Admin:WebPage@indexAction', array(
+                        $url = $this->createQueryUrl('Polls:Admin:WebPage@indexAction', [
                             'web_page_id' => $row['web_page_id'], 
                             'title' => rawurlencode($row['name']),
                             'module' => 'News',
                             'back_url' => rawurlencode($this->url('News:Admin:Post@indexAction'))
-                        ));
+                        ]);
 
                         return Icon::polls($url, $this->translate('Polls of this page'));
                     } else {
@@ -143,9 +146,9 @@ defined('KRYSTAL') or die;
                         $this->translate('Remove this post')
                     );
                 }
-            )
+            ]
 
-        ))); ?>
+        ])); ?>
 
         <?php if (empty($posts)): ?>
         <div class="center-block">
@@ -157,28 +160,31 @@ defined('KRYSTAL') or die;
     </div>
 
     <div class="card">
-        <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?php echo count($categories); ?>)</h4>
+        <h4><i class="glyphicon glyphicon-th-list"></i> <?php $this->show('Categories'); ?> (<?= count($categories); ?>)</h4>
 
         <div class="table-responsive">
-            <?= $this->widget(new GridViewWidget($categories, array(
+            <?= $this->widget(new GridViewWidget($categories, [
                 'tableClass' => 'table table-hover table-bordered table-striped',
-                'columns' => array(
-                    array(
+                'columns' => [
+                    [
                         'column' => 'id',
                         'label' => '#'
-                    ),
+                    ],
 
-                    array(
+                    [
                         'column' => 'name',
-                    ),
+                        'attributes' => [
+                            'class' => null
+                        ]
+                    ],
 
-                    array(
+                    [
                         'column' => 'post_count',
                         'label' => 'Amount of news'
-                    )
-                ),
+                    ]
+                ],
 
-                'actions' => array(
+                'actions' => [
                     'view' => function($row){
                         return Icon::view($row['url'], $this->translate('View this category on site'));
                     },
@@ -196,8 +202,8 @@ defined('KRYSTAL') or die;
                             $this->translate('Remove this category')
                         );
                     }
-                )
-            ))); ?>
+                ]
+            ])); ?>
 
             <?php if (empty($categories)): ?>
             <div class="center-block">
