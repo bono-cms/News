@@ -234,8 +234,7 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
                    ->setFull($post['full'], PostEntity::FILTER_SAFE_TAGS)
                    ->setPermanentUrl('/module/news/post/'.$entity->getId())
                    ->setKeywords($post['keywords'], PostEntity::FILTER_HTML)
-                   ->setMetaDescription($post['meta_description'], PostEntity::FILTER_HTML)
-                   ->setViewCount($post['views'], PostEntity::FILTER_INT);
+                   ->setMetaDescription($post['meta_description'], PostEntity::FILTER_HTML);
 
             // Attached ones if available
             if (isset($post[PostMapperInterface::PARAM_COLUMN_ATTACHED])) {
@@ -260,7 +259,8 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
                ->setSeo($post['seo'], PostEntity::FILTER_BOOL)
                ->setFront($post['front'], PostEntity::FILTER_BOOL)
                ->setCover($post['cover'], PostEntity::FILTER_HTML)
-               ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS);
+               ->setIntro($post['intro'], PostEntity::FILTER_SAFE_TAGS)
+               ->setViewCount($post['views'], PostEntity::FILTER_INT);
 
         return $entity;
     }

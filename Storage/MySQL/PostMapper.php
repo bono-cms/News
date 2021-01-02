@@ -63,6 +63,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             self::column('cover'),
             self::column('seo'),
             self::column('front'),
+            self::column('views'),
             PostTranslationMapper::column('web_page_id'),
             PostTranslationMapper::column('lang_id'),
             PostTranslationMapper::column('name'),
@@ -78,8 +79,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
                 PostTranslationMapper::column('title'),
                 PostTranslationMapper::column('full'),
                 PostTranslationMapper::column('keywords'),
-                PostTranslationMapper::column('meta_description'),
-                self::column('views')
+                PostTranslationMapper::column('meta_description')
             ));
         }
 
