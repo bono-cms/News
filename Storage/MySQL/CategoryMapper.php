@@ -84,19 +84,19 @@ final class CategoryMapper extends AbstractMapper implements CategoryMapperInter
                         ->innerJoin(self::getTableName(), array(
                             PostMapper::column('category_id') => self::getRawColumn('id')
                         ))
-                        // Post translation relation
-                        ->innerJoin(PostTranslationMapper::getTableName(), array(
-                            PostMapper::column('id') => PostTranslationMapper::getRawColumn('id')
-                        ))
                         // Category translation relation
                         ->innerJoin(CategoryTranslationMapper::getTableName(), array(
                             self::column('id') => CategoryTranslationMapper::getRawColumn('id')
                         ))
+                        // Post translation relation
+                        ->innerJoin(PostTranslationMapper::getTableName(), array(
+                            PostMapper::column('id') => PostTranslationMapper::getRawColumn('id'),
+                            PostTranslationMapper::column('lang_id') => CategoryTranslationMapper::getRawColumn('lang_id')
+                        ))
                         // Filtering condition
-                        ->whereEquals(
-                            CategoryTranslationMapper::column('lang_id'), 
-                            $this->getLangId()
-                        );
+                        ->whereEquals(CategoryTranslationMapper::column('lang_id'), $this->getLangId())
+                        ->andWhereNotEquals(PostTranslationMapper::column('name'), '')
+                        ->andWhereNotEquals(CategoryTranslationMapper::column('name'), '');
 
         // If excluded post ID provided explicitly, then append it on condition
         if ($excludedId !== null && is_numeric($excludedId)) {
