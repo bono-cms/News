@@ -34,7 +34,7 @@ CREATE TABLE `bono_module_news_posts` (
     `views` INT NOT NULL,
     `front` BOOLEAN NOT NULL COMMENT 'Whether this post must be front',
 
-    FOREIGN KEY (category_id) REFERENCES bono_module_news_categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES bono_module_news_categories(id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = UTF8;
 
 DROP TABLE IF EXISTS `bono_module_news_posts_translations`;
