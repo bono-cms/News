@@ -504,7 +504,8 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
      */
     public function fetchAllPublishedByCategoryId($categoryId, $limit)
     {
-        return $this->prepareResults($this->postMapper->fetchAllByPage($categoryId, true, true, null, $limit), false);
+        $rows = $this->postMapper->fetchAllByPage($categoryId, true, true, null, $limit);
+        return $this->prepareResults($rows, true);
     }
 
     /**
