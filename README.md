@@ -62,7 +62,7 @@ Basic example:
        <?= $post->getFull(); ?>
     </article>
     
-    <p>Views: <?= $post->getViewCount()(); ?></p>
+    <p>Views: <?= $post->getViewCount(); ?></p>
 
 ### Post template with image gallery
 
@@ -101,8 +101,8 @@ Each post entity has the following methods:
     $post->getGallery(); // Returns an array of gallery entities
     $post->getImageUrl('500x500'); // Returns full URL to cover image
     $post->getViewCount(); // Returns view count
-    $post->getCategoryName();
-    $post->hasGallery(); // True, if at 
+    $post->getCategoryName(); // Returns category name, if available
+    $post->hasGallery(); // True, if there's at least one uploaded gallery image
 
 To display a time, you can use the following methods:
 
