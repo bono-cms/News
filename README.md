@@ -85,7 +85,7 @@ Basic example:
     </div>
     <?php endif; ?>
     
-    <p>Views: <?= $post->getViewCount()(); ?></p>
+    <p>Views: <?= $post->getViewCount(); ?></p>
 
 ### Available methods
 
