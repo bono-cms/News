@@ -27,7 +27,7 @@ defined('KRYSTAL') or die;
         </div>
 
         <div class="btn-group mr-2">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> <? $this->show('Filter'); ?></button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> <?= $this->translate('Filter'); ?></button>
         </div>
     </div>
 
@@ -147,7 +147,6 @@ defined('KRYSTAL') or die;
                     );
                 }
             ]
-
         ])); ?>
 
         <?php if (empty($posts)): ?>
