@@ -87,6 +87,18 @@ Basic example:
     
     <p>Views: <?= $post->getViewCount(); ?></p>
 
+## URL Generation
+
+### Categories
+To generate a URL for a category by its ID (assuming the category ID is 1), use:
+
+    <a href="<?= $cms->createUrl(1, 'News (Categories)'); ?>">View category</a>
+
+### Posts
+To generate a URL for a post by its ID (assuming the post ID is 1), use:
+
+    <a href="<?= $cms->createUrl(1, 'News (Posts)'); ?>">View post</a>
+
 ### Available methods
 
 Each post entity has the following methods:
@@ -117,3 +129,4 @@ You'd have a global `$news` object available across all your templates. It has t
     $news->getAllByCategoryId($categoryId, $limit); // Returns posts within a category
     $news->getRecent($limit, $categoryId = null); // Returns recent posts
     $news->getRandom($limit, $categoryId = null); // Returns random post entity
+
