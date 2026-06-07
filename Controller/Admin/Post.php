@@ -11,7 +11,7 @@
 
 namespace News\Controller\Admin;
 
-use Krystal\Validate\Pattern;
+use Krystal\Validation\Validator;
 use Krystal\Stdlib\VirtualEntity;
 
 final class Post extends AbstractAdminController
@@ -171,28 +171,28 @@ final class Post extends AbstractAdminController
     {
         $post = $this->request->getPost('post');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $post,
-                'definition' => array(
-                    'name' => new Pattern\Name(),
-                    'intro' => new Pattern\IntroText(),
-                    'full'  => new Pattern\FullText(),
-                    'date' => new Pattern\DateFormat('m/d/Y')
-                )
-            ),
+        $validator = (new Validator(
+            $this->request->getPost(),
+            $this->request->getFiles()
+        ))->setTranslator($this->translator, $this->appConfig->getLanguage());
 
-            'file' => array(
-                'source' => $this->request->getFiles(),
-                'definition' => array(
-                    'file' => new Pattern\ImageFile(array(
-                        'required' => false
-                    ))
-                )
-            )
-        ));
+        $validator->field('translation.*.name', 'Post name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 5]);
 
-        if (1) {
+        $validator->field('translation.*.full', 'Post content')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 10]);
+
+        $validator->field('post.date', 'Date format')
+                  ->required()
+                  ->addRule('dateformat', null, ['format' => 'm/d/Y']);
+
+        $validator->file('file')
+                  ->required('The cover is required', (bool) !$post['id']) // Required on "Add", not required on "Edit"
+                  ->addRule('image');
+
+        if ($validator->isPassed()) {
             $service = $this->getModuleService('postManager');
 
             $historyService = $this->getService('Cms', 'historyManager');
@@ -216,7 +216,9 @@ final class Post extends AbstractAdminController
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }
