@@ -21,7 +21,7 @@ This template renders news categories and their associated post listings. Here's
        <?= $category->getDescription(); ?>
     </div>
     
-    <?php if (empty($posts)): ?>
+    <?php if (!empty($posts)): ?>
     <div class="row">
        <?php foreach ($posts as $post): ?>
        <div class="col-lg-4">
