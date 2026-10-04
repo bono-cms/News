@@ -49,13 +49,13 @@ defined('KRYSTAL') or die;
                     <?= Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
                     <?= Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
 
-                    <?php $this->loadPartial('language-name', array('language' => $language)); ?>
+                    <?php $this->loadPartial('language-name', ['language' => $language]); ?>
 
                     <div class="form-group row mb-3">
                         <label class="col-lg-2 col-form-label"><?= $this->translate('Name'); ?></label>
                         <div class="col-lg-10">
                             <div class="input-group">
-                                <?= Element::text(sprintf('translation[%s][name]', $language->getId()), Filter::charsDecode($entity->getName()), array('class' => 'form-control', 'placeholder' => $this->translate('Post name'))); ?>
+                                <?= Element::text(sprintf('translation[%s][name]', $language->getId()), Filter::charsDecode($entity->getName()), ['class' => 'form-control', 'placeholder' => $this->translate('Post name')]); ?>
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                                 </div>
@@ -66,14 +66,14 @@ defined('KRYSTAL') or die;
                     <div class="form-group row mb-3">
                         <label class="col-lg-2 col-form-label"><?= $this->translate('Introduction'); ?></label>
                         <div class="col-lg-10">
-                            <?= Element::textarea(sprintf('translation[%s][intro]', $language->getId()), $entity->getIntro(), array('data-wysiwyg' => 'true')); ?>
+                            <?= Element::textarea(sprintf('translation[%s][intro]', $language->getId()), $entity->getIntro(), ['data-wysiwyg' => 'true']); ?>
                         </div>
                     </div>
 
                     <div class="form-group row mb-3">
                         <label class="col-lg-2 col-form-label"><?= $this->translate('Full text'); ?></label>
                         <div class="col-lg-10">
-                            <?= Element::textarea(sprintf('translation[%s][full]', $language->getId()), $entity->getFull(), array('data-wysiwyg' => 'true')); ?>
+                            <?= Element::textarea(sprintf('translation[%s][full]', $language->getId()), $entity->getFull(), ['data-wysiwyg' => 'true']); ?>
                         </div>
                     </div>
 
@@ -82,7 +82,7 @@ defined('KRYSTAL') or die;
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Slug'); ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
-                                    <?= Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), array('class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this post. By default its taken from the name'))); ?>
+                                    <?= Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), ['class' => 'form-control', 'data-input' => 'slug', 'placeholder' => $this->translate('URL slug for this post. By default its taken from the name')]); ?>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <a href="#" class="text-secondary" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>">
@@ -97,14 +97,14 @@ defined('KRYSTAL') or die;
                         <div class="form-group row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Change frequency'); ?></label>
                             <div class="col-lg-10">
-                                <?= Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), array('class' => 'form-control')); ?>
+                                <?= Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), ['class' => 'form-control']); ?>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Priority'); ?></label>
                             <div class="col-lg-10">
-                                <?= Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), array('class' => 'form-control')); ?>
+                                <?= Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), ['class' => 'form-control']); ?>
                             </div>
                         </div>
 
@@ -112,7 +112,7 @@ defined('KRYSTAL') or die;
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Title'); ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
-                                    <?= Element::text(sprintf('translation[%s][title]', $language->getId()), Filter::charsDecode($entity->getTitle()), array('class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's title"))); ?>
+                                    <?= Element::text(sprintf('translation[%s][title]', $language->getId()), Filter::charsDecode($entity->getTitle()), ['class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Post's title")]); ?>
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                                     </div>
@@ -123,14 +123,14 @@ defined('KRYSTAL') or die;
                         <div class="form-group row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Keywords'); ?></label>
                             <div class="col-lg-10">
-                                <?= Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), array('class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines'))); ?>
+                                <?= Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), ['class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines')]); ?>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Description'); ?></label>
                             <div class="col-lg-10">
-                                <?= Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), array('class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines'))); ?>
+                                <?= Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), ['class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines')]); ?>
                             </div>
                         </div>
                     </div>
@@ -139,14 +139,14 @@ defined('KRYSTAL') or die;
             </div>
 
             <div class="mt-3">
-                <?php $this->loadPartial('actions', array(
+                <?php $this->loadPartial('actions', [
                     'new' => !$entity->getId(),
                     'add' => 'News:Admin:Post@addAction',
                     'edit' => 'News:Admin:Post@editAction',
                     'save' => 'News:Admin:Post@saveAction',
                     'cancel' => 'News:Admin:Post@indexAction',
                     'options' => true
-                )); ?>
+                ]); ?>
             </div>
         </div>
 
@@ -158,7 +158,7 @@ defined('KRYSTAL') or die;
             <div class="form-group row mb-3">
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Attached posts'); ?></label>
                 <div class="col-lg-10">
-                    <?= Element::select('post[attached][]', $posts, $entity->getAttachedIds(), array('class' => 'form-control', 'data-plugin' => 'chosen', 'data-placeholder' => ' ', 'multiple' => true)); ?>
+                    <?= Element::select('post[attached][]', $posts, $entity->getAttachedIds(), ['class' => 'form-control', 'data-plugin' => 'chosen', 'data-placeholder' => ' ', 'multiple' => true]); ?>
                 </div>
             </div>
             <?php endif; ?>
@@ -167,7 +167,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Front'); ?></label>
                 <div class="col-lg-10">
                     <div class="form-check form-switch mt-2">
-                        <?= Element::checkbox('post[front]', $entity->getFront(), array('class' => 'form-check-input')); ?>
+                        <?= Element::checkbox('post[front]', $entity->getFront(), ['class' => 'form-check-input']); ?>
                     </div>
                 </div>
             </div>
@@ -176,7 +176,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Published'); ?></label>
                 <div class="col-lg-10">
                     <div class="form-check form-switch mt-2">
-                        <?= Element::checkbox('post[published]', $entity->getPublished(), array('class' => 'form-check-input')); ?>
+                        <?= Element::checkbox('post[published]', $entity->getPublished(), ['class' => 'form-check-input']); ?>
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Enable SEO'); ?></label>
                 <div class="col-lg-10">
                     <div class="form-check form-switch mt-2">
-                        <?= Element::checkbox('post[seo]', $entity->getSeo(), array('class' => 'form-check-input')); ?>
+                        <?= Element::checkbox('post[seo]', $entity->getSeo(), ['class' => 'form-check-input']); ?>
                     </div>
                 </div>
             </div>
@@ -193,7 +193,7 @@ defined('KRYSTAL') or die;
             <div class="form-group row mb-3">
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Category'); ?></label>
                 <div class="col-lg-10">
-                    <?= Element::select('post[category_id]', $categories, $entity->getCategoryId(), array('class' => 'form-control')); ?>
+                    <?= Element::select('post[category_id]', $categories, $entity->getCategoryId(), ['class' => 'form-control']); ?>
                 </div>
             </div>
 
@@ -201,7 +201,7 @@ defined('KRYSTAL') or die;
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Date'); ?></label>
                 <div class="col-lg-10">
                     <div class="input-group">
-                        <?= Element::text('post[date]', $entity->getTimeBag()->getPanelFormat(), array('class' => 'form-control', 'placeholder' => $this->translate('Date of the post'))); ?>
+                        <?= Element::text('post[date]', $entity->getTimeBag()->getPanelFormat(), ['class' => 'form-control', 'placeholder' => $this->translate('Date of the post')]); ?>
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="bi bi-calendar-event" data-toggle="tooltip" title="<?= $this->translate('Change the date'); ?>"></i></span>
                         </div>
@@ -229,7 +229,7 @@ defined('KRYSTAL') or die;
                     <a class="btn btn-outline-primary" data-button="upload" data-target="[name='file']" href="#">
                         <i class="bi bi-image"></i> <?= $this->translate('Upload a file'); ?>
                     </a>
-                    <?= Element::file('file', 'image/x-png, image/gif, image/jpeg', array('class' => 'd-none', 'data-plugin' => 'preview')); ?>
+                    <?= Element::file('file', 'image/x-png, image/gif, image/jpeg', ['class' => 'd-none', 'data-plugin' => 'preview']); ?>
                 </div>
             </div>
         </div>
@@ -243,36 +243,36 @@ defined('KRYSTAL') or die;
                 </a>
             </div>
 
-            <?= $this->widget(new GridViewWidget($images, array(
+            <?= $this->widget(new GridViewWidget($images, [
                 'tableClass' => 'table table-hover table-bordered table-striped',
-                'columns' => array(
-                    array(
+                'columns' => [
+                    [
                         'column' => 'image',
                         'value' => function($entity){
-                            return Element::image($entity->getImageUrl('400x400'), array('class' => 'img-fluid mx-auto d-block rounded', 'style' => 'max-height: 150px;'));
+                            return Element::image($entity->getImageUrl('400x400'), ['class' => 'img-fluid mx-auto d-block rounded', 'style' => 'max-height: 150px;']);
                         }
-                    ),
-                    array(
+                    ],
+                    [
                         'column' => 'order'
-                    )
-                ),
+                    ]
+                ],
 
-                'actions' => array(
-                    'edit' => function($entity){
+                'actions' => [
+                    function($entity){
                         return Icon::edit(
                             $this->url('News:Admin:PostGallery@editAction', $entity['id']),
                             $this->translate('Edit this image')
                         );
                     },
 
-                    'delete' => function($entity){
+                    function($entity){
                         return Icon::remove(
                             $this->url('News:Admin:PostGallery@deleteAction', $entity['id']),
                             $this->translate('Remove this image')
                         );
                     }
-                )
-            ))); ?>
+                ]
+            ])); ?>
         </div>
         <?php endif; ?>
     </div>

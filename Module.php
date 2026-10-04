@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -16,7 +14,6 @@ use Krystal\Image\Tool\ImageManager;
 use Krystal\Stdlib\VirtualEntity;
 use News\Service\CategoryManager;
 use News\Service\PostManager;
-use News\Service\PostImageManagerFactory;
 use News\Service\TimeBag;
 use News\Service\SiteService;
 use News\Service\PostGalleryManager;
@@ -33,7 +30,6 @@ final class Module extends AbstractCmsModule
         $postGalleryMapper = $this->getMapper('/News/Storage/MySQL/PostGalleryMapper');
 
         $webPageManager = $this->getWebPageManager();
-        $historyManager = $this->getHistoryManager();
 
         $configManager = $this->createConfigService();
         $config = $configManager->getEntity();
@@ -42,13 +38,13 @@ final class Module extends AbstractCmsModule
         $postManager = new PostManager($postMapper, $categoryMapper, TimeBag::factory($config), $webPageManager, $imageManager);
         $categoryManager = new CategoryManager($categoryMapper, $postMapper, $webPageManager, $imageManager);
 
-        return array(
+        return [
             'siteService' => new SiteService($postManager, $categoryManager, $config),
             'configManager' => $configManager,
             'categoryManager' => $categoryManager,
             'postManager' => $postManager,
             'postGalleryManager' => new PostGalleryManager($postGalleryMapper, $this->createGalleryImageManager($config))
-        );
+        ];
     }
 
     /**
@@ -59,19 +55,19 @@ final class Module extends AbstractCmsModule
      */
     private function createGalleryImageManager(VirtualEntity $config)
     {
-        $plugins = array(
-            'thumb' => array(
+        $plugins = [
+            'thumb' => [
                 'quality' => $config->getCoverQuality(),
-                'dimensions' => array(
+                'dimensions' => [
                     // For administration panel
-                    array(400, 400),
+                    [400, 400],
 
                     // Dimensions for the site
-                    array($config->getCoverWidth(), $config->getCoverHeight()),
-                    array($config->getThumbWidth(), $config->getThumbHeight()),
-                )
-            )
-        );
+                    [$config->getCoverWidth(), $config->getCoverHeight()],
+                    [$config->getThumbWidth(), $config->getThumbHeight()],
+                ]
+            ]
+        ];
 
         return new ImageManager(
             '/data/uploads/module/news/gallery/',
@@ -89,19 +85,19 @@ final class Module extends AbstractCmsModule
      */
     private function createPostImageManager(VirtualEntity $config)
     {
-        $plugins = array(
-            'thumb' => array(
+        $plugins = [
+            'thumb' => [
                 'quality' => $config->getCoverQuality(),
-                'dimensions' => array(
+                'dimensions' => [
                     // For administration panel
-                    array(200, 200),
+                    [200, 200],
 
                     // Dimensions for the site
-                    array($config->getCoverWidth(), $config->getCoverHeight()),
-                    array($config->getThumbWidth(), $config->getThumbHeight()),
-                )
-            )
-        );
+                    [$config->getCoverWidth(), $config->getCoverHeight()],
+                    [$config->getThumbWidth(), $config->getThumbHeight()],
+                ]
+            ]
+        ];
 
         return new ImageManager(
             '/data/uploads/module/news/posts/',

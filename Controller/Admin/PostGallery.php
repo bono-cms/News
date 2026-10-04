@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -36,13 +34,13 @@ final class PostGallery extends AbstractAdminController
             
             // Append breadcrumbs
             $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Post@indexAction')
-                                           ->addOne($title, $this->createUrl('News:Admin:Post@editAction', array($image->getPostId())))
+                                           ->addOne($title, $this->createUrl('News:Admin:Post@editAction', [$image->getPostId()]))
                                            ->addOne($image->getId() ? 'Update image' : 'Add new image');
 
-            return $this->view->render('gallery.form', array(
+            return $this->view->render('gallery.form', [
                 'image' => $image
-            ));
-            
+            ]);
+
         } else {
             return false;
         }
@@ -90,7 +88,9 @@ final class PostGallery extends AbstractAdminController
         $this->getModuleService('postGalleryManager')->deleteById($id);
         $this->flashBag->set('success', 'Selected element has been removed successfully');
 
-        return 1;
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -103,16 +103,33 @@ final class PostGallery extends AbstractAdminController
         $input = $this->request->getPost('image');
         $service = $this->getModuleService('postGalleryManager');
 
-        if (!empty($input['id'])) {
-            $service->update($this->request->getAll());
-            $this->flashBag->set('success', 'The element has been updated successfully');
+        $validator = $this->createValidation();
 
-            return 1;
+        $validator->file('file')
+                  ->required('The cover is required', (bool) !$input['id'])
+                  ->addRule('image');
+
+        if ($validator->isPassed()) {
+            if (!empty($input['id'])) {
+                $service->update($this->request->getAll());
+                $this->flashBag->set('success', 'The element has been updated successfully');
+
+                return $this->json([
+                    'refresh' => true
+                ]);
+            } else {
+                $service->add($this->request->getAll());
+                $this->flashBag->set('success', 'The element has been created successfully');
+
+                return $this->json([
+                    'redirect' => $this->createUrl('News:Admin:PostGallery@editAction', [$service->getLastId()]),
+                ]);
+            }
+
         } else {
-            $service->add($this->request->getAll());
-            $this->flashBag->set('success', 'The element has been created successfully');
-
-            return $service->getLastId();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

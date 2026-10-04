@@ -3,15 +3,12 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
 
 namespace News\Controller\Admin;
 
-use Krystal\Validation\Validator;
 use Krystal\Stdlib\VirtualEntity;
 
 final class Post extends AbstractAdminController
@@ -31,12 +28,12 @@ final class Post extends AbstractAdminController
         $this->view->getBreadcrumbBag()
                    ->addOne('News');
 
-        return $this->view->render('index', array(
+        return $this->view->render('index', [
             'paginator' => $postManager->getPaginator(),
             'posts' => $posts,
             'categories' => $this->getCategoryManager()->fetchAll(),
             'categoryList' => $this->getCategoryManager()->fetchList()
-        ));
+        ]);
     }
 
     /**
@@ -59,19 +56,19 @@ final class Post extends AbstractAdminController
         // Load view plugins
         $this->view->getPluginBag()
                    ->appendScript('@News/admin/post.form.js')
-                   ->load(array($this->getWysiwygPluginName(), 'datepicker', 'chosen'));
+                   ->load([$this->getWysiwygPluginName(), 'datepicker', 'chosen']);
 
         // Append breadcrumbs
         $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Post@indexAction')
                                        ->addOne($title);
 
-        return $this->view->render('post.form', array(
+        return $this->view->render('post.form', [
             'categories' => $this->getCategoryManager()->fetchList(),
             // If you don't require option to attach similar posts, you can comment 'posts' key to reduce DB queries
             'posts' => $this->getCategoryManager()->fetchAllWithPosts($id),
             'post' => $post,
-            'images' => $id !== null ? $this->getModuleService('postGalleryManager')->fetchAllByPostId($id) : array()
-        ));
+            'images' => $id !== null ? $this->getModuleService('postGalleryManager')->fetchAllByPostId($id) : []
+        ]);
     }
 
     /**
@@ -144,7 +141,9 @@ final class Post extends AbstractAdminController
             $historyService->write('News', 'Post "%s" has been removed', $post->getName());
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -158,7 +157,9 @@ final class Post extends AbstractAdminController
             $this->getPostManager()->updateSettings($this->request->getPost());
 
             $this->flashBag->set('success', 'Settings have been saved successfully');
-            return '1';
+            return $this->json([
+                'refresh' => true
+            ]);
         }
     }
 
@@ -171,25 +172,22 @@ final class Post extends AbstractAdminController
     {
         $post = $this->request->getPost('post');
 
-        $validator = (new Validator(
-            $this->request->getPost(),
-            $this->request->getFiles()
-        ))->setTranslator($this->translator, $this->appConfig->getLanguage());
+        $validator = $this->createValidation();
 
-        $validator->field('translation.*.name', 'Post name')
+        $validator->field('translation.*.name')
                   ->required()
                   ->addRule('minlength', null, ['min' => 5]);
 
-        $validator->field('translation.*.full', 'Post content')
+        $validator->field('translation.*.full')
                   ->required()
                   ->addRule('minlength', null, ['min' => 10]);
 
-        $validator->field('post.date', 'Date format')
+        $validator->field('post.date')
                   ->required()
                   ->addRule('dateformat', null, ['format' => 'm/d/Y']);
 
         $validator->file('file')
-                  ->required('The cover is required', (bool) !$post['id']) // Required on "Add", not required on "Edit"
+                  ->required('The cover is required', (bool) !$post['id'])
                   ->addRule('image');
 
         if ($validator->isPassed()) {
@@ -203,7 +201,9 @@ final class Post extends AbstractAdminController
                     $this->flashBag->set('success', 'The element has been updated successfully');
 
                     $historyService->write('News', 'Post "%s" has been updated', $name);
-                    return '1';
+                    return $this->json([
+                        'refresh' => true
+                    ]);
                 }
 
             } else {
@@ -211,7 +211,9 @@ final class Post extends AbstractAdminController
                     $this->flashBag->set('success', 'The element has been created successfully');
 
                     $historyService->write('News', 'New post "%s" has been created', $name);
-                    return $service->getLastId();
+                    return $this->json([
+                        'redirect' => $this->createUrl('News:Admin:Post@editAction', [$service->getLastId()]),
+                    ]);
                 }
             }
 

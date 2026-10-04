@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -43,13 +41,13 @@ final class Category extends AbstractController
             $paginator = $postManager->getPaginator();
             $this->preparePaginator($paginator, $code, $slug, $pageNumber);
 
-            return $this->view->render('news-category', array(
+            return $this->view->render('news-category', [
                 'paginator' => $paginator,
                 'posts' => $posts,
                 'page' => $page,
                 'category' => $page,
                 'languages' => $this->getModuleService('categoryManager')->getSwitchUrls($id)
-            ));
+            ]);
 
         } else {
             return false;

@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -41,15 +39,15 @@ final class Home extends AbstractController
         $paginator = $postManager->getPaginator();
 
         // The pattern /(:var)/page/(:var) is reserved, so another one should be used instead
-        $paginator->setUrl($this->createUrl('News:Home@indexAction', array('page' => '(:var)'), 0));
+        $paginator->setUrl($this->createUrl('News:Home@indexAction', ['page' => '(:var)'], 0));
 
         $page = $this->getService('Pages', 'pageManager')->fetchDefault();
 
-        return $this->view->render('news-category', array(
+        return $this->view->render('news-category', [
             'paginator' => $paginator,
             'page' => $page,
             'posts' => $posts,
             'languages' => $this->getService('Pages', 'pageManager')->getSwitchUrls(null)
-        ));
+        ]);
     }
 }

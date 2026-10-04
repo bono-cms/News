@@ -21,7 +21,7 @@ defined('KRYSTAL') or die;
                 <a class="btn btn-outline-primary" data-button="upload" data-target="[name='file']" href="#">
                     <i class="bi bi-image"></i> <?= $this->translate('Upload a file'); ?>
                 </a>
-                <?= Element::file('file', 'image/x-png, image/gif, image/jpeg', array('class' => 'd-none', 'data-plugin' => 'preview')); ?>
+                <?= Element::file('file', 'image/x-png, image/gif, image/jpeg', ['class' => 'd-none', 'data-plugin' => 'preview']); ?>
             </div>
         </div>
 
@@ -29,7 +29,7 @@ defined('KRYSTAL') or die;
             <label class="col-lg-2 col-form-label"><?= $this->translate('Order'); ?></label>
             <div class="col-lg-10">
                 <div class="input-group">
-                    <?= Element::text('image[order]', $image->getOrder(), array('class' => 'form-control', 'placeholder' => $this->translate('Sorting order'))); ?>
+                    <?= Element::text('image[order]', $image->getOrder(), ['class' => 'form-control', 'placeholder' => $this->translate('Sorting order')]); ?>
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
@@ -38,13 +38,13 @@ defined('KRYSTAL') or die;
         </div>
 
         <div class="border-top pt-3">
-            <?php $this->loadPartial('actions', array(
+            <?php $this->loadPartial('actions', [
                 'new' => !$image->getId(),
-                'add' => array('News:Admin:PostGallery@addAction', $image->getPostId()),
+                'add' => ['News:Admin:PostGallery@addAction', $image->getPostId()],
                 'edit' => 'News:Admin:PostGallery@editAction',
                 'save' => 'News:Admin:PostGallery@saveAction',
-                'cancel' => array('News:Admin:Post@editAction', $image->getPostId())
-            )); ?>
+                'cancel' => ['News:Admin:Post@editAction', $image->getPostId()]
+            ]); ?>
         </div>
     </div>
 </form>

@@ -3,15 +3,12 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
 
 namespace News\Controller\Admin;
 
-use Krystal\Validate\Pattern;
 use Krystal\Stdlib\VirtualEntity;
 
 final class Category extends AbstractAdminController
@@ -34,9 +31,9 @@ final class Category extends AbstractAdminController
         $this->view->getBreadcrumbBag()->addOne('News', 'News:Admin:Post@indexAction')
                                        ->addOne($title);
 
-        return $this->view->render('category.form', array(
+        return $this->view->render('category.form', [
             'category' => $category
-        ));
+        ]);
     }
 
     /**
@@ -96,7 +93,9 @@ final class Category extends AbstractAdminController
             $this->flashBag->set('success', 'Selected element has been removed successfully');
         }
 
-        return '1';
+        return $this->json([
+            'refresh' => true
+        ]);
     }
 
     /**
@@ -108,16 +107,13 @@ final class Category extends AbstractAdminController
     {
         $input = $this->request->getPost('category');
 
-        $formValidator = $this->createValidator(array(
-            'input' => array(
-                'source' => $input,
-                'definition' => array(
-                    'name' => new Pattern\Name()
-                )
-            )
-        ));
+        $validator = $this->createValidation();
 
-        if (1) {
+        $validator->field('translation.*.name')
+                  ->required()
+                  ->addRule('minlength', null, ['min' => 5]);
+
+        if ($validator->isPassed()) {
             $service = $this->getModuleService('categoryManager');
             $historyService = $this->getService('Cms', 'historyManager');
 
@@ -128,17 +124,23 @@ final class Category extends AbstractAdminController
                 $this->flashBag->set('success', 'The element has been updated successfully');
 
                 $historyService->write('News', 'Category "%s" has been updated', $name);
-                return '1';
+                return $this->json([
+                    'refresh' => true
+                ]);
 
             } else {
                 $this->flashBag->set('success', 'The element has been created successfully');
 
                 $historyService->write('News', 'Category "%s" has been created', $name);
-                return $service->getLastId();
+                return $this->json([
+                    'redirect' => $this->createUrl('News:Admin:Category@editAction', [$service->getLastId()]),
+                ]);
             }
 
         } else {
-            return $formValidator->getErrors();
+            return $this->json([
+                'errors' => $validator->getErrors()
+            ]);
         }
     }
 }

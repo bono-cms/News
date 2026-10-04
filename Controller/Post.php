@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -35,11 +33,11 @@ final class Post extends AbstractController
                        ->add($postManager->getBreadcrumbs($post));
 
             // Prepare the response
-            $response = $this->view->render('news-post', array(
+            $response = $this->view->render('news-post', [
                 'page' => $post,
                 'post' => $post,
                 'languages' => $postManager->getSwitchUrls($id)
-            ));
+            ]);
 
             $postManager->incrementViewCount($id);
             return $response;

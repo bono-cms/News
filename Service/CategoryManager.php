@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -157,7 +155,7 @@ final class CategoryManager extends AbstractManager
      */
     public function save(array $input)
     {
-        $input['category'] = ArrayUtils::arrayWithout($input['category'], array('slug'));
+        $input['category'] = ArrayUtils::arrayWithout($input['category'], ['slug']);
         return $this->categoryMapper->savePage('News (Categories)', 'News:Category@indexAction', $input['category'], $input['translation']);
     }
 

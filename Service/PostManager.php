@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -16,7 +14,6 @@ use Krystal\Stdlib\ArrayUtils;
 use Krystal\Db\Filter\FilterableServiceInterface;
 use News\Storage\PostMapperInterface;
 use News\Storage\CategoryMapperInterface;
-use News\Service\TimeBagInterface;
 use Cms\Service\AbstractManager;
 use Cms\Service\WebPageManagerInterface;
 
@@ -89,7 +86,7 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
      */
     public function findSequential($id)
     {
-        $output = array();
+        $output = [];
         $rows = $this->postMapper->findSequential($id);
 
         foreach ($rows as $index => $row) {
@@ -130,16 +127,16 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
         $category = $this->categoryMapper->fetchById($post->getCategoryId(), false);
         $categoryWebPage = $this->webPageManager->fetchById($category['web_page_id']);
 
-        return array(
-            array(
+        return [
+            [
                 'name' => $category['name'],
                 'link' => $this->webPageManager->surround($categoryWebPage['slug'], $categoryWebPage['lang_id']),
-            ),
-            array(
+            ],
+            [
                 'name' => $post->getName(),
                 'link' => '#',
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -315,7 +312,7 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
         $post['category_id'] = (int) $post['category_id'];
 
         // Remove extra keys if present
-        $data = ArrayUtils::arrayWithout($post, array('date', 'remove_cover', 'attached'));
+        $data = ArrayUtils::arrayWithout($post, ['date', 'remove_cover', 'attached']);
 
         return $this->postMapper->savePage('News (Posts)', 'News:Post@indexAction', $data, $input['data']['translation']);
     }
@@ -347,7 +344,7 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
         }
 
         // Insert attached ones, if provided
-        $this->postMapper->insertAttached($id, isset($data['attached']) ? $data['attached'] : array());
+        $this->postMapper->insertAttached($id, isset($data['attached']) ? $data['attached'] : []);
 
         return true;
     }
@@ -388,7 +385,7 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
         $this->savePage($input);
 
         // Update attached IDs
-        $this->postMapper->updateAttached($post['id'], isset($post['attached']) ? $post['attached'] : array());
+        $this->postMapper->updateAttached($post['id'], isset($post['attached']) ? $post['attached'] : []);
 
         return true;
     }
@@ -490,7 +487,7 @@ final class PostManager extends AbstractManager implements FilterableServiceInte
      * @param array $parameters
      * @return array
      */
-    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = array())
+    public function filter($input, $page, $itemsPerPage, $sortingColumn, $desc, array $parameters = [])
     {
         return $this->prepareResults($this->postMapper->filter($input, $page, $itemsPerPage, $sortingColumn, $desc, $parameters), false);
     }

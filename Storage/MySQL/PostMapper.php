@@ -3,8 +3,6 @@
 /**
  * This file is part of the Bono CMS
  * 
- * Copyright (c) No Global State Lab
- * 
  * For the full copyright and license information, please view
  * the license file that was distributed with this source code.
  */
@@ -55,7 +53,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     private function getSharedColumns($all)
     {
         // Columns to be selected
-        $columns = array(
+        $columns = [
             self::column('id'),
             self::column('category_id'),
             self::column('timestamp'),
@@ -72,15 +70,15 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             WebPageMapper::column('changefreq'),
             WebPageMapper::column('priority'),
             CategoryTranslationMapper::column('name') => 'category_name'
-        );
+        ];
 
         if ($all) {
-            $columns = array_merge($columns, array(
+            $columns = array_merge($columns, [
                 PostTranslationMapper::column('title'),
                 PostTranslationMapper::column('full'),
                 PostTranslationMapper::column('keywords'),
                 PostTranslationMapper::column('meta_description')
-            ));
+            ]);
         }
 
         return $columns;
@@ -104,22 +102,22 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         $db = $this->db->select($this->getSharedColumns(false))
                        ->from(self::getTableName())
                        // Translation relation
-                       ->innerJoin(PostTranslationMapper::getTableName(), array(
+                       ->innerJoin(PostTranslationMapper::getTableName(), [
                             PostTranslationMapper::column('id') => self::getRawColumn('id')
-                       ))
+                       ])
                         // Category translation
-                        ->innerJoin(CategoryTranslationMapper::getTableName(), array(
+                        ->innerJoin(CategoryTranslationMapper::getTableName(), [
                             self::column('category_id') => CategoryTranslationMapper::getRawColumn('id'),
                             CategoryTranslationMapper::column('lang_id') => PostTranslationMapper::getRawColumn('lang_id')
-                        ))
+                        ])
                         // Category relation
-                        ->innerJoin(CategoryMapper::getTableName(), array(
+                        ->innerJoin(CategoryMapper::getTableName(), [
                             CategoryMapper::column('id') => CategoryTranslationMapper::getRawColumn('id')
-                        ))
+                        ])
                         // Web page relation
-                        ->innerJoin(WebPageMapper::getTableName(), array(
+                        ->innerJoin(WebPageMapper::getTableName(), [
                             WebPageMapper::column('id') => PostTranslationMapper::getRawColumn('web_page_id')
-                        ))
+                        ])
                         // Filtering condition
                         ->whereEquals(
                             PostTranslationMapper::column('lang_id'), 
@@ -165,14 +163,14 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         }
 
         // Support columns
-        $columns = array(
+        $columns = [
             'id' => self::column('id'),
             'name' => PostTranslationMapper::column('name'),
             'category_id' => self::column('category_id'),
             'published' => self::column('published'),
             'seo' => self::column('seo'),
             'front' => self::column('front')
-        );
+        ];
 
         // Check if valid column provided
         if (isset($columns[$sortingColumn])) {
@@ -203,12 +201,12 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         $pk = self::column('id');
 
         // Columns to be selected
-        $columns = array(
+        $columns = [
             self::column('id'),
             PostTranslationMapper::column('lang_id'),
             PostTranslationMapper::column('name'),
             WebPageMapper::column('slug')
-        );
+        ];
 
         // Inner comparison generator
         $inner = function($func, $operator) use ($id, $pk){
@@ -225,14 +223,14 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         $db = $this->db->select($columns)
                        ->from(PostTranslationMapper::getTableName())
                        // Translation relation
-                       ->innerJoin(self::getTableName(), array(
+                       ->innerJoin(self::getTableName(), [
                             PostTranslationMapper::column('id') => self::getRawColumn('id')
-                       ))
+                       ])
                        // Web page relation
-                       ->innerJoin(WebPageMapper::getTableName(), array(
+                       ->innerJoin(WebPageMapper::getTableName(), [
                             WebPageMapper::column('id') => PostTranslationMapper::getRawColumn('web_page_id'),
                             WebPageMapper::column('lang_id') => PostTranslationMapper::getRawColumn('lang_id')
-                       ))
+                       ])
                        // Language ID constraint
                        ->whereEquals(PostTranslationMapper::column('lang_id'), $this->getLangId())
                        ->rawAnd()
@@ -306,7 +304,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function updateSettings(array $settings)
     {
-        return $this->updateColumns($settings, array('seo', 'published', 'front'));
+        return $this->updateColumns($settings, ['seo', 'published', 'front']);
     }
 
     /**
@@ -369,13 +367,13 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     {
         $db = $this->createWebPageSelect($this->getSharedColumns(true))
                     // Category relation
-                    ->innerJoin(CategoryMapper::getTableName(), array(
+                    ->innerJoin(CategoryMapper::getTableName(), [
                         CategoryMapper::column('id') => self::getRawColumn('category_id')
-                    ))
+                    ])
                    // Category translating relation
-                   ->innerJoin(CategoryTranslationMapper::getTableName(), array(
+                   ->innerJoin(CategoryTranslationMapper::getTableName(), [
                         CategoryTranslationMapper::column('id') => self::getRawColumn('category_id')
-                   ));
+                   ]);
 
         if ($withTranslations === false) {
             $db->rawAnd()
@@ -410,7 +408,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchById($id, $withTranslations = false)
     {
-        $row = $this->fetchByIds(array($id), true, $withTranslations);
+        $row = $this->fetchByIds([$id], true, $withTranslations);
 
         if ($withTranslations == true) {
             return $row;
@@ -419,7 +417,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
         if (isset($row[0])) {
             return $row[0];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -436,7 +434,7 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     public function fetchMostlyViewed($limit, $categoryId, $rand, $front, $views)
     {
         // Default filter
-        $filter = array('published' => true);
+        $filter = ['published' => true];
 
         // Append category name
         if ($categoryId !== null) {
@@ -481,10 +479,10 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
      */
     public function fetchRandomPublished($limit, $categoryId = null)
     {
-        $filter = array(
+        $filter = [
             'category_id' => $categoryId, 
             'published' => true
-        );
+        ];
 
         return $this->findRecords($filter, null, $limit, function($db){
             $db->orderBy()
@@ -518,18 +516,18 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
     public function fetchAllByPage($categoryId, $published, $front, $page, $itemsPerPage, $sort = null)
     {
         // If sorting option provided, then use it
-        if ($sort !== null && in_array($sort, array('all', 'latest'))) {
+        if ($sort !== null && in_array($sort, ['all', 'latest'])) {
             switch ($sort) {
                 case 'all':
-                    $sortings = array(
+                    $sortings = [
                         self::column('id') => 'ASC'
-                    );
+                    ];
                 break;
 
                 case 'latest':
-                    $sortings = array(
+                    $sortings = [
                         self::column('id') => 'DESC'
-                    );
+                    ];
                 break;
             }
 
@@ -537,25 +535,25 @@ final class PostMapper extends AbstractMapper implements PostMapperInterface
             // Otherwise use defaults
             // Configure sorting way depending on published state
             if ($published) {
-                $sortings = array(
+                $sortings = [
                     self::column('timestamp') => 'DESC', 
                     self::column('id') => 'DESC'
-                );
+                ];
             } else {
-                $sortings = array(
+                $sortings = [
                     self::column('id') => 'DESC'
-                );
+                ];
             }
         }
 
         // Purely for older PHP versions. Old versions don't let static methods to be called in Closures
         $timestampColumn = self::column('timestamp');
 
-        $filter = array(
+        $filter = [
             'category_id' => $categoryId,
             'published' => $published,
             'front' => $front
-        );
+        ];
 
         return $this->findRecords($filter, $page, $itemsPerPage, function($db) use ($sortings, $filter, $timestampColumn){
             // Don't let future posts to be returned

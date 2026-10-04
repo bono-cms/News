@@ -4,38 +4,38 @@
  * Module configuration container
  */
 
-return array(
+return [
     'name' => 'News',
-    'route' => array('News:Admin:Post@indexAction', null),
+    'route' => ['News:Admin:Post@indexAction', null],
     'description' => 'News module allows you to manage news on your site',
     // Bookmarks of this module
-    'bookmarks' => array(
-        array(
+    'bookmarks' => [
+        [
             'name' => 'Add new post',
             'controller' => 'News:Admin:Post@addAction',
             'icon' => 'fas fa-newspaper'
-        )
-    ),
-    'menu' => array(
+        ]
+    ],
+    'menu' => [
         'name' => 'News',
         'icon' => 'fas fa-newspaper',
-        'items' => array(
-            array(
+        'items' => [
+            [
                 'route' => 'News:Admin:Post@indexAction',
                 'name' => 'View all news'
-            ),
-            array(
+            ],
+            [
                 'route' => 'News:Admin:Post@addAction',
                 'name' => 'Add new post'
-            ),
-            array(
+            ],
+            [
                 'route' => 'News:Admin:Category@addAction',
                 'name' => 'Add new category'
-            ),
-            array(
+            ],
+            [
                 'route' => 'News:Admin:Config@indexAction',
                 'name' => 'Configuration'
-            )
-        )
-    )
-);
+            ]
+        ]
+    ]
+];
