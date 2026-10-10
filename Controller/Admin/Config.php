@@ -9,6 +9,7 @@
 
 namespace News\Controller\Admin;
 
+use Krystal\Validation\Validator;
 use Cms\Controller\Admin\AbstractConfigController;
 
 final class Config extends AbstractConfigController
@@ -21,16 +22,40 @@ final class Config extends AbstractConfigController
     /**
      * {@inheritDoc}
      */
-    protected function getValidationRules()
+    protected function configureValidator(Validator $validator)
     {
-        return [
-            'per_page_count' => new Pattern\PerPageCount(),
-            'block_per_page_count' => new Pattern\PerPageCount(),
-            'cover_quality' => new Pattern\ImageQuality(),
-            'cover_height' => new Pattern\ImageHeight(),
-            'cover_width' => new Pattern\ImageWidth(),
-            'thumb_height' => new Pattern\ImageHeight(),
-            'thumb_width' => new Pattern\ImageWidth()
-        ];
+        // Pagination
+        $validator->field('config.per_page_count', 'Per page count')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('greaterthan', null, ['min' => 0]);
+
+        $validator->field('config.block_per_page_count', 'Block per page count')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('greaterthan', null, ['min' => 0]);
+
+        // Cover image dimensions and quality
+        $validator->field('config.cover_quality', 'Cover quality')
+                  ->required()
+                  ->addRule('numeric')
+                  ->addRule('between', null, ['min' => 1, 'max' => 100]);
+
+        $validator->field('config.cover_height', 'Cover height')
+                  ->required()
+                  ->addRule('numeric');
+
+        $validator->field('config.cover_width', 'Cover width')
+                  ->required()
+                  ->addRule('numeric');
+
+        // Thumbnail dimensions
+        $validator->field('config.thumb_height', 'Thumb height')
+                  ->required()
+                  ->addRule('numeric');
+
+        $validator->field('config.thumb_width', 'Thumb width')
+                  ->required()
+                  ->addRule('numeric');
     }
 }
