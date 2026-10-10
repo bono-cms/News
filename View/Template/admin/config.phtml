@@ -1,125 +1,124 @@
 <?php
 
 use Krystal\Form\Element;
-defined('KRYSTAL') or die;
 
 ?>
 
-<form class="card" data-group="config" autocomplete="off">
+<form class="card" autocomplete="off">
 	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="nav-item active"><a class="nav-link" href="#common" role="tab" data-toggle="tab"><i class="fa fa-home fa-fw"></i> <?php $this->show('Common'); ?></a></li>
+		<li role="presentation" class="nav-item"><a class="nav-link active" href="#common" role="tab" data-bs-toggle="tab"><i class="fas fa-home fa-fw"></i> <?= $this->translate('Common'); ?></a></li>
 		<?php if ($extendedMode): ?>
-		<li role="presentation" class="nav-item"><a class="nav-link" href="#additional" role="tab" data-toggle="tab"><i class="fa fa-th fa-fw"></i> <?php $this->show('Additional'); ?></a></li>
+		<li role="presentation" class="nav-item"><a class="nav-link" href="#additional" role="tab" data-bs-toggle="tab"><i class="fas fa-th fa-fw"></i> <?= $this->translate('Additional'); ?></a></li>
 		<?php endif; ?>
 	</ul>
 
-	<div class="tab-content">
-		<div class="tab-pane fade in active" id="common" role="tabpanel">
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Time format in list'); ?></label>
+	<div class="tab-content pt-3">
+		<div class="tab-pane fade show active" id="common" role="tabpanel">
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate('Time format in list'); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::text('config[time_format_in_list]', $config->getTimeFormatInList(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('Date format when showing posts in a category'); ?></span>
+                    <div class="form-text"><?= $this->translate('Date format when showing posts in a category'); ?></div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show("Date format in post's page"); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate("Date format in post's page"); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::text('config[time_format_in_post]', $config->getTimeFormatInPost(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('Date format when showing a post itself'); ?></span>
+                    <div class="form-text"><?= $this->translate('Date format when showing a post itself'); ?></div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Items to show per page'); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate('Items to show per page'); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[per_page_count]', $config->getPerPageCount(), ['class' => 'form-control', 'min' => '1']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('Amount of posts to be shown in a category'); ?></span>
+                    <div class="form-text"><?= $this->translate('Amount of posts to be shown in a category'); ?></div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('In announcement block'); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate('In announcement block'); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[block_per_page_count]', $config->getBlockPerPageCount(), ['class' => 'form-control', 'min' => '1']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('Amount of posts in announcement block'); ?></span>
+                    <div class="form-text"><?= $this->translate('Amount of posts in announcement block'); ?></div>
                 </div>
             </div>
 		</div>
 		
-		<div class="tab-pane" id="additional" role="tabpanel">
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show("Cover quality"); ?></label>
+		<div class="tab-pane fade" id="additional" role="tabpanel">
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate("Cover quality"); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[cover_quality]', $config->getCoverQuality(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('Image quality for covers'); ?></span>
+                    <div class="form-text"><?= $this->translate('Image quality for covers'); ?></div>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Cover height'); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate('Cover height'); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[cover_height]', $config->getCoverHeight(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('The height of post covers'); ?></span>
+                    <div class="form-text"><?= $this->translate('The height of post covers'); ?></div>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show('Cover width'); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate('Cover width'); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[cover_width]', $config->getCoverWidth(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('The width of post covers'); ?></span>
+                    <div class="form-text"><?= $this->translate('The width of post covers'); ?></div>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show("Thumb's height"); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate("Thumb's height"); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[thumb_height]', $config->getThumbHeight(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('The height of post thumb images'); ?></span>
+                    <div class="form-text"><?= $this->translate('The height of post thumb images'); ?></div>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label class="col-lg-2 control-label"><?php $this->show("Thumb's width"); ?></label>
+            <div class="row mb-3">
+                <label class="col-lg-2 col-form-label"><?= $this->translate("Thumb's width"); ?></label>
                 <div class="col-lg-10">
-                    <div class="input-group date">
+                    <div class="input-group">
                         <?= Element::number('config[thumb_width]', $config->getThumbWidth(), ['class' => 'form-control']); ?>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                     </div>
-                    <span class="help-block"><?php $this->show('The width of post thumb images'); ?></span>
+                    <div class="form-text"><?= $this->translate('The width of post thumb images'); ?></div>
                 </div>
             </div>
 		</div>
 	</div>
 
-    <div class="actions">
-        <button data-button="save-changes" data-url="<?= $this->url('News:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-save"></i> <?php $this->show('Save'); ?></button>
-        <button data-button="cancel" data-url="<?= $this->url('News:Admin:Post@indexAction'); ?>" class="btn btn-default"><i class="glyphicon glyphicon-floppy-remove"></i> <?php $this->show('Cancel'); ?></button>
+    <div class="actions mt-3">
+        <button data-button="save-changes" data-url="<?= $this->url('News:Admin:Config@saveAction'); ?>" class="btn btn-primary"><i class="bi bi-save"></i> <?= $this->translate('Save'); ?></button>
+        <button data-button="cancel" data-url="<?= $this->url('News:Admin:Post@indexAction'); ?>" class="btn btn-secondary"><i class="bi bi-x-circle"></i> <?= $this->translate('Cancel'); ?></button>
     </div>
 </form>

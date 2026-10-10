@@ -4,20 +4,18 @@ use Krystal\Form\Element;
 use Krystal\Security\Filter;
 use Cms\Service\LanguageManager;
 
-defined('KRYSTAL') or die;
-
 ?>
 
-<form class="card" data-group="category" autocomplete="off">
+<form class="card" autocomplete="off">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs" role="tablist">
             <li role="presentation" class="nav-item">
-                <a class="nav-link active" href="#page" role="tab" data-toggle="tab">
+                <a class="nav-link active" href="#page" role="tab" data-bs-toggle="tab">
                     <i class="bi bi-file-earmark"></i> <?= $this->translate('Category'); ?>
                 </a>
             </li>
             <li role="presentation" class="nav-item">
-                <a class="nav-link" href="#configuration" role="tab" data-toggle="tab">
+                <a class="nav-link" href="#configuration" role="tab" data-bs-toggle="tab">
                     <i class="bi bi-list-ul"></i> <?= $this->translate('Configuration'); ?>
                 </a>
             </li>
@@ -32,26 +30,24 @@ defined('KRYSTAL') or die;
                 <?php foreach ($languages as $index => $language): ?>
                 <?php $entity = LanguageManager::findByLangId($language->getId(), $category); ?>
 
-                <div class="tab-pane fade <?php echo $index == 0 ? 'show active' : null; ?>" id="<?php printf('language-%s', $language->getId()); ?>" role="tabpanel">
+                <div class="tab-pane fade <?= $index == 0 ? 'show active' : null; ?>" id="<?= sprintf('language-%s', $language->getId()); ?>" role="tabpanel">
                     <?= Element::hidden(sprintf('translation[%s][id]', $language->getId()), $entity->getId()); ?>
                     <?= Element::hidden(sprintf('translation[%s][web_page_id]', $language->getId()), $entity->getWebPageId()); ?>
                     <?= Element::hidden(sprintf('translation[%s][lang_id]', $language->getId()), $language->getId()); ?>
 
                     <?php $this->loadPartial('language-name', ['language' => $language]); ?>
 
-                    <div class="form-group row mb-3">
+                    <div class="row mb-3">
                         <label class="col-lg-2 col-form-label"><?= $this->translate('Name'); ?></label>
                         <div class="col-lg-10">
                             <div class="input-group">
                                 <?= Element::text(sprintf('translation[%s][name]', $language->getId()), Filter::charsDecode($entity->getName()), ['class' => 'form-control', 'placeholder' => $this->translate('Category name')]); ?>
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                                </div>
+                                <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group row mb-3">
+                    <div class="row mb-3">
                         <label class="col-lg-2 col-form-label"><?= $this->translate('Description'); ?></label>
                         <div class="col-lg-10">
                             <?= Element::textarea(sprintf('translation[%s][description]', $language->getId()), $entity->getDescription(), ['data-wysiwyg' => 'true']); ?>
@@ -59,56 +55,52 @@ defined('KRYSTAL') or die;
                     </div>
 
                     <div class="options border-top pt-3 mt-3">
-                        <div class="form-group row mb-3">
+                        <div class="row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Slug'); ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
                                     <?= Element::text(sprintf('translation[%s][slug]', $language->getId()), $entity->getSlug(), ['class' => 'form-control', 'placeholder' => $this->translate('URL slug for this category. By default its taken from the name')]); ?>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <a href="#" class="text-secondary" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>">
-                                                <i class="bi bi-arrow-repeat" data-toggle="tooltip" title="<?= $this->translate('Refresh the slug'); ?>"></i>
-                                            </a>
-                                        </span>
-                                    </div>
+                                    <span class="input-group-text">
+                                        <a href="#" class="text-secondary" data-slug-selector="<?= LanguageManager::generateSelector($language->getId()); ?>">
+                                            <i class="bi bi-arrow-repeat" data-bs-toggle="tooltip" title="<?= $this->translate('Refresh the slug'); ?>"></i>
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-3">
+                        <div class="row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Change frequency'); ?></label>
                             <div class="col-lg-10">
-                                <?= Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), ['class' => 'form-control']); ?>
+                                <?= Element::select(sprintf('translation[%s][changefreq]', $language->getId()), $this->translateArray($changeFreqs), $entity->getChangeFreq(), ['class' => 'form-select']); ?>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-3">
+                        <div class="row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Priority'); ?></label>
                             <div class="col-lg-10">
-                                <?= Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), ['class' => 'form-control']); ?>
+                                <?= Element::select(sprintf('translation[%s][priority]', $language->getId()), $priorities, $entity->getPriority(), ['class' => 'form-select']); ?>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-3">
+                        <div class="row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Title'); ?></label>
                             <div class="col-lg-10">
                                 <div class="input-group">
                                     <?= Element::text(sprintf('translation[%s][title]', $language->getId()), Filter::charsDecode($entity->getTitle()), ['class' => 'form-control', 'data-input' => 'title', 'placeholder' => $this->translate("Category title")]); ?>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="bi bi-pencil"></i></span>
-                                    </div>
+                                    <span class="input-group-text"><i class="bi bi-pencil"></i></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-3">
+                        <div class="row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Keywords'); ?></label>
                             <div class="col-lg-10">
                                 <?= Element::textarea(sprintf('translation[%s][keywords]', $language->getId()), $entity->getKeywords(), ['class' => 'form-control', 'placeholder' => $this->translate('Keywords used for search engines')]); ?>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-3">
+                        <div class="row mb-3">
                             <label class="col-lg-2 col-form-label"><?= $this->translate('Description'); ?></label>
                             <div class="col-lg-10">
                                 <?= Element::textarea(sprintf('translation[%s][meta_description]', $language->getId()), $entity->getMetaDescription(), ['class' => 'form-control', 'placeholder' => $this->translate('Meta description for search engines')]); ?>
@@ -134,7 +126,7 @@ defined('KRYSTAL') or die;
         <div role="tabpanel" class="tab-pane fade" id="configuration">
             <?= Element::hidden('category[id]', $entity->getId()); ?>
 
-            <div class="form-group row mb-3">
+            <div class="row mb-3">
                 <label class="col-lg-2 col-form-label"><?= $this->translate('Enable SEO'); ?></label>
                 <div class="col-lg-10 d-flex align-items-center">
                     <div class="form-check">
